@@ -8,10 +8,9 @@ export const Profile = () => {
 
 	return (
 		<>
-				{ isModalOpen && <ProfileModal /> }
 				<img src={require('../../public/soo.png')} 
 							alt="Profile" 
-							className="w-16 rounded-full border-emerald-400 border-2" 
+							className="w-14 rounded-full border-emerald-400 border-2" 
 							onClick={() => setIsModalOpen(!isModalOpen)}
 				/>
 		</>
