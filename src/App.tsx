@@ -12,6 +12,9 @@ function App() {
 					<Header />
 					<Routes>
 						<Route path="/" element={<Main/>} />
+						{/*<Route path="/Chat" element={<Main/>} />
+						<Route path="/Game" element={<Main/>} />
+					<Route path="/Profile" element={<Main/>} />*/}
 					</Routes>
 				</BrowserRouter>
 			</RecoilRoot>
