@@ -4,3 +4,8 @@ export const modalState = atom<boolean>({
 	key: 'modalState',
 	default: false,
 })
+
+export const chattingModalState = atom<boolean>({
+	key: 'chattingModalState',
+	default: false,
+})
