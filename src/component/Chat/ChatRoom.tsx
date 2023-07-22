@@ -87,13 +87,10 @@ export const ChatRoom = () => {
 ]
 
 	return (
-		<div className='h-full px-5 bg-green-300'>
-			<div className='flex flex-col'>
-				<div className='flex h-16 bg-slate-400'>
+		<div className='grid grid-cols-1 grid-row-2 gap-1 h-full'>
 					<ServiceTitle title="Chat" />
-				</div>
-					<div className=" bg-white py-10 px-5 w-full h-full rounded-3xl shadow-2xl overflow-y-auto">
-						<div className='grid grid-cols-2 w-full gap-3'>
+					<div className="relative bg-white py-10 px-3 w-full h-full rounded-3xl shadow-2xl overflow-y-auto">
+						<div className='grid grid-cols-2 w-full gap-y-7 gap-x-5'>
 							{
 								data.map((item) => 
 									<ChatList key={item.id} props={item} /> 
@@ -102,6 +99,5 @@ export const ChatRoom = () => {
 						</div>
 					</div>
 				</div>
-			</div>
 	)
 }
