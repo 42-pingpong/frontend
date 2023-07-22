@@ -89,7 +89,7 @@ export const ChatRoom = () => {
 	return (
 		<div className='grid grid-cols-1 grid-row-2 gap-1 h-full'>
 					<ServiceTitle title="Chat" />
-					<div className="relative bg-white py-10 px-3 w-full h-full rounded-3xl shadow-2xl overflow-y-auto">
+					<div className="relative bg-white py-10 px-3 w-[60vw] h-[50vh]  md:w-full md:h-full rounded-3xl shadow-2xl overflow-y-auto">
 						<div className='grid grid-cols-2 w-full gap-y-7 gap-x-5'>
 							{
 								data.map((item) => 

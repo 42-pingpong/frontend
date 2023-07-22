@@ -3,7 +3,7 @@ import { chatRoomList } from './ChatRoom'
 
 export const ChatList = ({ props }: { props: chatRoomList }) => {
 	return (
-		<div className='flex relative w-full h-14 bg-[#E9F6FB] p-2 rounded-full shadow-md shadow-gray-300 justify-between items-center'>
+		<div className='flex relative md:w-full md:h-14 w-60 h-14 bg-[#E9F6FB] p-2 rounded-full shadow-md shadow-gray-300 justify-between items-center'>
 			<div className='flex w-8 h-8 rounded-full bg-white justify-center items-center'>
 				<p className='text-gray-600'>{props.id}</p>
 			</div>

@@ -1,7 +1,9 @@
 import { useRecoilValue } from 'recoil';
 import { modalState } from '../../atom/modal';
 import { ProfileModal } from '../Header/ProfileModal';
-import { ChatRoom } from '../Chat/ChatRoom';
+import { ChatRoom } from '../ChatList/ChatRoom';
+import { UserList } from '../UserList/UserList';
+import { GameMatch } from '../GameMatch/GameMatch';
 
 export const Main = () => {
 	const isModalOpen = useRecoilValue(modalState);
@@ -14,10 +16,10 @@ export const Main = () => {
 						<ChatRoom />
 					</div>
 					<div className="col-span-1 row-span-6 bg-green-400">
-						<h1>friend</h1>
+						<UserList />
 					</div>
 					<div className="col-span-2 row-span-2 bg-green-600">
-						<h1>game</h1>
+						<GameMatch />
 					</div>
 				</div>
 				{ isModalOpen && <ProfileModal /> }
