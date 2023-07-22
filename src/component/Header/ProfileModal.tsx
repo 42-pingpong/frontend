@@ -22,12 +22,12 @@ export const ProfileModal = () => {
 				 className="background"
 				 onClick={closeModal}>
 			<div id="modal-content" 
-						className="relative flex flex-col float-right bg-white rounded-3xl w-80 h-72 mt-20 shadow-lg items-center justify-center">
+						className="modal-container">
 				<div className="profile-container">
 					<div className="profile-image-container">
-						<img src={require('../../public/soo.png')} 
+					<img src={require('../../public/soo.png')} 
 								alt="Profile" 
-								className="profile-image" />
+								className="absolute w-11/12 rounded-full border-4 m-3 border-emerald-400 " />
 					</div>
 					<div className="profile-content-container">
 						<div className="profile-name-container">
