@@ -34,7 +34,7 @@ export const GameProgress = () => {
 	return (
 		<div className='flex flex-col h-full w-full justify-center items-center'>
 			{/*얘는 위에서 + onclicked state따라 바뀌는거*/}
-			<span className='text-gray-500 text-2xl mb-2'>Maching...</span>
+			<span className='text-gray-500 text-2xl mb-2'>Matching...</span>
 			<div className='flex flex-col w-full h-14'>
 				<ProgressBar progress={progress} />
 			</div>

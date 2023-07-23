@@ -22,7 +22,7 @@ export const ProfileModal = () => {
 				 className="background"
 				 onClick={closeModal}>
 			<div id="modal-content" 
-						className="modal-container">
+						className="relative flex flex-col float-right bg-white rounded-3xl w-[28rem] h-[24rem] mt-20  items-center justify-center shadow-lg shadow-gray-300">
 				<div className="profile-container">
 					<div className="profile-image-container">
 					<img src={require('../../public/soo.png')} 
@@ -47,11 +47,12 @@ export const ProfileModal = () => {
 				<div className="logout">
 					로그아웃
 				</div>
+				<div className="close-button">
 				<button id="modal-close-button" 
-								className="close-button" 
 								onClick={closeModal}>
 					X
 				</button>
+				</div>
 			</div>
 		</div>
 	)
