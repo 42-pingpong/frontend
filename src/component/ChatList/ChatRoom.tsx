@@ -87,17 +87,34 @@ export const ChatRoom = () => {
 ]
 
 	return (
-		<div className='grid grid-cols-1 grid-row-2 gap-1 h-full'>
-					<ServiceTitle title="Chat" />
-					<div className="relative bg-white py-10 px-3 w-[60vw] h-[50vh]  md:w-full md:h-full rounded-3xl shadow-2xl overflow-y-auto">
-						<div className='grid grid-cols-2 w-full gap-y-7 gap-x-5'>
-							{
-								data.map((item) => 
-									<ChatList key={item.id} props={item} /> 
-								)
-							}
-						</div>
-					</div>
+		<div className='flex flex-col h-full'>
+			<div className='flex'>
+				<ServiceTitle title="Chat" />
+			</div>
+			<div className="flex flex-grow p-10 bg-white w-[60vw] h-[50vh] md:w-full md:h-full rounded-3xl shadow-2xl ">
+				<div className='grid grid-cols-2 w-full gap-y-7 gap-x-10 overflow-y-auto py-3'>
+					{
+						data.map((item) => 
+						<ChatList key={item.id} props={item} /> 
+						)
+					}
 				</div>
-	)
+			</div>
+		</div>
+)
 }
+//	return (
+//		<div className='grid grid-cols-1 grid-row-2 gap-1 h-full'>
+//			<ServiceTitle title="Chat" />
+//			<div className="relative bg-white py-10 px-10 w-[60vw] h-[50vh] md:w-full md:h-full rounded-3xl shadow-2xl overflow-y-auto">
+//				<div className='grid grid-cols-2 w-full gap-y-7 gap-x-10'>
+//					{
+//						data.map((item) => 
+//						<ChatList key={item.id} props={item} /> 
+//						)
+//					}
+//				</div>
+//			</div>
+//		</div>
+//)
+//}
