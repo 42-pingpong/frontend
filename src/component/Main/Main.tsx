@@ -18,7 +18,7 @@ export const Main = () => {
 					<div className="col-span-1 row-span-6">
 						<UserList />
 					</div>
-					<div className="col-span-2 row-span-2 bg-green-600">
+					<div className="col-span-2 row-span-2">
 						<GameMatch />
 					</div>
 				</div>
