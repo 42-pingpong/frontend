@@ -69,7 +69,4 @@
 		@apply absolute top-5 right-10 p-0  text-gray-400 text-lg
 	}
 
-	.shadow-gray {
-		@apply shadow-lg shadow-black
-	}
 }
