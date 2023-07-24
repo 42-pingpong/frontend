@@ -15,10 +15,10 @@ export const Main = () => {
 					<div className="col-span-2 row-span-4 ">
 						<ChatRoom />
 					</div>
-					<div className="col-span-1 row-span-5">
+					<div className="row-span-5">
 						<UserList />
 					</div>
-					<div className="col-span-2 row-span-1">
+					<div className="col-span-2">
 						<GameMatch />
 					</div>
 				</div>
