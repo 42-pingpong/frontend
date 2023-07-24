@@ -1,9 +1,9 @@
 import { useRecoilState } from 'recoil';
-import { modalState } from '../../atom/modal';
+import { profileModalState } from '../../atom/modal';
 import './styles.css'
 
 export const ProfileModal = () => {
-  const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
+  const [isModalOpen, setIsModalOpen] = useRecoilState(profileModalState);
 
 	const closeModal = (e: any) => {
 		const modalContent = document.getElementById('modal-content');

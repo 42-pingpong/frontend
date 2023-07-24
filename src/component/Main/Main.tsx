@@ -1,12 +1,12 @@
 import { useRecoilValue } from 'recoil';
-import { modalState } from '../../atom/modal';
+import { profileModalState } from '../../atom/modal';
 import { ProfileModal } from '../Header/ProfileModal';
 import { ChatRoom } from '../ChatList/ChatRoom';
 import { UserList } from '../UserList/UserList';
 import { GameMatch } from '../GameMatch/GameMatch';
 
 export const Main = () => {
-	const isModalOpen = useRecoilValue(modalState);
+	const isModalOpen = useRecoilValue(profileModalState);
 
 	return (
 		<>
