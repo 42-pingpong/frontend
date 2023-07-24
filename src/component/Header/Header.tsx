@@ -3,7 +3,7 @@ import { Profile } from './Profile';
 
 const Header = () => {
   return (
-    <header className="sticky z-10 top-0">
+    <header className="sticky top-0 z-10">
       <nav className=" bg-white px-3 py-1.5 shadow-lg rounded-b-3xl">
         <div className="flex justify-between items-center mx-auto md:px-0">
           <Link to="/" className="flex items-center">
