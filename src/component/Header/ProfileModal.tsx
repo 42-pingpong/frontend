@@ -1,18 +1,18 @@
-import { useRecoilState } from "recoil";
-import { modalState } from "../../atom/modal";
+import { useRecoilState } from 'recoil';
+import { modalState } from '../../atom/modal';
 import './styles.css'
 
 export const ProfileModal = () => {
-	const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
-	
-	const closeModal = (e:any) => {
+  const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
+
+	const closeModal = (e: any) => {
 		const modalContent = document.getElementById('modal-content');
 		const modalCloseButton = document.getElementById('modal-close-button');
 
-		if ((modalContent && modalContent.contains(e.target) && e.target !== modalCloseButton))
+		if (modalContent && modalContent.contains(e.target) && e.target !== modalCloseButton)
 			e.stopPropagation();
-		else
-			setIsModalOpen(!isModalOpen)
+		else 
+			setIsModalOpen(!isModalOpen);
 	};
 
 	return (
