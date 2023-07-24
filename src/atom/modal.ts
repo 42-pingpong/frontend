@@ -1,11 +1,11 @@
-import { atom } from "recoil";
+import { atom } from 'recoil';
 
 export const modalState = atom<boolean>({
-	key: 'modalState',
-	default: false,
-})
+  key: 'modalState',
+  default: false,
+});
 
 export const chattingModalState = atom<boolean>({
-	key: 'chattingModalState',
-	default: false,
-})
+  key: 'chattingModalState',
+  default: false,
+});

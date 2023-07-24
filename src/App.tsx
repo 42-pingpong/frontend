@@ -6,19 +6,19 @@ import { Main } from './component/Main/Main';
 
 function App() {
   return (
-		<>
-			<RecoilRoot>
-				<BrowserRouter>
-					<Header />
-					<Routes>
-						<Route path="/" element={<Main/>} />
-						{/*<Route path="/Chat" element={<Main/>} />
+    <>
+      <RecoilRoot>
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Main />} />
+            {/*<Route path="/Chat" element={<Main/>} />
 						<Route path="/Game" element={<Main/>} />
 					<Route path="/Profile" element={<Main/>} />*/}
-					</Routes>
-				</BrowserRouter>
-			</RecoilRoot>
-		</>
+          </Routes>
+        </BrowserRouter>
+      </RecoilRoot>
+    </>
   );
 }
 
