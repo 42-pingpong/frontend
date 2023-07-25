@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { chattingModalState } from '../../atom/modal';
 import { useRecoilState } from 'recoil';
 
 const roomtypeList = ['Public', 'Protected', 'Private'];
 
-const ChattingRoom = () => {
-  const [state, setState] = useRecoilState(chattingModalState);
+export const ChattingRoom = () => {
+  const [chattingState, setChattingState] = useRecoilState(chattingModalState);
 
   const closeModal = () => {
-    setState(!state);
+    setChattingState(!chattingState);
   };
 
   return (
+    <div
+      className="background bg-[rgba(0, 0, 0, 0.2)]"
+      onClick={closeModal}>
     <div className="w-[35vw] h-[57vh] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[10vh]">
       <p className="py-[7%] px-[8%] font-sans not-italic font-[320]  text-[35px] leading-[41px] tracking-tighter text-[#5D777B]">
         Create Chatting Room
@@ -80,6 +83,7 @@ const ChattingRoom = () => {
       >
         X
       </button>
+    </div>
     </div>
   );
 };
