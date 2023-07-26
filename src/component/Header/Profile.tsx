@@ -1,9 +1,7 @@
-import { useCallback, useState } from 'react';
-import { ProfileModal } from './ProfileModal';
 import { modalState } from '../../atom/modal';
 import { useRecoilState } from 'recoil';
 
-export const Profile = () => {
+const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
 
   return (
@@ -17,3 +15,5 @@ export const Profile = () => {
     </>
   );
 };
+
+export default Profile;
