@@ -1,5 +1,15 @@
 import { atom } from 'recoil';
 
+interface UserInfo {
+  id: number;
+  nickName: string;
+  email: string;
+  fullName: string;
+  profile: string;
+  selfIntroduction: string;
+  level: number;
+}
+
 export const loginState = atom<boolean>({
   key: 'loginState',
   default: false,

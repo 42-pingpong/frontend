@@ -1,10 +1,12 @@
 import { useRecoilState } from 'recoil';
 import { modalState } from '../../atom/modal';
+import { userInfo } from '../../atom/login';
 import Logout from './Logout';
 import './styles.css';
 
 export const ProfileModal = () => {
   const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
+  const [userInfoObj, setUserInfoObj] = useRecoilState(userInfo);
 
   const closeModal = (e: any) => {
     const modalContent = document.getElementById('modal-content');
@@ -30,23 +32,20 @@ export const ProfileModal = () => {
         <div className="profile-container">
           <div className="profile-image-container">
             <img
-              src={require('../../public/soo.png')}
+              src={userInfoObj.profile}
               alt="Profile"
               className="absolute w-11/12 rounded-full border-4 m-3 border-emerald-400 "
             />
           </div>
           <div className="profile-content-container">
             <div className="profile-name-container">
-              <span className="profile-name">IntraId</span>
+              <span className="profile-name">{userInfoObj.nickName}</span>
             </div>
             <div className="profile-email-container">
-              <span className="profile-email">IntraId@42student.seoul.kr</span>
+              <span className="profile-email">{userInfoObj.email}</span>
             </div>
             <div className="profile-massege-container">
-              <p className="profile-massege">
-                안녕하세요 수예요 이거만 하고 잘까 생각중입니다.
-                상태메세지입니다. 오늘 탕후루를 먹었어요. 맛있더라고요
-              </p>
+              <p className="profile-massege">{userInfoObj.selfIntroduction}</p>
             </div>
           </div>
         </div>
