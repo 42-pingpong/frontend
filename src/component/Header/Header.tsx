@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Profile } from './Profile';
+import ConditionalProfileDisplay from './ConditionalProfileDisplay';
 
 const Header = () => {
   return (
@@ -14,9 +14,7 @@ const Header = () => {
               alt="Logo"
             />
           </Link>
-          <div className="flex items-center mr-3">
-            <Profile />
-          </div>
+          <ConditionalProfileDisplay />
         </div>
       </nav>
     </header>
