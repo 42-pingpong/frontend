@@ -18,7 +18,7 @@ const ConditionalProfileDisplay = () => {
       }
     };
     fetchUser();
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <div className="flex items-center mr-3">

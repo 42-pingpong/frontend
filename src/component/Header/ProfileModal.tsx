@@ -1,5 +1,6 @@
 import { useRecoilState } from 'recoil';
 import { modalState } from '../../atom/modal';
+import Logout from './Logout';
 import './styles.css';
 
 export const ProfileModal = () => {
@@ -52,7 +53,7 @@ export const ProfileModal = () => {
         <div className="profile-button-container">
           <span className="profile-button-text"> Profile </span>
         </div>
-        <div className="logout">로그아웃</div>
+        <Logout />
         <div className="close-button">
           <button id="modal-close-button" onClick={closeModal}>
             X
