@@ -20,67 +20,67 @@ export const ChatSection = () => {
             sender: 'jina'
         },
         {
-            id: 1,
+            id: 2,
             nickname: 'nick1',
             text: 'test2',
             sender: 'me'
         },
         {
-            id: 1,
+            id: 3,
             nickname: 'nick1',
             text: 'test3',
             sender: 'jina'
         },
         {
-            id: 1,
+            id: 4,
             nickname: 'nick1',
             text: 'test1',
             sender: 'me'
         },
         {
-            id: 1,
+            id: 5,
             nickname: 'nick1',
             text: 'test1',
             sender: 'jina'
         },
         {
-            id: 1,
+            id: 6,
             nickname: 'nick1',
             text: 'test1',
             sender: 'jina'
         },
         {
-            id: 1,
+            id: 7,
             nickname: 'nick1',
             text: 'test1',
             sender: 'jina'
         },
         {
-            id: 1,
+            id: 8,
             nickname: 'nick1',
             text: 'test1',
             sender: 'jina'
         },
         {
-            id: 1,
+            id: 9,
             nickname: 'nick1',
             text: 'test1',
             sender: 'jina'
         },
         {
-            id: 1,
+            id: 11,
             nickname: 'nick1',
             text: 'test1',
             sender: 'jina'
         },
         {
-            id: 1,
+            id: 12,
             nickname: 'nick1',
             text: 'test1',
             sender: 'jina'
         },
         {
-            id: 1,
+            id: 13,
             nickname: 'nick1',
             text: 'test1',
             sender: 'jina'
@@ -162,7 +162,7 @@ export const ChatSection = () => {
 // ]
     
     return (
-        <div id="chat-section" className="col-span-2 flex flex-col w-full flex-grow">
+        <div id="chat-section" className="flex flex-col h-full">
             <div className='flex'>
                 <ServiceTitle title="Chat" />
             </div>
@@ -176,7 +176,7 @@ export const ChatSection = () => {
 	}}></ChatList>
             </div>
       
-            <div className="rounded-3xl shadow-xl h-[50%] relative flex justify-center">
+            <div className="rounded-3xl shadow-xl h-[50%] flex-grow relative flex justify-center">
                 <div className='w-full h-[85%]  justify-between overflow-y-auto py-3 items-center z-10'>
 					{
                         //here

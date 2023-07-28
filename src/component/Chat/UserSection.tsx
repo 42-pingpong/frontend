@@ -6,7 +6,7 @@ import { UserList, userData } from "../UserList/UserList"
 export const UserSection = () => {
     
     return (
-        <div id = 'friends-section' className="flex-col">
+        <div id = 'friends-section' className="flex-col flex h-full">
              <div className='flex'>
                 <ServiceTitle title="User" />
             </div>
