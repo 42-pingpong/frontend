@@ -8,11 +8,11 @@ export const Chatting = ({ props }: {props: chatForm}) => {
 				<img src={require('../../public/soo.png')} />
 </ div>
             
-            <div className="text-xl mb-[2.5%] px-5 rounded-[50px] shadow-lg w-[30vw] h-[3rem] bg-[#D9D9D9] justify-center mx-[2.5%]">
+            <div className="text-xl mb-[2.5%] px-5 rounded-[50px] shadow-lg w-40 h-[3rem] bg-[#D9D9D9] justify-center mx-[2.5%]">
                 <span> {props.text} </span>
         </div>
             </div> ) : (
-            <div className="text-xl mb-[2.5%] px-5 rounded-[50px] shadow-lg w-[30vw] h-[3rem] bg-[#9D9D9D] justify-center mx-[2.5%] ml-auto">
+            <div className="text-xl mb-[2.5%] px-5 rounded-[50px] shadow-lg w-40 h-[3rem] bg-[#9D9D9D] justify-center mx-[2.5%] ml-auto">
                 <span> {props.text} </span>
 
         </div>
