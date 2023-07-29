@@ -34,7 +34,7 @@ export const ProfileModal = () => {
             <img
               src={userInfoObj.profile}
               alt="Profile"
-              className="absolute w-11/12 rounded-full border-4 m-3 border-emerald-400 "
+              className="absolute w-[7.5rem] h-[7.5rem] rounded-full border-4 m-3 border-emerald-400 object-cover"
             />
           </div>
           <div className="profile-content-container">

@@ -25,7 +25,7 @@ const Profile = () => {
       <img
         src={userInfoObj.profile}
         alt="Profile"
-        className="w-14 rounded-full border-emerald-400 border-2"
+        className="w-14 h-14 object-cover rounded-full border-emerald-400 border-2"
         onClick={() => setIsModalOpen(!isModalOpen)}
       />
     </>
