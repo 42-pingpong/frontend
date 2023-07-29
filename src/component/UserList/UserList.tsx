@@ -46,6 +46,41 @@ export const userData = [
 		name: 'user3',
 		status: 'ingame',
 	},
+	{
+		id: 1,
+		name: 'user1',
+		status: 'online',
+	},
+	{
+		id: 2,
+		name: 'user2',
+		status: 'offline',
+	},
+	{
+		id: 3,
+		name: 'user3',
+		status: 'ingame',
+	},
+	{
+		id: 14,
+		name: 'user1',
+		status: 'online',
+	},
+	{
+		id: 23,
+		name: 'user2',
+		status: 'offline',
+	},
+	{
+		id: 35,
+		name: 'user3',
+		status: 'ingame',
+	},
+	{
+		id: 315,
+		name: 'user3',
+		status: 'ingame',
+	},
 ]
 
 export const UserList = () => {

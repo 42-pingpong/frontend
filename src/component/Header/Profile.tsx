@@ -1,39 +1,21 @@
-import { profileModalState } from '../../atom/modal';
+import { modalState } from '../../atom/modal';
 import { useRecoilState } from 'recoil';
-import { loginState } from '../../atom/user';
-import { useQuery, useMutation } from 'react-query';
-import axios from 'axios';
+import { userInfo } from '../../atom/login';
 
-export const Profile = () => {
-  const URI = `${process.env.REACT_APP_SERVER}`;
-  const [isModalOpen, setIsModalOpen] = useRecoilState(profileModalState);
-  const [isLogin, setIsLogin] = useRecoilState(loginState);
-
-	const handleLogin = () => {
-		window.location.href = `${URI}/api/auth/42/login`;
-	}
-
-	const {data, isError, isSuccess} = useQuery('user', () => axios.get(`${URI}/api/user/me`, {
-		withCredentials: true,
-	}));
-		
-	if (isSuccess) {
-		setIsLogin(true);
-	}
-	if (isError) {
-		setIsLogin(false);
-	}
-	
+const Profile = () => {
+  const [userInfoObj, setUserInfoObj] = useRecoilState(userInfo);
+  const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
 
   return (
     <>
       <img
-        src={require('../../public/soo.png')}
+        src={userInfoObj.profile}
         alt="Profile"
         className="w-14 rounded-full border-emerald-400 border-2"
-        onClick={() => (isLogin ? setIsModalOpen(!isModalOpen) : handleLogin())}
+        onClick={() => setIsModalOpen(!isModalOpen)}
       />
     </>
   );
 };
 
+export default Profile;
