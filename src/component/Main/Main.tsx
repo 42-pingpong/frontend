@@ -1,4 +1,5 @@
 import { useRecoilValue } from 'recoil';
+import { useParams } from 'react-router-dom';
 import { chattingModalState, profileModalState } from '../../atom/modal';
 import { ProfileModal } from '../Header/ProfileModal';
 import { ChatRoom } from '../ChatList/ChatRoom';
@@ -9,6 +10,13 @@ import { ChattingRoom } from '../ChattingRoom/ChattingRoom';
 export const Main = () => {
   const isProfileModalOpen = useRecoilValue(profileModalState);
   const isChattingModalOpen = useRecoilValue(chattingModalState);
+
+  const token = useParams<{ accesstoken: string | undefined }>();
+
+  if (token?.accesstoken !== undefined) {
+    console.log(token);
+    localStorage.setItem('token', token.accesstoken);
+  }
 
   return (
     <>

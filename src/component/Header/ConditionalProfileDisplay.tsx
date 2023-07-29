@@ -15,8 +15,10 @@ const ConditionalProfileDisplay = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const token = localStorage.getItem('token');
         const res = await axios.get(SERVER + `/api/user/me`, {
           withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
         });
         console.log(res);
 
