@@ -14,6 +14,11 @@ const Profile = () => {
       console.log('connect');
       StatusSocket.connect();
 
+      StatusSocket.on('change-status', (data: any) => {
+        console.log('change-status');
+        console.log(data);
+      });
+
       return () => {
         StatusSocket.disconnect();
       };
