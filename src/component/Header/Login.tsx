@@ -1,6 +1,8 @@
+const SERVER = process.env.REACT_APP_SERVER;
+
 const Login = () => {
   const handleLogin = () => {
-    const authURL = `http://localhost:10002/api/auth/42/login`;
+    const authURL = SERVER + `/api/auth/42/login`;
     window.location.href = authURL;
   };
 
