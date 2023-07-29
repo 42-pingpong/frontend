@@ -1,10 +1,24 @@
 import { profileModalState } from '../../atom/modal';
 import { useRecoilState } from 'recoil';
-import { userInfo } from '../../atom/login';
+import { loginState, userInfo } from '../../atom/login';
+import { StatusSocket } from '../../sockets/StatusSocket';
+import { useEffect } from 'react';
 
 const Profile = () => {
   const [userInfoObj, setUserInfoObj] = useRecoilState(userInfo);
   const [isModalOpen, setIsModalOpen] = useRecoilState(profileModalState);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      console.log('connect');
+      StatusSocket.connect();
+
+      return () => {
+        StatusSocket.disconnect();
+      };
+    }
+  }, [isLoggedIn]);
 
   return (
     <>
