@@ -6,6 +6,9 @@ module.exports = {
 			colors: {
 				'sky' : '#E9F6FB',
 			},
+      screens: {
+        'game' : '2450px',
+      }
 		},
   },
   plugins: [],
