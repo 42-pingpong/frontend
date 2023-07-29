@@ -1,16 +1,21 @@
+import axios from 'axios';
 import { loginState } from '../../atom/login';
+import { profileModalState } from '../../atom/modal';
 import { useRecoilState } from 'recoil';
 
+const SERVER = process.env.REACT_APP_SERVER;
+
 const Logout = () => {
-  const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
-
+  const [, setIsLoggedIn] = useRecoilState(loginState);
+  const [, setIsModalOpen] = useRecoilState(profileModalState);
   const handleLogout = async () => {
-    const logoutURL = `http://localhost:10002/api/auth/logout`;
+    const logoutURL = SERVER + `/api/auth/logout`;
 
-    const res = await fetch(logoutURL, {
-      credentials: 'include',
+    const res = await axios(logoutURL, {
+      withCredentials: true,
     });
     setIsLoggedIn(false);
+    setIsModalOpen(false);
   };
 
   return (

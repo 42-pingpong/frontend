@@ -13,10 +13,7 @@ export const ServiceTitle = (props: ServiceTitleProps) => {
 
   return (
     <div className="flex h-full ml-5 items-center">
-      <span className="text-bold text-[35px] text-gray-500">
-        {' '}
-        {props.title}{' '}
-      </span>
+      <span className="text-bold text-[35px] text-gray-500">{props.title}</span>
       <img
         src={require('../../public/plus.png')}
         alt="plus-button"
