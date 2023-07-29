@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { chattingModalState, profileModalState } from '../../atom/modal';
 import { ProfileModal } from '../Header/ProfileModal';
 import { ChatRoom } from '../ChatList/ChatRoom';
@@ -11,11 +11,10 @@ export const Main = () => {
   const isProfileModalOpen = useRecoilValue(profileModalState);
   const isChattingModalOpen = useRecoilValue(chattingModalState);
 
-  const token = useParams<{ accesstoken: string | undefined }>();
-
-  if (token?.accesstoken !== undefined) {
-    console.log(token);
-    localStorage.setItem('token', token.accesstoken);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const ac = searchParams.get('accessToken');
+  if (ac !== null) {
+    localStorage.setItem('token', ac);
   }
 
   return (

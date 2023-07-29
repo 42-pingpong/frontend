@@ -13,7 +13,8 @@ function App() {
         <BrowserRouter>
           <Header />
           <Routes>
-            <Route path="/:acesstoken" element={<Main />} />
+            <Route path="/" element={<Main />} />
+            <Route path="/token" element={<Main />} />
             <Route path="/Chat" element={<Chat />} />
             <Route path="/Game" element={<Game />} />
             {/*<Route path="/Profile" element={<Main/>} />*/}
