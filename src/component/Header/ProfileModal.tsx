@@ -1,11 +1,11 @@
 import { useRecoilState } from 'recoil';
-import { modalState } from '../../atom/modal';
+import { profileModalState } from '../../atom/modal';
 import { userInfo } from '../../atom/login';
 import Logout from './Logout';
 import './styles.css';
 
 export const ProfileModal = () => {
-  const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
+  const [isModalOpen, setIsModalOpen] = useRecoilState(profileModalState);
   const [userInfoObj, setUserInfoObj] = useRecoilState(userInfo);
 
   const closeModal = (e: any) => {

@@ -9,7 +9,6 @@ export const GameProgress = () => {
 	let interval: any = undefined;
 	
 	useEffect(() => {
-		console.log(matching);
 		if(matching) {
 			interval = setInterval(() => {
 				setProgress((prev) => prev + 1);
