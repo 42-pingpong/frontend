@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 
-export const modalState = atom<boolean>({
-  key: 'modalState',
+export const profileModalState = atom<boolean>({
+  key: 'profileModalState',
   default: false,
 });
 
