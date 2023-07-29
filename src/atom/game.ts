@@ -1,9 +1,9 @@
-import { atom } from "recoil";
+import { atom } from 'recoil';
 
 export const newMatching = atom({
-	key: 'newMatching',
-	default: false,
-})
+  key: 'newMatching',
+  default: false,
+});
 
 export const ballX = atom({
   key: 'ballX',
@@ -26,21 +26,31 @@ export const ballSpeedY = atom({
 });
 
 export const myScore = atom({
-  key:'myScore',
+  key: 'myScore',
   default: 0,
-})
+});
 
 export const otherScore = atom({
-  key:'otherScore',
+  key: 'otherScore',
   default: 0,
-})
+});
 
 export const myPaddle = atom({
   key: 'myPaddle',
   default: 295,
-})
+});
 
 export const otherPaddle = atom({
   key: 'otherPaddle',
   default: 295,
-})
+});
+
+export const start = atom({
+  key: 'start',
+  default: false,
+});
+
+export const end = atom({
+  key: 'end',
+  default: false,
+});
