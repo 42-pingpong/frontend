@@ -1,5 +1,4 @@
 import { io } from 'socket.io-client';
-import cookieExtractor from '../tools/cookieExtractor';
 
 // "undefined" means the URL will be computed from the `window.location` object
 const URL = `ws://localhost:10002/status`;
