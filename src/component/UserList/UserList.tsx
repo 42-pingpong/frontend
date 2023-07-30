@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { StatusSocket } from '../../sockets/StatusSocket';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { StatusIcon } from './StatusIcon';
 import { User } from './User';
@@ -84,6 +85,18 @@ export const userData = [
 ];
 
 export const UserList = () => {
+  /**
+   * 친구 중에서, 상태가 바뀐 친구의 정보를 줌.
+   * */
+  useEffect(() => {
+    if (StatusSocket.connected) {
+      StatusSocket.on('change-status', (data: any) => {
+        console.log('change-status');
+        console.log(data);
+      });
+    }
+  }, [StatusSocket]);
+
   return (
     <div className="flex h-full w-72 md:w-full flex-col">
       <div className="flex">
