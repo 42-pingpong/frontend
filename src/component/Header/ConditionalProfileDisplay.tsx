@@ -3,7 +3,6 @@ import { useRecoilState } from 'recoil';
 import { loginState, userInfo } from '../../atom/login';
 import Login from './Login';
 import Profile from './Profile';
-import { useQuery } from 'react-query';
 import axios from 'axios';
 
 const SERVER = process.env.REACT_APP_SERVER;

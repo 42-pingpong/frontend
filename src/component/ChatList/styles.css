@@ -3,8 +3,7 @@
 @tailwind utilities;
 
 @layer chatroom {
-	.chat-container {
-		@apply flex absolute bg-white w-[55vw] h-[55vh] rounded-3xl shadow-2xl
-	}
-
+  .chat-container {
+    @apply flex absolute bg-white w-[55vw] h-[55vh] rounded-3xl shadow-2xl;
+  }
 }
