@@ -98,7 +98,7 @@ export const UserList = () => {
   }, [StatusSocket]);
 
   return (
-    <div className="flex h-full w-72 md:w-full flex-col">
+    <div className="flex h-full flex-col">
       <div className="flex">
         <ServiceTitle title="Friends" />
       </div>

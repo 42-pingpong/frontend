@@ -11,22 +11,20 @@ export const Main = () => {
   const isChattingModalOpen = useRecoilValue(chattingModalState);
 
   return (
-    <>
-      <div className="h-screen bg-slate-100 py-14 px-32">
-        <div className="grid grid-cols-3 grid-rows-5 gap-x-24 gap-y-10 w-full h-[80vh] md:w-full md:h-[80vh]">
-          <div className="col-span-2 row-span-4 ">
-            <ChatRoom />
-          </div>
-          <div className="row-span-5">
-            <UserList />
-          </div>
-          <div className="col-span-2">
-            <GameMatch />
-          </div>
+    <div className="flex py-14 px-32 items-center justify-center">
+      <div className="grid grid-row-3 xl:grid-cols-3 xl:grid-rows-6 h-full gap-10  max-w-[1800px] w-[100vw]">
+        <div className=" h-96 xl:h-full row-span-1 xl:col-span-2 xl:row-span-4">
+          <ChatRoom />
         </div>
-        {isProfileModalOpen && <ProfileModal />}
-        {isChattingModalOpen && <ChattingRoom />}
+        <div className="h-96 xl:h-full row-span-1 xl:row-span-6">
+          <UserList />
+        </div>
+        <div className="h-48 xl:h-full row-span-1 xl:row-span-2 xl:col-span-2">
+          <GameMatch />
+        </div>
       </div>
-    </>
+      {isProfileModalOpen && <ProfileModal />}
+      {isChattingModalOpen && <ChattingRoom />}
+    </div>
   );
 };
