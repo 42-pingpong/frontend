@@ -14,6 +14,14 @@ const Profile = () => {
       console.log('connect');
       StatusSocket.connect();
 
+      /**
+       * 친구 중에서, 상태가 바뀐 친구의 정보를 줌.
+       * */
+      StatusSocket.on('change-status', (data: any) => {
+        console.log('change-status');
+        console.log(data);
+      });
+
       return () => {
         StatusSocket.disconnect();
       };
