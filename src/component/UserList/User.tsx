@@ -8,11 +8,11 @@ export const User = ({ props }: { props: userList }) => {
       <div className="w-14 h-14 rounded-full border-2">
         <img src={require('../../public/soo.png')} />
       </div>
-      <div className="flex w-1/2">
+      <div className="flex w-1/2 ml-1">
         <span className="text-gray-500 text-xl">{props.name}</span>
       </div>
       <div className="flex w-10 h-6">
-        <img src={require('../../public/plane.png')} className="ml-3" />
+        <img src={require('../../public/plane.png')} />
       </div>
       <div
         className={`${
@@ -21,7 +21,7 @@ export const User = ({ props }: { props: userList }) => {
             : props.status === 'offline'
             ? 'bg-red-400'
             : 'bg-blue-400 '
-        } w-5 h-5 mr-3 rounded-full `}
+        } w-5 h-5 rounded-full `}
       ></div>
     </div>
   );
