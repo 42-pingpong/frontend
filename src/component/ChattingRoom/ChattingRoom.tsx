@@ -7,19 +7,25 @@ const roomtypeList = ['Public', 'Protected', 'Private'];
 export const ChattingRoom = () => {
   const [chattingState, setChattingState] = useRecoilState(chattingModalState);
 
-    const closeModal = (e: any) => {
-      const modalContent = document.getElementById('chattingroom-content');
-      const modalCloseButton = document.getElementById('modal-close-button');
-  
-      if (modalContent && modalContent.contains(e.target) && e.target !== modalCloseButton)
-        e.stopPropagation();
-      else 
-      setChattingState(!chattingState);
-      }
+  const closeModal = (e: any) => {
+    const modalContent = document.getElementById('chattingroom-content');
+    const modalCloseButton = document.getElementById('modal-close-button');
+
+    if (
+      modalContent &&
+      modalContent.contains(e.target) &&
+      e.target !== modalCloseButton
+    )
+      e.stopPropagation();
+    else setChattingState(!chattingState);
+  };
 
   return (
     <div className="background bg-[rgba(0,0,0,0.2)]" onClick={closeModal}>
-      <div id = 'chattingroom-content' className="w-[35vw] h-[65vh] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[10vh]">
+      <div
+        id="chattingroom-content"
+        className="w-[35vw] h-[65vh] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[10vh]"
+      >
         <p className="py-[7%] px-[8%] font-sans not-italic font-[320]  text-[35px] leading-[41px] tracking-tighter text-[#5D777B]">
           Create Chatting Room
         </p>
