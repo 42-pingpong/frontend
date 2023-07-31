@@ -1,14 +1,21 @@
+import axios from 'axios';
 import React, { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { loginState, userInfo } from '../../atom/login';
+import { GetFriendResponseDto } from '../../interfaces/Get-Friend.dto';
 import { StatusSocket } from '../../sockets/StatusSocket';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { StatusIcon } from './StatusIcon';
-import { User } from './User';
+import { Friend } from './Friend';
+import { UserDto } from '../../interfaces/User.dto';
 
-export interface userList {
+export interface UserList {
   id: number;
   name: string;
   status: string;
   //image: string;
+  //
+  //
 }
 
 export const userData = [
@@ -84,13 +91,45 @@ export const userData = [
   },
 ];
 
-export const UserList = () => {
+const SERVER = process.env.REACT_APP_SERVER;
+
+export const FriendList = () => {
+  const [isLogin] = useRecoilState(loginState);
+  const [userInfoState] = useRecoilState(userInfo);
+  const [userList, setUserList] = React.useState<GetFriendResponseDto[]>([]);
+
+  useEffect(() => {
+    if (isLogin) {
+      const fetchUserList = async () => {
+        try {
+          const response = await axios.get(
+            SERVER +
+              `/api/user/me/friends/${userInfoState.id}?status=all&includeMe=true`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            }
+          );
+          console.log(response.data);
+          const data: GetFriendResponseDto[] = response.data;
+          if (data !== undefined) {
+            setUserList(data);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchUserList();
+    }
+  }, [isLogin]);
+
   /**
    * 친구 중에서, 상태가 바뀐 친구의 정보를 줌.
    * */
   useEffect(() => {
     if (StatusSocket.connected) {
-      StatusSocket.on('change-status', (data: any) => {
+      StatusSocket.on('change-status', (data: UserDto) => {
         console.log('change-status');
         console.log(data);
       });
@@ -109,8 +148,8 @@ export const UserList = () => {
           <StatusIcon props={{ status: 'ingame', color: 'bg-blue-400' }} />
         </div>
         <div className="flex flex-col w-full h-full p-1 overflow-y-auto mt-3 mb-10">
-          {userData.map((item) => (
-            <User key={item.id} props={item} />
+          {userList.map((item) => (
+            <Friend key={item.friendId} props={item} />
           ))}
         </div>
       </div>
