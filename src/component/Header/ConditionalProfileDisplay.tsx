@@ -3,24 +3,37 @@ import { useRecoilState } from 'recoil';
 import { loginState, userInfo } from '../../atom/login';
 import Login from './Login';
 import Profile from './Profile';
+import axios from 'axios';
+import React from 'react';
+
+const SERVER = process.env.REACT_APP_SERVER;
 
 const ConditionalProfileDisplay = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
-  const [userInfoObject, setUserInfo] = useRecoilState(userInfo);
+  const [, setUserInfo] = useRecoilState(userInfo);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const res = await fetch('http://localhost:10002/api/user/me', {
-        credentials: 'include',
-      });
-      const data = await res.json();
-      if (data.id !== undefined) {
-        setIsLoggedIn(true);
-        setUserInfo(data);
-        console.log(data);
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await axios.get(SERVER + `/api/user/me`, {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log(res);
+
+        const userData = res.data;
+
+        if (userData.id !== undefined) {
+          setIsLoggedIn(true);
+          setUserInfo(userData);
+          console.log(userData);
+        }
+      } catch (error) {
+        console.log('error');
       }
     };
-    fetchUser();
+    fetchData();
   }, [isLoggedIn]);
 
   return (

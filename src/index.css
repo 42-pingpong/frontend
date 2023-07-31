@@ -3,8 +3,7 @@
 @tailwind utilities;
 
 body {
-  /*margin: 0;*/
-  /*overflow-x: hidden;
-	overflow-y: scroll;*/
+  background-color: #f0f4f8; /* Replace with your desired background color */
+  margin: 0;
+  overflow: auto;
 }
-
