@@ -5,6 +5,7 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Main } from './component/Main/Main';
 import { Chat } from './component/Chat/Chat';
 import { Game } from './component/Game/Game';
+import { TokenSave } from './component/Main/TokenSave';
 
 function App() {
   return (
@@ -14,9 +15,10 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Main />} />
+            <Route path="/token" element={<TokenSave />} />
             <Route path="/Chat" element={<Chat />} />
-						<Route path="/Game" element={<Game/>} />
-					{/*<Route path="/Profile" element={<Main/>} />*/}
+            <Route path="/Game" element={<Game />} />
+            {/*<Route path="/Profile" element={<Main/>} />*/}
           </Routes>
         </BrowserRouter>
       </RecoilRoot>

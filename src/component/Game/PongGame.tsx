@@ -46,13 +46,13 @@ export const PongGame = () => {
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
       setOtherPaddleState((prevY) =>
-        Math.min(prevY + 30, containerHeight - paddleHeight),
+        Math.min(prevY + 30, containerHeight - paddleHeight)
       );
     } else if (e.key === 'w') {
       setMyPaddleState((prevY) => Math.max(prevY - 30, 0));
     } else if (e.key === 's') {
       setMyPaddleState((prevY) =>
-        Math.min(prevY + 30, containerHeight - paddleHeight),
+        Math.min(prevY + 30, containerHeight - paddleHeight)
       );
     }
   };

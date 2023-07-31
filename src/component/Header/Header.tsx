@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
 import ConditionalProfileDisplay from './ConditionalProfileDisplay';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
@@ -10,7 +10,7 @@ const Header = () => {
             {/* md, sm 등 반응형: 은 그 크기 이상일 때 사용할 사이즈, 디폴트는 그 크기 이하일 때*/}
             <img
               src={require('../../public/logo.png')}
-              className="w-24"
+              className="w-24 2xl:w-28"
               alt="Logo"
             />
           </Link>
