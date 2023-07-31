@@ -5,6 +5,8 @@ module.exports = {
     extend: {
       colors: {
         sky: '#E9F6FB',
+        borderBlue: '#2FA5BB',
+        progressBlue: '#97D2DD',
       },
       screens: {
         game: '2450px',
