@@ -9,3 +9,8 @@ export const chattingModalState = atom<boolean>({
   key: 'chattingModalState',
   default: false,
 });
+
+export const addUserModalState = atom<boolean>({
+  key: 'addUserModalState',
+  default: false,
+});

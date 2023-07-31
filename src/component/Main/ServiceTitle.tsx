@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import { newMatching } from '../../atom/game';
-import { chattingModalState } from '../../atom/modal';
+import { addUserModalState, chattingModalState } from '../../atom/modal';
 
 interface ServiceTitleProps {
   title: string;
@@ -10,6 +10,9 @@ interface ServiceTitleProps {
 export const ServiceTitle = (props: ServiceTitleProps) => {
   const [matching, setMatching] = useRecoilState(newMatching);
   const [chatstate, setChatstate] = useRecoilState(chattingModalState);
+  const [addUser, setAddUser] = useRecoilState(addUserModalState);
+
+  console.log(props.title);
 
   return (
     <div className="flex h-full ml-5 items-center">
@@ -25,6 +28,8 @@ export const ServiceTitle = (props: ServiceTitleProps) => {
             ? setMatching(!matching)
             : props.title === 'Chat'
             ? setChatstate(!chatstate)
+            : props.title === 'Friends'
+            ? setAddUser(!addUser)
             : null
         }
       />
