@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { loginState, userInfo } from '../../atom/login';
+import { loginState, userInfo } from '../../atom/user';
 import Login from './Login';
 import Profile from './Profile';
 import axios from 'axios';

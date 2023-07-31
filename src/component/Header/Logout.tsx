@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { loginState } from '../../atom/login';
+import { loginState } from '../../atom/user';
 import { profileModalState } from '../../atom/modal';
 import { useRecoilState } from 'recoil';
 

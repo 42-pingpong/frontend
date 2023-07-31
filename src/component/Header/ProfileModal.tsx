@@ -1,10 +1,12 @@
 import { useRecoilState } from 'recoil';
 import { profileModalState } from '../../atom/modal';
-import { userInfo } from '../../atom/login';
+import { useNavigate } from 'react-router-dom';
+import { userInfo } from '../../atom/user';
 import Logout from './Logout';
 import './styles.css';
 
 export const ProfileModal = () => {
+  const navigation = useNavigate();
   const [isModalOpen, setIsModalOpen] = useRecoilState(profileModalState);
   const [userInfoObj, setUserInfoObj] = useRecoilState(userInfo);
 
@@ -21,6 +23,10 @@ export const ProfileModal = () => {
     else setIsModalOpen(!isModalOpen);
   };
 
+  const navigateToProfile = () => {
+    navigation('/profile');
+  };
+
   return (
     //fixed : viewport를 기준으로 한다. (조상의 position에 영향을 받지 않고 화면 전체를 기준으로 한다)
     // 그래서.. 스크롤을 내려도 고정된다..
@@ -34,7 +40,7 @@ export const ProfileModal = () => {
             <img
               src={userInfoObj.profile}
               alt="Profile"
-              className="absolute w-[7.5rem] h-[7.5rem] rounded-full border-4 m-3 border-emerald-400 object-cover"
+              className="absolute w-[7.5rem] h-[7.5rem] rounded-full border-4 m-3 border-borderBlue object-cover"
             />
           </div>
           <div className="profile-content-container">
@@ -49,7 +55,7 @@ export const ProfileModal = () => {
             </div>
           </div>
         </div>
-        <div className="profile-button-container">
+        <div className="profile-button-container" onClick={navigateToProfile}>
           <span className="profile-button-text"> Profile </span>
         </div>
         <Logout />

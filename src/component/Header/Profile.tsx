@@ -1,6 +1,6 @@
 import { profileModalState } from '../../atom/modal';
 import { useRecoilState } from 'recoil';
-import { loginState, userInfo } from '../../atom/login';
+import { loginState, userInfo } from '../../atom/user';
 import { StatusSocket } from '../../sockets/StatusSocket';
 import { useEffect } from 'react';
 import React from 'react';
@@ -26,7 +26,7 @@ const Profile = () => {
       <img
         src={userInfoObj.profile}
         alt="Profile"
-        className="w-14 h-14 object-cover rounded-full border-emerald-400 border-2"
+        className="w-14 h-14 object-cover rounded-full border-borderBlue border-2"
         onClick={() => setIsModalOpen(!isModalOpen)}
       />
     </>

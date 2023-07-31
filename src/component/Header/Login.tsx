@@ -8,7 +8,7 @@ const Login = () => {
 
   return (
     <button
-      className="bg-emerald-400 text-white px-3 py-1.5 rounded-md"
+      className="bg-borderBlue text-white px-3 py-1.5 rounded-md"
       onClick={() => handleLogin()}
     >
       Login

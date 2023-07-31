@@ -5,6 +5,7 @@ import { chattingModalState } from '../../atom/modal';
 
 interface ServiceTitleProps {
   title: string;
+  nonAddButton?: boolean;
 }
 
 export const ServiceTitle = (props: ServiceTitleProps) => {
@@ -16,18 +17,20 @@ export const ServiceTitle = (props: ServiceTitleProps) => {
       <span className="text-bold text-[30px] md:text-[35px] text-gray-500">
         {props.title}
       </span>
-      <img
-        src={require('../../public/plus.png')}
-        alt="plus-button"
-        className="ml-2 mt-1 w-5 h-5 md:w-6 md:h-6 opacity-70"
-        onClick={() =>
-          props.title === 'Game'
-            ? setMatching(!matching)
-            : props.title === 'Chat'
-            ? setChatstate(!chatstate)
-            : null
-        }
-      />
+      {props.nonAddButton ? null : (
+        <img
+          src={require('../../public/plus.png')}
+          alt="plus-button"
+          className="ml-2 mt-1 w-5 h-5 md:w-6 md:h-6 opacity-70"
+          onClick={() =>
+            props.title === 'Game'
+              ? setMatching(!matching)
+              : props.title === 'Chat'
+              ? setChatstate(!chatstate)
+              : null
+          }
+        />
+      )}
     </div>
   );
 };
