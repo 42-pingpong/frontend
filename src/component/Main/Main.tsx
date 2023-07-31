@@ -11,8 +11,8 @@ export const Main = () => {
   const isChattingModalOpen = useRecoilValue(chattingModalState);
 
   return (
-    <div className="flex py-14 px-32 items-center justify-center">
-      <div className="grid grid-row-3 xl:grid-cols-3 xl:grid-rows-5 h-screen gap-x-20 gap-y-10 max-w-[1800px] w-[100vw]">
+    <div className="flex p-32 items-center justify-center h-screen">
+      <div className="grid grid-row-3 xl:grid-cols-3 xl:grid-rows-5 h-full gap-x-20 gap-y-10 max-w-[1800px] w-[100vw]">
         <div className=" h-96 xl:h-full row-span-1 xl:col-span-2 xl:row-span-4">
           <ChatRoom />
         </div>
