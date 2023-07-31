@@ -31,7 +31,7 @@ export const Main = () => {
       </div>
       {isProfileModalOpen && <ProfileModal />}
       {isChattingModalOpen && <ChattingRoom />}
-        {isAddUserModalOpen && <AddUser />}
+      {isAddUserModalOpen && <AddUser />}
     </div>
   );
 };

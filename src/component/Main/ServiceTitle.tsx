@@ -2,7 +2,6 @@ import React from 'react';
 import { useRecoilState } from 'recoil';
 import { newMatching } from '../../atom/game';
 import { addUserModalState, chattingModalState } from '../../atom/modal';
-import { addUserState } from '../../atom/user';
 
 interface ServiceTitleProps {
   title: string;

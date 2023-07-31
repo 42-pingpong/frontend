@@ -1,9 +1,9 @@
 import React from 'react';
-import { addUserState } from '../../atom/user';
 import { useRecoilState } from 'recoil';
+import { addUserModalState } from '../../atom/modal';
 
 export const AddUser = () => {
-  const [addUser, setAddUser] = useRecoilState(addUserState);
+  const [addUser, setAddUser] = useRecoilState(addUserModalState);
 
   const closeModal = (e: any) => {
     const modalContent = document.getElementById('chattingroom-content');
@@ -39,12 +39,19 @@ export const AddUser = () => {
             ></input>
             <div className="flex justify-end">
               <img
-                src={require('../../public/plane.png')}
+                src={require('../../public/search.png')}
                 className="right-[5%] bottom-9 w-6 h-6 relative"
               />
             </div>
           </div>
         </div>
+        <button
+          id="modal-close-button"
+          className="absolute top-3 right-7 p-0 text-gray-400 text-lg"
+          onClick={closeModal}
+        >
+          X
+        </button>
       </div>
     </div>
   );
