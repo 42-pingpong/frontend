@@ -1,14 +1,20 @@
 import { useRecoilValue } from 'recoil';
-import { chattingModalState, profileModalState } from '../../atom/modal';
+import {
+  addUserModalState,
+  chattingModalState,
+  profileModalState,
+} from '../../atom/modal';
 import { ProfileModal } from '../Header/ProfileModal';
 import { ChatRoom } from '../ChatList/ChatRoom';
-import { UserList } from '../UserList/UserList';
 import { GameMatch } from '../GameMatch/GameMatch';
 import { ChattingRoom } from '../ChattingRoom/ChattingRoom';
+import { AddUser } from '../FriendList/AddUser';
+import { FriendList } from '../FriendList/FriendList';
 
 export const Main = () => {
   const isProfileModalOpen = useRecoilValue(profileModalState);
   const isChattingModalOpen = useRecoilValue(chattingModalState);
+  const isAddUserModalOpen = useRecoilValue(addUserModalState);
 
   return (
     <div className="flex p-32 items-center justify-center h-screen">
@@ -17,7 +23,7 @@ export const Main = () => {
           <ChatRoom />
         </div>
         <div className="h-96 xl:h-full row-span-1 xl:row-span-5">
-          <UserList />
+          <FriendList />
         </div>
         <div className="h-48 xl:h-full row-span-1 xl:col-span-2">
           <GameMatch />
@@ -25,6 +31,7 @@ export const Main = () => {
       </div>
       {isProfileModalOpen && <ProfileModal />}
       {isChattingModalOpen && <ChattingRoom />}
+      {isAddUserModalOpen && <AddUser />}
     </div>
   );
 };

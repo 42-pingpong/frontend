@@ -1,7 +1,5 @@
 import { ServiceTitle } from '../Main/ServiceTitle';
-import { StatusIcon } from '../UserList/StatusIcon';
-import { User } from '../UserList/User';
-import { UserList, userData } from '../UserList/UserList';
+import { StatusIcon } from '../FriendList/StatusIcon';
 
 export const UserSection = () => {
   return (
@@ -18,11 +16,11 @@ export const UserSection = () => {
           <StatusIcon props={{ status: 'offline', color: 'bg-red-400' }} />
           <StatusIcon props={{ status: 'ingame', color: 'bg-blue-400' }} />
         </div>
-        <div className="flex flex-col w-full h-full overflow-y-auto mt-3 mb-10">
+        {/*<div className="flex flex-col w-full h-full overflow-y-auto mt-3 mb-10">
           {userData.map((item) => (
             <User key={item.id} props={item} />
           ))}
-        </div>
+        </div>*/}
       </div>
     </div>
   );
