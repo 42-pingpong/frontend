@@ -1,5 +1,5 @@
 import { ServiceTitle } from '../Main/ServiceTitle';
-import { StatusIcon } from '../UserList/StatusIcon';
+import { StatusIcon } from '../FriendList/StatusIcon';
 
 export const UserSection = () => {
   return (

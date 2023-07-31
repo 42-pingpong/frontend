@@ -1,11 +1,11 @@
-import { User } from './User.types';
+import { UserDto } from './User.dto';
 
 export interface GetFriendResponseDto {
-  user: User;
+  user: UserDto;
 
   userId: number;
 
-  friend: User;
+  friend: UserDto;
 
   friendId: number;
 }

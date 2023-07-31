@@ -8,8 +8,8 @@ import { ProfileModal } from '../Header/ProfileModal';
 import { ChatRoom } from '../ChatList/ChatRoom';
 import { GameMatch } from '../GameMatch/GameMatch';
 import { ChattingRoom } from '../ChattingRoom/ChattingRoom';
-import { AddUser } from '../UserList/AddUser';
-import { FriendList } from '../UserList/FriendList';
+import { AddUser } from '../FriendList/AddUser';
+import { FriendList } from '../FriendList/FriendList';
 
 export const Main = () => {
   const isProfileModalOpen = useRecoilValue(profileModalState);

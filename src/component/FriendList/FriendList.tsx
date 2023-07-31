@@ -2,12 +2,12 @@ import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { loginState, userInfo } from '../../atom/login';
-import { GetFriendResponseDto } from '../../interfaces/Get-Friend.types';
-import { User } from '../../interfaces/User.types';
+import { GetFriendResponseDto } from '../../interfaces/Get-Friend.dto';
 import { StatusSocket } from '../../sockets/StatusSocket';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { StatusIcon } from './StatusIcon';
 import { Friend } from './Friend';
+import { UserDto } from '../../interfaces/User.dto';
 
 export interface UserList {
   id: number;
@@ -129,7 +129,7 @@ export const FriendList = () => {
    * */
   useEffect(() => {
     if (StatusSocket.connected) {
-      StatusSocket.on('change-status', (data: User) => {
+      StatusSocket.on('change-status', (data: UserDto) => {
         console.log('change-status');
         console.log(data);
       });

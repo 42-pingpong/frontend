@@ -1,5 +1,5 @@
 import React from 'react';
-import { GetFriendResponseDto } from '../../interfaces/Get-Friend.types';
+import { GetFriendResponseDto } from '../../interfaces/Get-Friend.dto';
 
 export const Friend = ({ props }: { props: GetFriendResponseDto }) => {
   return (
