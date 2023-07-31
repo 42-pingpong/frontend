@@ -17,6 +17,7 @@ const Logout = () => {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     });
+    localStorage.removeItem('token');
     setIsLoggedIn(false);
     setIsModalOpen(false);
   };
