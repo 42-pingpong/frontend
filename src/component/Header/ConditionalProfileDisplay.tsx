@@ -5,6 +5,7 @@ import Login from './Login';
 import Profile from './Profile';
 import axios from 'axios';
 import { UserDto } from '../../interfaces/User.dto';
+import axiosInstance from '../../api/axios';
 
 const SERVER = process.env.REACT_APP_SERVER;
 
@@ -15,14 +16,8 @@ const ConditionalProfileDisplay = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const res = await axios.get(SERVER + `/api/user/me`, {
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        console.log(res);
-
-        const userData: UserDto = res.data;
+        const res = await axiosInstance.get<UserDto>(`/api/user/me`);
+        const userData = res.data;
 
         if (userData.id !== undefined) {
           setIsLoggedIn(true);
