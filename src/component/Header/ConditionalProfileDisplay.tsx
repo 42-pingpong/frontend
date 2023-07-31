@@ -4,7 +4,7 @@ import { loginState, userInfo } from '../../atom/login';
 import Login from './Login';
 import Profile from './Profile';
 import axios from 'axios';
-import React from 'react';
+import { User } from '../../interfaces/User.types';
 
 const SERVER = process.env.REACT_APP_SERVER;
 
@@ -22,7 +22,7 @@ const ConditionalProfileDisplay = () => {
         });
         console.log(res);
 
-        const userData = res.data;
+        const userData: User = res.data;
 
         if (userData.id !== undefined) {
           setIsLoggedIn(true);
