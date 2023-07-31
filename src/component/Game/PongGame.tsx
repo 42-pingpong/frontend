@@ -135,6 +135,7 @@ export const PongGame = () => {
         </div>
       );
     }
+    return null;
   };
 
   const End = () => {
@@ -149,13 +150,55 @@ export const PongGame = () => {
         </div>
       );
     }
+    return null;
   };
 
-  return (
+  if (startState === false && endState === false) {
+    return (
+      <div className="pong-game-container">
+        <div className="pong-game">
+          <Start />
+          <div
+            className="absolute w-[25px] h-[140px] bg-[#97D2DD] rounded-[10px]"
+            style={{ top: myPaddleState }}
+          ></div>
+          <div
+            className="absolute w-[25px] h-[140px] bg-[#97D2DD] rounded-[10px]"
+            style={{
+              top: otherPaddleState,
+              left: containerWidth - paddleWidth,
+            }}
+          ></div>
+          <div
+            className="absolute w-[30px] h-[30px] bg-[#727DE3] rounded-[50%]"
+            style={{ top: ballYState, left: ballXState }}
+          ></div>
+        </div>
+      </div>
+    );
+  }
+
+  return endState === true ? (
     <div className="pong-game-container">
       <div className="pong-game">
-        <Start />
         <End />
+        <div
+          className="absolute w-[25px] h-[140px] bg-[#97D2DD] rounded-[10px]"
+          style={{ top: myPaddleState }}
+        ></div>
+        <div
+          className="absolute w-[25px] h-[140px] bg-[#97D2DD] rounded-[10px]"
+          style={{ top: otherPaddleState, left: containerWidth - paddleWidth }}
+        ></div>
+        <div
+          className="absolute w-[30px] h-[30px] bg-[#727DE3] rounded-[50%]"
+          style={{ top: ballYState, left: ballXState }}
+        ></div>
+      </div>
+    </div>
+  ) : (
+    <div className="pong-game-container">
+      <div className="pong-game">
         <div
           className="absolute w-[25px] h-[140px] bg-[#97D2DD] rounded-[10px]"
           style={{ top: myPaddleState }}
