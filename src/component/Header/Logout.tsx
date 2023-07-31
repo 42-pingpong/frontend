@@ -13,7 +13,11 @@ const Logout = () => {
 
     const res = await axios(logoutURL, {
       withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     });
+    localStorage.removeItem('token');
     setIsLoggedIn(false);
     setIsModalOpen(false);
   };
