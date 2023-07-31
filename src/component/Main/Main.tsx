@@ -1,14 +1,20 @@
 import { useRecoilValue } from 'recoil';
-import { chattingModalState, profileModalState } from '../../atom/modal';
+import {
+  addUserModalState,
+  chattingModalState,
+  profileModalState,
+} from '../../atom/modal';
 import { ProfileModal } from '../Header/ProfileModal';
 import { ChatRoom } from '../ChatList/ChatRoom';
 import { UserList } from '../UserList/UserList';
 import { GameMatch } from '../GameMatch/GameMatch';
 import { ChattingRoom } from '../ChattingRoom/ChattingRoom';
+import { AddUser } from '../UserList/AddUser';
 
 export const Main = () => {
   const isProfileModalOpen = useRecoilValue(profileModalState);
   const isChattingModalOpen = useRecoilValue(chattingModalState);
+  const isAddUserModalOpen = useRecoilValue(addUserModalState);
 
   return (
     <>
@@ -26,6 +32,7 @@ export const Main = () => {
         </div>
         {isProfileModalOpen && <ProfileModal />}
         {isChattingModalOpen && <ChattingRoom />}
+        {isAddUserModalOpen && <AddUser />}
       </div>
     </>
   );
