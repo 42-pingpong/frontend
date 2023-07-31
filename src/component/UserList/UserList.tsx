@@ -98,17 +98,17 @@ export const UserList = () => {
   }, [StatusSocket]);
 
   return (
-    <div className="flex h-full w-72 md:w-full flex-col">
+    <div className="flex h-full flex-col">
       <div className="flex">
         <ServiceTitle title="Friends" />
       </div>
       <div className="flex flex-col w-full h-60 flex-grow px-10 rounded-[2rem] shadow-2xl bg-white">
-        <div className="flex flex-row h-14 w-full justify-between mt-10 px-3">
+        <div className="flex flex-row h-14 justify-between gap-1 mt-10 px-3">
           <StatusIcon props={{ status: 'online', color: 'bg-green-400' }} />
           <StatusIcon props={{ status: 'offline', color: 'bg-red-400' }} />
           <StatusIcon props={{ status: 'ingame', color: 'bg-blue-400' }} />
         </div>
-        <div className="flex flex-col w-full h-full overflow-y-auto mt-3 mb-10">
+        <div className="flex flex-col w-full h-full p-1 overflow-y-auto mt-3 mb-10">
           {userData.map((item) => (
             <User key={item.id} props={item} />
           ))}

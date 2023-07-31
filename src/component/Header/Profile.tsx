@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import { loginState, userInfo } from '../../atom/login';
 import { StatusSocket } from '../../sockets/StatusSocket';
 import { useEffect } from 'react';
+import React from 'react';
 
 const Profile = () => {
   const [userInfoObj, setUserInfoObj] = useRecoilState(userInfo);

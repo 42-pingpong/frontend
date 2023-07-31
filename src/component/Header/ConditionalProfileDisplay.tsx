@@ -4,6 +4,7 @@ import { loginState, userInfo } from '../../atom/login';
 import Login from './Login';
 import Profile from './Profile';
 import axios from 'axios';
+import React from 'react';
 
 const SERVER = process.env.REACT_APP_SERVER;
 
