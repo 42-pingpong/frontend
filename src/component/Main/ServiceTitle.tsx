@@ -13,8 +13,6 @@ export const ServiceTitle = (props: ServiceTitleProps) => {
   const [chatstate, setChatstate] = useRecoilState(chattingModalState);
   const [addUser, setAddUser] = useRecoilState(addUserModalState);
 
-  console.log(props.title);
-
   return (
     <div className="flex h-full ml-5 items-center">
       <span className="text-bold text-[30px] md:text-[35px] text-gray-500">

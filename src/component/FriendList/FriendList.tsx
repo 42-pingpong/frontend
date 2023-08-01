@@ -18,11 +18,11 @@ export const FriendList = () => {
     if (isLogin) {
       const fetchUserList = async () => {
         try {
+          console.log('fetchUserList');
           const res = await axiosInstance.get<GetFriendResponseDto[]>(
-            '/user/me/friends/${userInfoState.id}?status=all&includeMe=true'
+            `/user/me/friends/${userInfoState.id}?status=all&includeMe=false`
           );
-
-          console.log(res.data);
+          console.log(res);
 
           const data: GetFriendResponseDto[] = res.data;
           if (data !== undefined) {

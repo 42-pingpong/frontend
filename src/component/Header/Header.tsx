@@ -1,7 +1,13 @@
+import { useRecoilState } from 'recoil';
 import ConditionalProfileDisplay from './ConditionalProfileDisplay';
 import { Link } from 'react-router-dom';
+import { profileModalState } from '../../atom/modal';
 
 const Header = () => {
+  const [isModalOpen, setIsModalOpen] = useRecoilState(profileModalState);
+  const handleModal = () => {
+    if (isModalOpen) setIsModalOpen(false);
+  };
   return (
     <header className="sticky top-0 z-10">
       <nav className=" bg-white px-3 py-1.5 shadow-lg rounded-b-3xl">
@@ -12,6 +18,7 @@ const Header = () => {
               src={require('../../public/logo.png')}
               className="w-24 2xl:w-28"
               alt="Logo"
+              onClick={handleModal}
             />
           </Link>
           <ConditionalProfileDisplay />
