@@ -16,7 +16,7 @@ const ConditionalProfileDisplay = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axiosInstance.get<UserDto>(`/api/user/me`);
+        const res = await axiosInstance.get<UserDto>(`/user/me`);
         const userData = res.data;
 
         if (userData.id !== undefined) {

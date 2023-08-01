@@ -8,7 +8,7 @@ import { ProfileModal } from '../Header/ProfileModal';
 import { ChatRoom } from '../ChatList/ChatRoom';
 import { GameMatch } from '../GameMatch/GameMatch';
 import { ChattingRoom } from '../ChattingRoom/ChattingRoom';
-import { AddUser } from '../FriendList/AddUser';
+import { AddFriend } from '../FriendList/AddFriend';
 import { FriendList } from '../FriendList/FriendList';
 
 export const Main = () => {
@@ -31,7 +31,7 @@ export const Main = () => {
       </div>
       {isProfileModalOpen && <ProfileModal />}
       {isChattingModalOpen && <ChattingRoom />}
-      {isAddUserModalOpen && <AddUser />}
+      {isAddUserModalOpen && <AddFriend />}
     </div>
   );
 };

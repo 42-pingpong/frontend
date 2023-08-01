@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { addUserModalState } from '../../atom/modal';
+import axiosInstance from '../../api/axios';
 
-export const AddUser = () => {
+export const AddFriend = () => {
   const [addUser, setAddUser] = useRecoilState(addUserModalState);
+  const inputNicknameRef = useRef('');
 
   const closeModal = (e: any) => {
     const modalContent = document.getElementById('chattingroom-content');
@@ -18,7 +20,16 @@ export const AddUser = () => {
     else setAddUser(!addUser);
   };
 
-  console.log('adduser called');
+  const handelInputCahnge = (e: any) => {
+    inputNicknameRef.current = e.target.value;
+  };
+
+  const userSearch = async () => {
+    const res = await axiosInstance.get(
+      `/user/search?nickName=${inputNicknameRef.current}`
+    );
+    console.log(res);
+  };
 
   return (
     <div className="background bg-[rgba(0,0,0,0.2)]" onClick={closeModal}>
@@ -35,9 +46,10 @@ export const AddUser = () => {
             <h1 className="pb-3 pl-8 font-light tracking-tight"> Member </h1>
             <input
               type="text"
+              onChange={handelInputCahnge}
               className="px-5 align-middle justify-center rounded-[50px] shadow-lg w-[100%] h-[3rem] font-light "
             ></input>
-            <div className="flex justify-end">
+            <div className="flex justify-end" onClick={userSearch}>
               <img
                 src={require('../../public/search.png')}
                 className="right-[5%] bottom-9 w-6 h-6 relative"

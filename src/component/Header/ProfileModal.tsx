@@ -25,6 +25,7 @@ export const ProfileModal = () => {
 
   const navigateToProfile = () => {
     navigation('/profile');
+    setIsModalOpen(!isModalOpen);
   };
 
   return (
