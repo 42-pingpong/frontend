@@ -1,7 +1,6 @@
 import { io } from 'socket.io-client';
 
-// "undefined" means the URL will be computed from the `window.location` object
-const CURL = `ws://localhost:10002/chat`;
+const CURL = `${process.env.REACT_APP_WS}/chat`;
 
 export const ChatSocket = io(CURL, {
   transports: ['websocket'],

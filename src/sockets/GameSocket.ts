@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 
 // "undefined" means the URL will be computed from the `window.location` object
-const GURL = `ws://localhost:10002/game`;
+const GURL = `${process.env.REACT_APP_WS}/game`;
 
 export const GameSocket = io(GURL, {
   transports: ['websocket'],

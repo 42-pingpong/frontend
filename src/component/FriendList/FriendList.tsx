@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { loginState, userInfo } from '../../atom/user';
@@ -8,8 +7,7 @@ import { ServiceTitle } from '../Main/ServiceTitle';
 import { StatusIcon } from './StatusIcon';
 import { Friend } from './Friend';
 import { UserDto } from '../../interfaces/User.dto';
-
-const SERVER = process.env.REACT_APP_SERVER;
+import axiosInstance from '../../api/axios';
 
 export const FriendList = () => {
   const [isLogin] = useRecoilState(loginState);
@@ -20,17 +18,13 @@ export const FriendList = () => {
     if (isLogin) {
       const fetchUserList = async () => {
         try {
-          const response = await axios.get(
-            SERVER +
-              `/api/user/me/friends/${userInfoState.id}?status=all&includeMe=true`,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-              },
-            }
+          const res = await axiosInstance.get<GetFriendResponseDto[]>(
+            '/user/me/friends/${userInfoState.id}?status=all&includeMe=true'
           );
-          console.log(response.data);
-          const data: GetFriendResponseDto[] = response.data;
+
+          console.log(res.data);
+
+          const data: GetFriendResponseDto[] = res.data;
           if (data !== undefined) {
             setUserList(data);
           }
