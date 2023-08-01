@@ -5,6 +5,7 @@ import { addUserModalState, chattingModalState } from '../../atom/modal';
 
 interface ServiceTitleProps {
   title: string;
+  nonAddButton?: boolean;
 }
 
 export const ServiceTitle = (props: ServiceTitleProps) => {

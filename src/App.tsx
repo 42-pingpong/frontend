@@ -6,6 +6,7 @@ import { Main } from './component/Main/Main';
 import { Chat } from './component/Chat/Chat';
 import { Game } from './component/Game/Game';
 import { TokenSave } from './component/Main/TokenSave';
+import { Profile } from './component/Profile/Profile';
 
 function App() {
   return (
@@ -16,9 +17,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Main />} />
             <Route path="/token" element={<TokenSave />} />
-            <Route path="/Chat" element={<Chat />} />
-            <Route path="/Game" element={<Game />} />
-            {/*<Route path="/Profile" element={<Main/>} />*/}
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/game" element={<Game />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </BrowserRouter>
       </RecoilRoot>

@@ -1,95 +1,13 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { loginState, userInfo } from '../../atom/login';
+import { loginState, userInfo } from '../../atom/user';
 import { GetFriendResponseDto } from '../../interfaces/Get-Friend.dto';
 import { StatusSocket } from '../../sockets/StatusSocket';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { StatusIcon } from './StatusIcon';
 import { Friend } from './Friend';
 import { UserDto } from '../../interfaces/User.dto';
-
-export interface UserList {
-  id: number;
-  name: string;
-  status: string;
-  //image: string;
-  //
-  //
-}
-
-export const userData = [
-  {
-    id: 1,
-    name: 'user1',
-    status: 'online',
-  },
-  {
-    id: 2,
-    name: 'user2',
-    status: 'offline',
-  },
-  {
-    id: 3,
-    name: 'user3',
-    status: 'ingame',
-  },
-  {
-    id: 14,
-    name: 'user1',
-    status: 'online',
-  },
-  {
-    id: 23,
-    name: 'user2',
-    status: 'offline',
-  },
-  {
-    id: 35,
-    name: 'user3',
-    status: 'ingame',
-  },
-  {
-    id: 315,
-    name: 'user3',
-    status: 'ingame',
-  },
-  {
-    id: 1,
-    name: 'user1',
-    status: 'online',
-  },
-  {
-    id: 2,
-    name: 'user2',
-    status: 'offline',
-  },
-  {
-    id: 3,
-    name: 'user3',
-    status: 'ingame',
-  },
-  {
-    id: 14,
-    name: 'user1',
-    status: 'online',
-  },
-  {
-    id: 23,
-    name: 'user2',
-    status: 'offline',
-  },
-  {
-    id: 35,
-    name: 'user3',
-    status: 'ingame',
-  },
-  {
-    id: 315,
-    name: 'user3',
-    status: 'ingame',
-  },
-];
 
 const SERVER = process.env.REACT_APP_SERVER;
 
