@@ -2,8 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { addUserModalState } from '../../atom/modal';
 import axiosInstance from '../../api/axios';
-import { GetFriendResponseDto } from '../../interfaces/Get-Friend.dto';
-import { FindUserList } from './FindUserList';
+import { SearchUserList } from './SearchUser';
 import { UserDto } from '../../interfaces/User.dto';
 
 export const AddFriend = () => {
@@ -78,7 +77,7 @@ export const AddFriend = () => {
           className="w-[22vw] h-100% shadow-xl px-10 py-16 bg-[#F8F8F8] rounded-[30px] mx-auto items-center justify-center relative z-10 mt-8"
         >
           {userList.map((item) => (
-            <FindUserList key={item.id} props={item} />
+            <SearchUserList key={item.id} props={item} />
           ))}
         </div>
       )}

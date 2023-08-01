@@ -1,10 +1,13 @@
 import React from 'react';
 import { UserDto } from '../../interfaces/User.dto';
 import axiosInstance from '../../api/axios';
+import { StatusSocket } from '../../sockets/StatusSocket';
 
-export const FindUserList = ({ props }: { props: UserDto }) => {
-  const handleAddFriend = async () => {
-    // const res = await axiosInstance.post(`/user/me/friends/${props.id}`);
+export const SearchUserList = ({ props }: { props: UserDto }) => {
+  const handleAddFriend = () => {
+    StatusSocket.emit('request-friend', {
+      requestUserId: props.id,
+    });
   };
 
   return (
