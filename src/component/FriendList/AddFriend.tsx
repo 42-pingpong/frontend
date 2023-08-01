@@ -1,10 +1,14 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { addUserModalState } from '../../atom/modal';
 import axiosInstance from '../../api/axios';
+import { GetFriendResponseDto } from '../../interfaces/Get-Friend.dto';
+import { FindUserList } from './FindUserList';
+import { UserDto } from '../../interfaces/User.dto';
 
 export const AddFriend = () => {
   const [addUser, setAddUser] = useRecoilState(addUserModalState);
+  const [userList, setUserList] = useState<UserDto[]>([]);
   const inputNicknameRef = useRef('');
 
   const closeModal = (e: any) => {
@@ -25,9 +29,12 @@ export const AddFriend = () => {
   };
 
   const userSearch = async () => {
+    if (inputNicknameRef.current === '') return;
     const res = await axiosInstance.get(
       `/user/search?nickName=${inputNicknameRef.current}`
     );
+    if (res.data !== undefined) setUserList(res.data);
+    console.log(res.data);
     console.log(res);
   };
 
@@ -35,7 +42,7 @@ export const AddFriend = () => {
     <div className="background bg-[rgba(0,0,0,0.2)]" onClick={closeModal}>
       <div
         id="chattingroom-content"
-        className="w-[25vw] h-[22vh] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[10vh]"
+        className="w-[22vw] h-[22vh] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[20vh]"
       >
         <p className="py-[7%] px-[8%] font-sans not-italic font-[320]  text-[35px] leading-[41px] tracking-tighter text-[#5D777B]">
           Add Friend
@@ -65,6 +72,16 @@ export const AddFriend = () => {
           X
         </button>
       </div>
+      {userList?.length != 0 && (
+        <div
+          id="chattingroom-content"
+          className="w-[22vw] h-100% shadow-xl px-10 py-16 bg-[#F8F8F8] rounded-[30px] mx-auto items-center justify-center relative z-10 mt-8"
+        >
+          {userList.map((item) => (
+            <FindUserList key={item.id} props={item} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

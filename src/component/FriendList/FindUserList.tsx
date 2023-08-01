@@ -1,8 +1,12 @@
 import React from 'react';
-import { GetFriendResponseDto } from '../../interfaces/Get-Friend.dto';
 import { UserDto } from '../../interfaces/User.dto';
+import axiosInstance from '../../api/axios';
 
-export const Friend = ({ props }: { props: UserDto }) => {
+export const FindUserList = ({ props }: { props: UserDto }) => {
+  const handleAddFriend = async () => {
+    // const res = await axiosInstance.post(`/user/me/friends/${props.id}`);
+  };
+
   return (
     <div className="flex w-full h-20 bg-sky rounded-full my-3 shadow-md shadow-gray-300 items-center p-4 justify-between">
       {/*보더는 나중에 뺄까*/}
@@ -11,9 +15,6 @@ export const Friend = ({ props }: { props: UserDto }) => {
       </div>
       <div className="flex w-1/2">
         <span className="text-gray-500 text-xl">{props.nickName}</span>
-      </div>
-      <div className="flex w-10 h-6">
-        <img src={require('../../public/plane.png')} className="ml-3" />
       </div>
       <div
         className={`${
@@ -24,6 +25,9 @@ export const Friend = ({ props }: { props: UserDto }) => {
             : 'bg-blue-400 '
         } w-5 h-5 mr-3 rounded-full `}
       ></div>
+      <div className="flex w-10 h-6" onClick={handleAddFriend}>
+        <img src={require('../../public/plus.png')} className="opacity-50" />
+      </div>
     </div>
   );
 };
