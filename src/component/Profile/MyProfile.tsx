@@ -1,11 +1,11 @@
 import React from 'react';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { friendList, userInfo } from '../../atom/user';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { GetFriendResponseDto } from '../../interfaces/Get-Friend.dto';
 
 export const MyProfile = ({ nickName }: { nickName?: string }) => {
-  const [userInfoObj, setUserInfo] = useRecoilState(userInfo);
+  const userInfoObj = useRecoilValue(userInfo);
   const data = useRecoilValue<GetFriendResponseDto[]>(friendList).find(
     (item) => ':' + item.friend.nickName === nickName
   );
@@ -69,11 +69,13 @@ export const MyProfile = ({ nickName }: { nickName?: string }) => {
             </span>
           </div>
           <div className="flex w-full h-28 py-3 flex-grow-0">
-            <div className="flex w-full h-full justify-center items-center bg-progressBlue rounded-full shadow-xl">
-              <span className="text-[2rem] font-semibold text-white">
-                Profile Edit
-              </span>
-            </div>
+            {user === userInfoObj ? (
+              <div className="flex w-full h-full justify-center items-center bg-progressBlue rounded-full shadow-xl">
+                <span className="text-[2rem] font-semibold text-white">
+                  Profile Edit
+                </span>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
