@@ -1,25 +1,19 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { ServiceTitle } from '../Main/ServiceTitle';
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import { userInfo } from '../../atom/user';
 import { profileEditState } from '../../atom/profile';
 import { UserDto } from '../../interfaces/User.dto';
 import { EditUserProfileDto } from '../../interfaces/Edit-User-Profile.dto';
+import axiosInstance from '../../api/axios';
 
 export const ProfileEdit = () => {
   const user = useRecoilValue(userInfo);
-  const [profileEdit, setProfileEdit] = useRecoilState(profileEditState);
-
-  const editForm: EditUserProfileDto = {
-    nickName: '',
-    profile: '',
-    selfIntroduction: '',
-  };
-
+  const setProfileEdit = useSetRecoilState(profileEditState);
+  const [profileImage, setProfileImage] = useState(user.profile);
   const nickNameRef = useRef('');
-  const profileRef = useRef('');
   const selfIntroductionRef = useRef('');
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = () => {
     console.log('submit');
@@ -27,14 +21,40 @@ export const ProfileEdit = () => {
     //data patch 요청
   };
 
-  const handleChangeProfilePhoto = () => {
-    // Trigger the file selection dialog when the image is clicked
-    fileInputRef.current.click();
+  const handleChangeImageClick = () => {
+    // fileInputRef의 클릭 이벤트를 발생시킴
+    //트리거 발생하면 handleImageChange 실행됨
+    if (fileInputRef.current) fileInputRef.current.click();
   };
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    // Handle the selected image file here, for example, upload it to the server.
+  const handleImageChange = async (e: any) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    const formData = new FormData();
+
+    try {
+      //이미지 미리보기
+      reader.onloadend = () => {
+        if (reader.result) setProfileImage(reader.result.toString());
+      };
+      if (file) {
+        reader.readAsDataURL(file);
+        //서버에 image patch 요청
+      }
+
+      formData.append('profileImage', file); //key: value
+
+      /*
+        multipart/form-data를 보내려면 FormData 개체를 사용할 수 있습니다.
+        FormData를 사용하여 이미지를 보낼 때 Axios는 FormData 개체를 감지하고 
+        자동으로 Content-Type 헤더를 multipart/form-data로 설정합니다. 
+      */
+      const res = await axiosInstance.post('uri', formData);
+      //서버한테 바이너리 이미지 주면 uri로 바꿔서 받아옴
+      setProfileImage(res.data.imageUrl);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
   };
 
   const inputChangeHandler = (event: any) => {
@@ -42,9 +62,6 @@ export const ProfileEdit = () => {
     switch (name) {
       case 'nickName':
         nickNameRef.current = value;
-        break;
-      case 'profile':
-        profileRef.current = value;
         break;
       case 'selfIntroduction':
         selfIntroductionRef.current = value;
@@ -68,7 +85,7 @@ export const ProfileEdit = () => {
           <div className="flex flex-row h-[25%] w-full items-center justify-center px-5 mt-3 bg-sky rounded-[3rem] shadow-lg">
             <div className="flex rounded-full border-borderBlue border-[6px] w-32 h-32 lg:w-40 lg:h-40">
               <img
-                src={user.profile}
+                src={profileImage}
                 alt="Profile"
                 className="w-full h-full object-cover rounded-full"
               />
@@ -83,7 +100,7 @@ export const ProfileEdit = () => {
                 <img
                   src={require('../../public/camera.png')}
                   className="w-full"
-                  onClick={handleChangeProfilePhoto}
+                  onClick={handleChangeImageClick}
                   alt="Change Profile Photo"
                 />
               </div>
@@ -92,9 +109,10 @@ export const ProfileEdit = () => {
               <input
                 type="text"
                 name="nickName"
+                maxLength={10}
                 placeholder={user.nickName}
                 onChange={inputChangeHandler}
-                className="w-full text-[2.8rem] font-bold text-center mb-3 text-gray-500 border-none outline-none rounded-full"
+                className="w-full text-[2.8rem] font-semibold text-center mb-3 text-gray-500 border-none outline-none rounded-full"
               />
             </div>
           </div>
