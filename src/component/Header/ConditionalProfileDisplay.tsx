@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { loginState, userInfo } from '../../atom/user';
 import Login from './Login';
 import Profile from './Profile';
@@ -11,7 +11,7 @@ const SERVER = process.env.REACT_APP_SERVER;
 
 const ConditionalProfileDisplay = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
-  const [, setUserInfo] = useRecoilState(userInfo);
+  const setUserInfo = useSetRecoilState(userInfo);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,7 +22,6 @@ const ConditionalProfileDisplay = () => {
         if (userData.id !== undefined) {
           setIsLoggedIn(true);
           setUserInfo(userData);
-          console.log(userData);
         }
       } catch (error) {
         console.log('error');

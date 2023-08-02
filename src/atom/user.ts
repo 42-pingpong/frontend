@@ -1,5 +1,6 @@
 import { atom } from 'recoil';
 import { GetFriendResponseDto } from '../interfaces/Get-Friend.dto';
+import { UserDto } from '../interfaces/User.dto';
 
 export const loginState = atom<boolean>({
   key: 'loginState',

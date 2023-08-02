@@ -7,6 +7,7 @@ import {
   clickedXState,
   clickedYState,
   friendProfileModalState,
+  notificationModalState,
   passwordModalState,
   profileModalState,
 } from '../../atom/modal';
@@ -17,6 +18,7 @@ import { CreateChattingRoomModal } from '../Chat/CreateChattingRoomModal';
 import { AddFriendModal } from '../FriendList/AddFriendModal';
 import { FriendList } from '../FriendList/FriendList';
 import { FriendProfileModal } from '../FriendList/FriendProfileModal';
+import { NotificationModal } from '../Header/NotificationModal';
 import { PasswordModal } from '../Chat/ChatList/PasswordModal';
 
 export const Main = () => {
@@ -24,6 +26,7 @@ export const Main = () => {
   const isChattingModalOpen = useRecoilValue(chattingModalState);
   const isAddUserModalOpen = useRecoilValue(addUserModalState);
   const isFirendProfileModalOpen = useRecoilValue(friendProfileModalState);
+  const isNotificationModalOpen = useRecoilValue(notificationModalState);
   const isPasswordModalOpen = useRecoilValue(passwordModalState);
   const clickedX = useRecoilValue(clickedXState);
   const clickedY = useRecoilValue(clickedYState);
@@ -44,6 +47,7 @@ export const Main = () => {
         </div>
       </div>
       {isProfileModalOpen && <ProfileModal />}
+      {isNotificationModalOpen && <NotificationModal />}
       {isChattingModalOpen && <CreateChattingRoomModal />}
       {isAddUserModalOpen && <AddFriendModal />}
       {isFirendProfileModalOpen && (
