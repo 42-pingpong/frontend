@@ -20,7 +20,7 @@ export const ChatList = ({ props }: { props: chatRoomList }) => {
           <span>me</span>
         ) : props.permission === 'protected' ? (
           <img
-            src={require('../../public/lock.png')}
+            src={require('../../../public/lock.png')}
             alt="lock"
             className="w-3 h-4 md:w-5 md:h-6 opacity-70"
           />

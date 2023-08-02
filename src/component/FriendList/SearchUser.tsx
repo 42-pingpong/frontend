@@ -2,12 +2,15 @@ import React from 'react';
 import { UserDto } from '../../interfaces/User.dto';
 import axiosInstance from '../../api/axios';
 import { StatusSocket } from '../../sockets/StatusSocket';
+import { RequestFriendDto } from '../../interfaces/Request-Friend.dto';
 
 export const SearchUserList = ({ props }: { props: UserDto }) => {
+  const RequestData: RequestFriendDto = {
+    requestedUserId: props.id,
+  };
+
   const handleAddFriend = () => {
-    StatusSocket.emit('request-friend', {
-      requestUserId: props.id,
-    });
+    StatusSocket.emit('request-friend', RequestData);
   };
 
   return (

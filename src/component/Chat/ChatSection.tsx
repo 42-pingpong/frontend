@@ -1,5 +1,5 @@
-import { ChatList } from '../ChatList/ChatList';
-import { ChatRoom, chatRoomList } from '../ChatList/ChatRoom';
+import { ChatList } from './ChatList/ChatList';
+import { ChatRoom, chatRoomList } from './ChatList/ChatRoom';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { Chatting } from './Chatting';
 

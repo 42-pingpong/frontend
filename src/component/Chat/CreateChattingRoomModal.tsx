@@ -4,7 +4,7 @@ import { useRecoilState } from 'recoil';
 
 const roomtypeList = ['Public', 'Protected', 'Private'];
 
-export const ChattingRoom = () => {
+export const CreateChattingRoomModal = () => {
   const [chattingState, setChattingState] = useRecoilState(chattingModalState);
 
   const closeModal = (e: any) => {

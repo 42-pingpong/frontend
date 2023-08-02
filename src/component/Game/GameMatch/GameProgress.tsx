@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
-import { newMatching } from '../../atom/game';
+import { newMatching } from '../../../atom/game';
 import { ProgressBar } from './ProgressBar';
 
 export const GameProgress = () => {
