@@ -104,7 +104,7 @@ export const FriendList = () => {
         try {
           const response = await axios.get(
             SERVER +
-              `/api/user/me/friends/${userInfoState.id}?status=all&includeMe=true`,
+              `/api/user/me/friends/${userInfoState.id}?status=all&includeMe=false`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -120,21 +120,22 @@ export const FriendList = () => {
           console.log(error);
         }
       };
-      fetchUserList();
-    }
-  }, [isLogin]);
 
-  /**
-   * 친구 중에서, 상태가 바뀐 친구의 정보를 줌.
-   * */
-  useEffect(() => {
-    if (StatusSocket.connected) {
-      StatusSocket.on('change-status', (data: UserDto) => {
+      StatusSocket.on('change-status', (data: GetFriendResponseDto) => {
         console.log('change-status');
         console.log(data);
+        const newList = userList.map((item) =>
+          item.friendId == data.friendId ? item : item
+        );
+
+        setUserList(newList);
       });
+      fetchUserList();
     }
-  }, [StatusSocket]);
+    return () => {
+      StatusSocket.off('change-status');
+    };
+  }, [isLogin]);
 
   return (
     <div className="flex h-full flex-col">
