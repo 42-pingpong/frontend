@@ -6,6 +6,11 @@ export const profileModalState = atom<boolean>({
   default: false,
 });
 
+export const notificationModalState = atom<boolean>({
+  key: 'notificationModalState',
+  default: false,
+});
+
 export const chattingModalState = atom<boolean>({
   key: 'chattingModalState',
   default: false,

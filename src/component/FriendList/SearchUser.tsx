@@ -1,6 +1,5 @@
 import React from 'react';
 import { UserDto } from '../../interfaces/User.dto';
-import axiosInstance from '../../api/axios';
 import { StatusSocket } from '../../sockets/StatusSocket';
 import { RequestFriendDto } from '../../interfaces/Request-Friend.dto';
 
@@ -10,6 +9,7 @@ export const SearchUserList = ({ props }: { props: UserDto }) => {
   };
 
   const handleAddFriend = () => {
+    console.log('handleAddFriend socket emit');
     StatusSocket.emit('request-friend', RequestData);
   };
 
