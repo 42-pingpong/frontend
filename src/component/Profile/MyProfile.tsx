@@ -1,10 +1,15 @@
 import React from 'react';
 import { ServiceTitle } from '../Main/ServiceTitle';
-import { userInfo } from '../../atom/user';
-import { useRecoilState } from 'recoil';
+import { friendList, userInfo } from '../../atom/user';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { GetFriendResponseDto } from '../../interfaces/Get-Friend.dto';
 
-export const MyProfile = () => {
+export const MyProfile = ({ nickName }: { nickName?: string }) => {
   const [userInfoObj, setUserInfo] = useRecoilState(userInfo);
+  const data = useRecoilValue<GetFriendResponseDto[]>(friendList).find(
+    (item) => ':' + item.friend.nickName === nickName
+  );
+  const user = nickName !== undefined ? data?.friend : userInfoObj;
 
   return (
     <div className="flex flex-col h-full min-w-max">
@@ -15,14 +20,14 @@ export const MyProfile = () => {
         <div className="flex flex-row h-[25%] w-full items-center justify-center px-5 mt-3 bg-sky rounded-[3rem] shadow-lg">
           <div className="flex rounded-full border-borderBlue border-[6px] w-32 h-32 lg:w-40 lg:h-40">
             <img
-              src={userInfoObj.profile}
+              src={user?.profile}
               alt="Profile"
               className="w-full h-full object-cover rounded-full"
             />
           </div>
           <div className="flex w-30 flex-grow flex-col h-full pl-2 justify-center ">
             <span className="w-full text-[2.8rem] font-bold text-center mb-3 text-gray-500">
-              {userInfoObj.nickName}
+              {user?.nickName}
             </span>
           </div>
         </div>
@@ -32,10 +37,10 @@ export const MyProfile = () => {
               name
             </span>
             <span className="text-[1.8rem] font-semibold text-center text-gray-500">
-              {userInfoObj.fullName}
+              {user?.fullName}
             </span>
             <span className="text-[1rem] text-center text-gray-500">
-              {userInfoObj.email}
+              {user?.email}
             </span>
           </div>
           <div className="flex flex-col w-full h-32 flex-grow-0 items-start">
@@ -43,7 +48,7 @@ export const MyProfile = () => {
               intra level
             </span>
             <span className="text-[1.6rem] font-semibold text-center text-gray-500">
-              {userInfoObj.level}
+              {user?.level}
             </span>
           </div>
           <div className="flex w-full h-32 flex-grow items-start flex-col">
@@ -51,7 +56,7 @@ export const MyProfile = () => {
               introduction
             </span>
             <span className="text-[1rem] font-semibold text-gray-500">
-              {userInfoObj.selfIntroduction}
+              {user?.selfIntroduction}
             </span>
           </div>
           <div className="flex w-full h-28 py-3 flex-grow-0">
