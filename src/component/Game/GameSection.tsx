@@ -8,7 +8,7 @@ export const GameSection = () => {
       <div className="flex">
         {/* Game 해두면 게이지 그거 돌 것 같아서 일단 Pong으로 해뒀어염
                 게임모드 어쩌구저쩌구 이걸로 해도 될 것 같습니다?? */}
-        <ServiceTitle title="Pong" />
+        <ServiceTitle title="Pong" nonAddButton={true} />
       </div>
       <div className="rounded-3xl mx-auto justify-center w-[300px] z-10">
         <Matchpoint />

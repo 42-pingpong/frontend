@@ -1,7 +1,8 @@
 import { ChatList } from './ChatList/ChatList';
-import { ChatRoom, chatRoomList } from './ChatList/ChatRoom';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { Chatting } from './Chatting';
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export interface chatForm {
   id: number;
@@ -104,10 +105,15 @@ export const ChatSection = () => {
     },
   ];
 
+  // const params = useParams();
+  // console.log(params);
+
+  // params 써서 방 정보 불러오는 거 필요할 것 같아염 ~
+
   return (
     <div id="chat-section" className="flex flex-col h-full">
       <div className="flex">
-        <ServiceTitle title="Chat" />
+        <ServiceTitle title="Chat" nonAddButton={true} />
       </div>
       <div className="rounded-3xl mx-auto w-[500px] z-10">
         <ChatList
@@ -124,12 +130,9 @@ export const ChatSection = () => {
 
       <div className="rounded-3xl shadow-xl h-[50%] flex-grow relative flex justify-center">
         <div className="w-full h-[85%] justify-between overflow-y-auto py-3 items-center z-10">
-          {
-            //here
-            data.map((item) => (
-              <Chatting key={item.id} props={item} />
-            ))
-          }
+          {data.map((item) => (
+            <Chatting key={item.id} props={item} />
+          ))}
         </div>
         <input
           type="text"
