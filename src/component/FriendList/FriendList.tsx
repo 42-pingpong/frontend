@@ -1,40 +1,32 @@
 import React, { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { loginState, userInfo } from '../../atom/user';
-import { GetFriendResponseDto } from '../../interfaces/Get-Friend.dto';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { friendList, loginState, userInfo } from '../../atom/user';
 import { StatusSocket } from '../../sockets/StatusSocket';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { StatusIcon } from './StatusIcon';
 import { Friend } from './Friend';
 import { UserDto } from '../../interfaces/User.dto';
-import axiosInstance from '../../api/axios';
+import { useQuery } from 'react-query';
+import { fetchUsers } from '../../api/Friend/Friend';
 
 export const FriendList = () => {
-  const [isLogin] = useRecoilState(loginState);
+  const isLogin = useRecoilValue(loginState);
   const [userInfoState] = useRecoilState(userInfo);
-  const [userList, setUserList] = React.useState<GetFriendResponseDto[]>([]);
+  const [userList, setUserList] = useRecoilState(friendList);
 
-  useEffect(() => {
-    if (isLogin) {
-      const fetchUserList = async () => {
-        try {
-          console.log('fetchUserList');
-          const res = await axiosInstance.get<GetFriendResponseDto[]>(
-            `/user/me/friends/${userInfoState.id}?status=all&includeMe=false`
-          );
-          console.log(res);
-
-          const data: GetFriendResponseDto[] = res.data;
-          if (data !== undefined) {
-            setUserList(data);
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchUserList();
+  const { data } = useQuery(
+    ['userList', userInfoState.id, isLogin],
+    () => fetchUsers(userInfoState.id),
+    {
+      enabled: !!isLogin, // 로그인 상태일 때만 쿼리를 실행합니다.
+      staleTime: 60 * 1000, // 1분
+      refetchOnWindowFocus: false, // 포커스가 바뀌어도 새로고침을 하지 않음
+      onSuccess: (data) => {
+        console.log(data);
+        setUserList(data);
+      },
     }
-  }, [isLogin]);
+  );
 
   /**
    * 친구 중에서, 상태가 바뀐 친구의 정보를 줌.
@@ -61,7 +53,7 @@ export const FriendList = () => {
         </div>
         <div className="flex flex-col w-full h-full p-1 overflow-y-auto mt-3 mb-10">
           {userList.map((item) => (
-            <Friend key={item.friendId} props={item} />
+            <Friend key={item.friendId} props={item.friend} />
           ))}
         </div>
       </div>

@@ -4,6 +4,10 @@ import { loginState, userInfo } from '../../atom/user';
 import { StatusSocket } from '../../sockets/StatusSocket';
 import { useEffect } from 'react';
 import React from 'react';
+import {
+  addSocketListener,
+  handleFriendRequest,
+} from '../../sockets/StatusSocketEvents';
 
 const Profile = () => {
   const [userInfoObj, setUserInfoObj] = useRecoilState(userInfo);
@@ -14,6 +18,7 @@ const Profile = () => {
     if (isLoggedIn) {
       console.log('connect');
       StatusSocket.connect();
+      addSocketListener('friend-request', handleFriendRequest);
 
       return () => {
         StatusSocket.disconnect();
