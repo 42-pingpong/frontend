@@ -11,6 +11,8 @@ export const MyProfile = ({ nickName }: { nickName?: string }) => {
   );
   const user = nickName !== undefined ? data?.friend : userInfoObj;
 
+  const handleChageProfilePhoto = () => {};
+
   return (
     <div className="flex flex-col h-full min-w-max">
       <div className="flex">
@@ -24,6 +26,13 @@ export const MyProfile = ({ nickName }: { nickName?: string }) => {
               alt="Profile"
               className="w-full h-full object-cover rounded-full"
             />
+            <div className="flex absolute ml-24 mt-20 w-20 h-20">
+              <img
+                src={require('../../public/camera.png')}
+                className="w-full"
+                onClick={handleChageProfilePhoto}
+              />
+            </div>
           </div>
           <div className="flex w-30 flex-grow flex-col h-full pl-2 justify-center ">
             <span className="w-full text-[2.8rem] font-bold text-center mb-3 text-gray-500">

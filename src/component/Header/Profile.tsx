@@ -28,7 +28,6 @@ const Profile = () => {
   }, [isLoggedIn]);
 
   useEffect(() => {
-    console.log('머고');
     StatusSocket.on(
       'request-friend-from-user',
       (data: RequestFriendFromUserDto) => {
