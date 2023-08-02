@@ -142,12 +142,13 @@ export const FriendList = () => {
       setUserList(newList); // 새로운 리스트로 상태를 업데이트
     };
 
-    StatusSocket.on('change-status', handleStatusChange);
-
+    if (isLogin) {
+      StatusSocket.on('change-status', handleStatusChange);
+    }
     return () => {
       StatusSocket.off('change-status', handleStatusChange);
     };
-  }, []);
+  }, [isLogin]);
 
   return (
     <div className="flex h-full flex-col">
