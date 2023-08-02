@@ -26,7 +26,7 @@ export const FriendProfileModal: React.FC<FriendProfileModalProps> = ({
   );
 
   const closeModal = (e: any) => {
-    const modalContent = document.getElementById('chattingroom-content');
+    const modalContent = document.getElementById('frined-profile-content');
     const modalCloseButton = document.getElementById('modal-close-button');
 
     if (
