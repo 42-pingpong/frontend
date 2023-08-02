@@ -1,5 +1,5 @@
 import React from 'react';
-import { ServiceTitle } from '../Main/ServiceTitle';
+import { ServiceTitle } from '../../Main/ServiceTitle';
 import { ChatList } from './ChatList';
 import './styles.css';
 

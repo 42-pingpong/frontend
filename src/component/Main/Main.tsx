@@ -9,10 +9,10 @@ import {
   profileModalState,
 } from '../../atom/modal';
 import { ProfileModal } from '../Header/ProfileModal';
-import { ChatRoom } from '../ChatList/ChatRoom';
-import { GameMatch } from '../GameMatch/GameMatch';
-import { ChattingRoom } from '../ChattingRoom/ChattingRoom';
-import { AddFriend } from '../FriendList/AddFriend';
+import { ChatRoom } from '../Chat/ChatList/ChatRoom';
+import { GameMatch } from '../Game/GameMatch/GameMatch';
+import { CreateChattingRoomModal } from '../Chat/CreateChattingRoomModal';
+import { AddFriendModal } from '../FriendList/AddFriendModal';
 import { FriendList } from '../FriendList/FriendList';
 import { FriendProfileModal } from '../FriendList/FriendProfileModal';
 
@@ -39,8 +39,8 @@ export const Main = () => {
         </div>
       </div>
       {isProfileModalOpen && <ProfileModal />}
-      {isChattingModalOpen && <ChattingRoom />}
-      {isAddUserModalOpen && <AddFriend />}
+      {isChattingModalOpen && <CreateChattingRoomModal />}
+      {isAddUserModalOpen && <AddFriendModal />}
       {isFirendProfileModalOpen && (
         <FriendProfileModal
           user={clickedFriendProfile}

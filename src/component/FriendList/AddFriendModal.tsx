@@ -5,7 +5,7 @@ import axiosInstance from '../../api/axios';
 import { SearchUserList } from './SearchUser';
 import { UserDto } from '../../interfaces/User.dto';
 
-export const AddFriend = () => {
+export const AddFriendModal = () => {
   const [addUser, setAddUser] = useRecoilState(addUserModalState);
   const [userList, setUserList] = useState<UserDto[]>([]);
   const inputNicknameRef = useRef('');
