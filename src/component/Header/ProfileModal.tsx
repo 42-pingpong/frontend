@@ -1,14 +1,16 @@
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { profileModalState } from '../../atom/modal';
 import { useNavigate } from 'react-router-dom';
 import { userInfo } from '../../atom/user';
 import Logout from './Logout';
 import './styles.css';
+import { profileEditState } from '../../atom/profile';
 
 export const ProfileModal = () => {
   const navigation = useNavigate();
   const [isModalOpen, setIsModalOpen] = useRecoilState(profileModalState);
   const [userInfoObj, setUserInfoObj] = useRecoilState(userInfo);
+  const setProfileEdit = useSetRecoilState(profileEditState);
 
   const closeModal = (e: any) => {
     const modalContent = document.getElementById('modal-content');
@@ -26,6 +28,7 @@ export const ProfileModal = () => {
   const navigateToProfile = () => {
     navigation('/profile');
     setIsModalOpen(!isModalOpen);
+    setProfileEdit(false);
   };
 
   return (

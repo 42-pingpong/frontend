@@ -45,14 +45,20 @@ const Profile = () => {
         className="w-14 h-10 justify-start items-center flex"
         onClick={() => setIsNotificationModalOpen(!isNotificationModalOpen)}
       >
-        <div className="w-5 h-5 rounded-full bg-borderBlue"></div>
+        <div className="w-5 h-5 rounded-full bg-borderBlue" />
       </div>
-      {/* {notification && (
-          <div className=" flex flex-row justify-center items-center">
-        <div className="bg-red-300 w-10 h-10 justify-start items-center flex">
-          <div className="w-5 h-5 rounded-full bg-borderBlue"></div>
-        </div>
-        )} */}
+      {/*
+        소켓 on되면 이거 활성화 시키고 위에 주석처리해야됨  
+      {notification && ( 
+           <div
+              className="w-14 h-10 justify-start items-center flex"
+              onClick={() => setIsNotificationModalOpen(!isNotificationModalOpen)}
+            >
+             <div className="w-5 h-5 rounded-full bg-borderBlue">
+           </div>
+        )} 
+        
+        */}
       <img
         src={userInfoObj.profile}
         alt="Profile"

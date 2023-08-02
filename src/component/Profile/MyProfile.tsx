@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { friendList, userInfo } from '../../atom/user';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { GetFriendResponseDto } from '../../interfaces/Get-Friend.dto';
+import { profile } from 'console';
+import { profileEditState } from '../../atom/profile';
 
 export const MyProfile = ({ nickName }: { nickName?: string }) => {
   const userInfoObj = useRecoilValue(userInfo);
   const data = useRecoilValue<GetFriendResponseDto[]>(friendList).find(
     (item) => ':' + item.friend.nickName === nickName
   );
+  const [profileEdit, setProfileEdit] = useRecoilState(profileEditState);
   const user = nickName !== undefined ? data?.friend : userInfoObj;
-
-  const handleChageProfilePhoto = () => {};
 
   return (
     <div className="flex flex-col h-full min-w-max">
@@ -26,13 +27,6 @@ export const MyProfile = ({ nickName }: { nickName?: string }) => {
               alt="Profile"
               className="w-full h-full object-cover rounded-full"
             />
-            <div className="flex absolute ml-24 mt-20 w-20 h-20">
-              <img
-                src={require('../../public/camera.png')}
-                className="w-full"
-                onClick={handleChageProfilePhoto}
-              />
-            </div>
           </div>
           <div className="flex w-30 flex-grow flex-col h-full pl-2 justify-center ">
             <span className="w-full text-[2.8rem] font-bold text-center mb-3 text-gray-500">
@@ -69,8 +63,11 @@ export const MyProfile = ({ nickName }: { nickName?: string }) => {
             </span>
           </div>
           <div className="flex w-full h-28 py-3 flex-grow-0">
-            {user === userInfoObj ? (
-              <div className="flex w-full h-full justify-center items-center bg-progressBlue rounded-full shadow-xl">
+            {nickName === undefined ? (
+              <div
+                className="flex w-full h-full justify-center items-center bg-progressBlue rounded-full shadow-xl"
+                onClick={() => setProfileEdit(true)}
+              >
                 <span className="text-[2rem] font-semibold text-white">
                   Profile Edit
                 </span>
