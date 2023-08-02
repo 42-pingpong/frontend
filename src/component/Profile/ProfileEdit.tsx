@@ -8,7 +8,6 @@ import { EditUserProfileDto } from '../../interfaces/Edit-User-Profile.dto';
 
 export const ProfileEdit = () => {
   const user = useRecoilValue(userInfo);
-  // const handleChageProfilePhoto = () => {};
   const [profileEdit, setProfileEdit] = useRecoilState(profileEditState);
 
   const editForm: EditUserProfileDto = {
@@ -20,6 +19,7 @@ export const ProfileEdit = () => {
   const nickNameRef = useRef('');
   const profileRef = useRef('');
   const selfIntroductionRef = useRef('');
+  const fileInputRef = useRef(null);
 
   const handleSubmit = () => {
     console.log('submit');
@@ -27,7 +27,17 @@ export const ProfileEdit = () => {
     //data patch 요청
   };
 
-  const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeProfilePhoto = () => {
+    // Trigger the file selection dialog when the image is clicked
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    // Handle the selected image file here, for example, upload it to the server.
+  };
+
+  const inputChangeHandler = (event: any) => {
     const { name, value } = event.target;
     switch (name) {
       case 'nickName':
@@ -38,6 +48,7 @@ export const ProfileEdit = () => {
         break;
       case 'selfIntroduction':
         selfIntroductionRef.current = value;
+        console.log(value);
         break;
       default:
         break;
@@ -62,24 +73,30 @@ export const ProfileEdit = () => {
                 className="w-full h-full object-cover rounded-full"
               />
               <div className="flex absolute ml-24 mt-20 w-20 h-20">
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleImageChange}
+                  style={{ display: 'none' }}
+                />
                 <img
                   src={require('../../public/camera.png')}
                   className="w-full"
-                  // onClick={handleChageProfilePhoto}
+                  onClick={handleChangeProfilePhoto}
+                  alt="Change Profile Photo"
                 />
               </div>
             </div>
-            <div className="flex w-30 flex-grow flex-col h-full pl-2 justify-center items-center">
+            <div className="flex w-32 flex-grow flex-col h-full pl-2 justify-center items-center">
               <input
                 type="text"
-                name="nickName" // value={user.nickName}
+                name="nickName"
+                placeholder={user.nickName}
                 onChange={inputChangeHandler}
-                className="w-72 text-[2.8rem] font-bold text-center mb-3 text-gray-500 border-none outline-none round-full"
+                className="w-full text-[2.8rem] font-bold text-center mb-3 text-gray-500 border-none outline-none rounded-full"
               />
             </div>
-            {/* <span className="w-full text-[2.8rem] font-bold text-center mb-3 text-gray-500">
-                {user.nickName}
-              </span> */}
           </div>
           <div className="flex flex-grow flex-col mt-5 px-3">
             <div className="flex w-full flex-col items-start justify-center h-32 flex-grow">
@@ -101,13 +118,18 @@ export const ProfileEdit = () => {
                 {user.level}
               </span>
             </div>
-            <div className="flex w-full h-32 flex-grow items-start flex-col">
+            <div className="flex w-full h-32 flex-grow items-start justify-start flex-col">
               <span className="text-[1.2rem] font-bold text-center mb-3 text-borderBlue">
                 introduction
               </span>
-              <span className="text-[1rem] font-semibold text-gray-500">
-                {user.selfIntroduction}
-              </span>
+              <textarea
+                name="selfIntroduction"
+                placeholder="최대 100자까지 입력 가능합니다."
+                onChange={inputChangeHandler}
+                maxLength={100}
+                className="w-full h-full text-[1rem] font-semibold text-gray-500 border-none outline-none rounded-lg bg-slate-100 p-3"
+                style={{ wordWrap: 'break-word', resize: 'none' }}
+              />
             </div>
             <div className="flex w-full h-28 py-3 flex-grow-0">
               <button className="flex w-full h-full" type="submit">
