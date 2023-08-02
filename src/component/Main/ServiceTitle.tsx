@@ -18,20 +18,24 @@ export const ServiceTitle = (props: ServiceTitleProps) => {
       <span className="text-bold text-[30px] md:text-[35px] text-gray-500">
         {props.title}
       </span>
-      <img
-        src={require('../../public/plus.png')}
-        alt="plus-button"
-        className="ml-2 mt-1 w-5 h-5 md:w-6 md:h-6 opacity-70"
-        onClick={() =>
-          props.title === 'Game'
-            ? setMatching(!matching)
-            : props.title === 'Chat'
-            ? setChatstate(!chatstate)
-            : props.title === 'Friends'
-            ? setAddUser(!addUser)
-            : null
-        }
-      />
+      {props?.nonAddButton !== true ? (
+        <img
+          src={require('../../public/plus.png')}
+          alt="plus-button"
+          className="ml-2 mt-1 w-5 h-5 md:w-6 md:h-6 opacity-70"
+          onClick={() =>
+            props.title === 'Game'
+              ? setMatching(!matching)
+              : props.title === 'Chat'
+              ? setChatstate(!chatstate)
+              : props.title === 'Friends'
+              ? setAddUser(!addUser)
+              : null
+          }
+        />
+      ) : (
+        <span></span>
+      )}
     </div>
   );
 };
