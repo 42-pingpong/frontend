@@ -19,7 +19,7 @@ function App() {
             <Route path="/token" element={<TokenSave />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/game" element={<Game />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:nickName?" element={<Profile />} />
           </Routes>
         </BrowserRouter>
       </RecoilRoot>

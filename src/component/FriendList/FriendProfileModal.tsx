@@ -38,9 +38,9 @@ export const FriendProfileModal: React.FC<FriendProfileModalProps> = ({
     else setFriendProfile(!friendProfile);
   };
 
-  const navigateToProfile = (id: number) => {
+  const navigateToProfile = (nickName: string) => {
     // 네비게이터가 라우팅 해주는 것 같아서 일단 이렇게 넣어뒀어여
-    navigation(`/api/user/${id}`);
+    navigation(`profile/:${nickName}`);
     setFriendProfile(!friendProfile);
   };
 
@@ -76,7 +76,7 @@ export const FriendProfileModal: React.FC<FriendProfileModalProps> = ({
         </div>
         <div
           className="profile-button-container"
-          onClick={() => navigateToProfile(user.id)}
+          onClick={() => navigateToProfile(user.nickName)}
         >
           <span className="profile-button-text"> Profile </span>
         </div>
