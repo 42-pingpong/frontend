@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { loginState, userInfo } from '../../atom/login';
 import { GetFriendResponseDto } from '../../interfaces/Get-Friend.dto';
@@ -96,15 +96,15 @@ const SERVER = process.env.REACT_APP_SERVER;
 export const FriendList = () => {
   const [isLogin] = useRecoilState(loginState);
   const [userInfoState] = useRecoilState(userInfo);
-  const [userList, setUserList] = React.useState<GetFriendResponseDto[]>([]);
+  const [userList, setUserList] = React.useState<UserDto[]>([]);
+  const userListRef = useRef(userList);
 
   useEffect(() => {
     if (isLogin) {
       const fetchUserList = async () => {
         try {
           const response = await axios.get(
-            SERVER +
-              `/api/user/me/friends/${userInfoState.id}?status=all&includeMe=false`,
+            SERVER + `/api/user/me/friends/${userInfoState.id}?status=all`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -112,30 +112,42 @@ export const FriendList = () => {
             }
           );
           console.log(response.data);
-          const data: GetFriendResponseDto[] = response.data;
+          const data: UserDto[] = response.data;
           if (data !== undefined) {
             setUserList(data);
+            userListRef.current = data;
           }
         } catch (error) {
           console.log(error);
         }
       };
 
-      StatusSocket.on('change-status', (data: GetFriendResponseDto) => {
-        console.log('change-status');
-        console.log(data);
-        const newList = userList.map((item) =>
-          item.friendId == data.friendId ? item : item
-        );
-
-        setUserList(newList);
-      });
       fetchUserList();
     }
     return () => {
       StatusSocket.off('change-status');
     };
   }, [isLogin]);
+
+  useEffect(() => {
+    const handleStatusChange = (data: UserDto) => {
+      console.log('change-status');
+      console.log(data);
+
+      // userListRef를 기반으로 업데이트한 새로운 리스트 생성
+      const newList = userListRef.current.map((item) =>
+        item.id === data.id ? data : item
+      );
+
+      setUserList(newList); // 새로운 리스트로 상태를 업데이트
+    };
+
+    StatusSocket.on('change-status', handleStatusChange);
+
+    return () => {
+      StatusSocket.off('change-status', handleStatusChange);
+    };
+  }, []);
 
   return (
     <div className="flex h-full flex-col">
@@ -150,7 +162,7 @@ export const FriendList = () => {
         </div>
         <div className="flex flex-col w-full h-full p-1 overflow-y-auto mt-3 mb-10">
           {userList.map((item) => (
-            <Friend key={item.friendId} props={item} />
+            <Friend key={item.id} props={item} />
           ))}
         </div>
       </div>
