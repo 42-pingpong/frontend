@@ -5,7 +5,7 @@ export const UserSection = () => {
   return (
     <div id="friends-section" className="flex-col flex h-full">
       <div className="flex">
-        <ServiceTitle title="User" />
+        <ServiceTitle title="User" nonAddButton={true} />
       </div>
 
       <div className="md:h-20 w-60"></div>

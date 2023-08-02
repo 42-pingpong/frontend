@@ -50,3 +50,13 @@ export const clickedFriendProfileState = atom<UserDto>({
     status: '',
   },
 });
+
+export const passwordModalState = atom<boolean>({
+  key: 'passwordModalState',
+  default: false,
+});
+
+export const clickedRoomIdState = atom({
+  key: 'clickedRoomNumber',
+  default: '',
+});

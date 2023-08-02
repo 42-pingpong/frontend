@@ -3,10 +3,12 @@ import {
   addUserModalState,
   chattingModalState,
   clickedFriendProfileState,
+  clickedRoomIdState,
   clickedXState,
   clickedYState,
   friendProfileModalState,
   notificationModalState,
+  passwordModalState,
   profileModalState,
 } from '../../atom/modal';
 import { ProfileModal } from '../Header/ProfileModal';
@@ -17,6 +19,7 @@ import { AddFriendModal } from '../FriendList/AddFriendModal';
 import { FriendList } from '../FriendList/FriendList';
 import { FriendProfileModal } from '../FriendList/FriendProfileModal';
 import { NotificationModal } from '../Header/NotificationModal';
+import { PasswordModal } from '../Chat/ChatList/PasswordModal';
 
 export const Main = () => {
   const isProfileModalOpen = useRecoilValue(profileModalState);
@@ -24,9 +27,11 @@ export const Main = () => {
   const isAddUserModalOpen = useRecoilValue(addUserModalState);
   const isFirendProfileModalOpen = useRecoilValue(friendProfileModalState);
   const isNotificationModalOpen = useRecoilValue(notificationModalState);
+  const isPasswordModalOpen = useRecoilValue(passwordModalState);
   const clickedX = useRecoilValue(clickedXState);
   const clickedY = useRecoilValue(clickedYState);
   const clickedFriendProfile = useRecoilValue(clickedFriendProfileState);
+  const clickedRoomId = useRecoilValue(clickedRoomIdState);
 
   return (
     <div className="flex p-32 items-center justify-center h-screen">
@@ -52,6 +57,7 @@ export const Main = () => {
           y={clickedY}
         />
       )}
+      {isPasswordModalOpen && <PasswordModal roomId={clickedRoomId} />}
     </div>
   );
 };
