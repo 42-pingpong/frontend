@@ -12,11 +12,12 @@ export const AddFriend = () => {
 
   const closeModal = (e: any) => {
     const modalContent = document.getElementById('chattingroom-content');
+    const modalListContent = document.getElementById('search-user-list');
     const modalCloseButton = document.getElementById('modal-close-button');
 
     if (
-      modalContent &&
-      modalContent.contains(e.target) &&
+      ((modalContent && modalContent.contains(e.target)) ||
+        (modalListContent && modalListContent.contains(e.target))) &&
       e.target !== modalCloseButton
     )
       e.stopPropagation();
@@ -73,12 +74,14 @@ export const AddFriend = () => {
       </div>
       {userList?.length != 0 && (
         <div
-          id="chattingroom-content"
-          className="w-[22vw] h-100% shadow-xl px-10 py-16 bg-[#F8F8F8] rounded-[30px] mx-auto items-center justify-center relative z-10 mt-8"
+          id="search-user-list"
+          className="flex flex-col w-[22vw] h-[45vh] shadow-xl px-12 py-16 bg-[#F8F8F8] rounded-[30px] mx-auto items-center justify-center relative z-10 mt-8"
         >
-          {userList.map((item) => (
-            <SearchUserList key={item.id} props={item} />
-          ))}
+          <div className="overflow-y-auto w-full h-full inset-0 px-4">
+            {userList.map((item) => (
+              <SearchUserList key={item.id} props={item} />
+            ))}
+          </div>
         </div>
       )}
     </div>
