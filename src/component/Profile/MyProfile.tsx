@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { friendList, userInfo } from '../../atom/user';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { GetFriendResponseDto } from '../../interfaces/Get-Friend.dto';
-import { profile } from 'console';
 import { profileEditState } from '../../atom/profile';
+import { UserDto } from '../../interfaces/User.dto';
 
 export const MyProfile = ({ nickName }: { nickName?: string }) => {
   const userInfoObj = useRecoilValue(userInfo);
-  const data = useRecoilValue<GetFriendResponseDto[]>(friendList).find(
-    (item) => ':' + item.friend.nickName === nickName
+  const data = useRecoilValue<UserDto[]>(friendList).find(
+    (item) => ':' + item.nickName === nickName
   );
   const [profileEdit, setProfileEdit] = useRecoilState(profileEditState);
-  const user = nickName !== undefined ? data?.friend : userInfoObj;
+  const user = nickName !== undefined ? data : userInfoObj;
 
   return (
     <div className="flex flex-col h-full min-w-max">
