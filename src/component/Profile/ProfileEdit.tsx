@@ -16,9 +16,9 @@ export const ProfileEdit = () => {
   const profileImageRef = useRef(user.profile);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     console.log('submit');
-    setProfileEdit(false);
 
     try {
       if (formData && formData.get('image')) {
@@ -43,7 +43,7 @@ export const ProfileEdit = () => {
         };
 
         const res = await axiosInstance.patch(`/user/${user.id}`, newProfile);
-        console.log(res.status);
+
         if (res.status === 200) {
           setUser((prevUser) => ({
             ...prevUser,
@@ -56,6 +56,8 @@ export const ProfileEdit = () => {
     } catch (error: any) {
       console.error('Error:', error);
       if (error.response.status === 409) alert('이미 존재하는 닉네임입니다.');
+    } finally {
+      setProfileEdit(false);
     }
   };
 
