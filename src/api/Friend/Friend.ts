@@ -1,13 +1,9 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { GetFriendResponseDto } from '../../interfaces/Get-Friend.dto';
 import axiosInstance from '../axios';
-import { friendList, loginState, userInfo } from '../../atom/user';
-import { useQuery } from 'react-query';
-import { useEffect } from 'react';
+import { UserDto } from '../../interfaces/User.dto';
 
-export const fetchUsers = async (userId: number) => {
-  const response = await axiosInstance.get<GetFriendResponseDto[]>(
-    `/user/me/friends/${userId}?status=all&includeMe=false`
+export const fetchFriendList = async (userId: number) => {
+  const response = await axiosInstance.get<UserDto[]>(
+    `/user/me/friends/${userId}?status=all`
   );
   return response.data;
 };
