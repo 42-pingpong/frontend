@@ -7,38 +7,42 @@ import { StatusIcon } from './StatusIcon';
 import { Friend } from './Friend';
 import { UserDto } from '../../interfaces/User.dto';
 import { useQuery } from 'react-query';
-import { fetchUsers } from '../../api/Friend/Friend';
+import { fetchFriendList } from '../../api/Friend/Friend';
 
 export const FriendList = () => {
   const isLogin = useRecoilValue(loginState);
   const [userInfoState] = useRecoilState(userInfo);
-  const [userList, setUserList] = useRecoilState(friendList);
+  const [friendListState, setFriendListState] = useRecoilState(friendList);
 
   const { data } = useQuery(
     ['userList', userInfoState.id, isLogin],
-    () => fetchUsers(userInfoState.id),
+    () => fetchFriendList(userInfoState.id),
     {
       enabled: !!isLogin, // 로그인 상태일 때만 쿼리를 실행합니다.
       staleTime: 60 * 1000, // 1분
       refetchOnWindowFocus: false, // 포커스가 바뀌어도 새로고침을 하지 않음
       onSuccess: (data) => {
-        console.log(data);
-        setUserList(data);
+        setFriendListState(data);
       },
     }
   );
 
-  /**
-   * 친구 중에서, 상태가 바뀐 친구의 정보를 줌.
-   * */
   useEffect(() => {
-    if (StatusSocket.connected) {
-      StatusSocket.on('change-status', (data: UserDto) => {
-        console.log('change-status');
-        console.log(data);
-      });
-    }
-  }, [StatusSocket]);
+    const handleChangeFriendStatus = (data: UserDto) => {
+      console.log('change-status');
+      console.log(data);
+      const newList = friendListState.map((item) =>
+        item.id === data.id ? { ...item, status: data.status } : item
+      );
+      setFriendListState(newList);
+    };
+
+    StatusSocket.on('change-status', handleChangeFriendStatus);
+
+    return () => {
+      StatusSocket.off('change-status', handleChangeFriendStatus);
+    };
+  }, []);
 
   return (
     <div className="flex h-full flex-col">
@@ -52,8 +56,8 @@ export const FriendList = () => {
           <StatusIcon props={{ status: 'ingame', color: 'bg-blue-400' }} />
         </div>
         <div className="flex flex-col w-full h-full p-1 overflow-y-auto mt-3 mb-10">
-          {userList.map((item) => (
-            <Friend key={item.friendId} props={item.friend} />
+          {friendListState.map((item) => (
+            <Friend key={item.id} props={item} />
           ))}
         </div>
       </div>
