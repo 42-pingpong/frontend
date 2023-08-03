@@ -2,7 +2,7 @@ import { ChatList } from './ChatList/ChatList';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { Chatting } from './Chatting';
 import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export interface chatForm {
   id: number;
@@ -12,6 +12,8 @@ export interface chatForm {
 }
 
 export const ChatSection = () => {
+  const input = useRef('');
+  const [reset, setReset] = useState('');
   const data: chatForm[] = [
     {
       id: 1,
@@ -105,6 +107,16 @@ export const ChatSection = () => {
     },
   ];
 
+  const handleSendMessage = () => {
+    console.log(input.current);
+    input.current = '';
+    setReset('');
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    input.current = e.target.value;
+    setReset(e.target.value);
+  };
   // const params = useParams();
   // console.log(params);
 
@@ -136,8 +148,20 @@ export const ChatSection = () => {
         </div>
         <input
           type="text"
-          className="text-xl absolute px-5 bottom-10 rounded-[50px] shadow-lg w-[80%] h-[3rem] bg-[#D9D9D9] justify-center "
+          className="text-xl absolute px-5 bottom-10 rounded-[50px] shadow-lg w-[80%] h-[3rem] bg-[#D9D9D9] justify-center"
+          onChange={(e) => handleInputChange(e)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleSendMessage();
+          }}
+          value={reset}
         ></input>
+        <div className="absolute right-0 bottom-10 shadow-lg w-12  h-[3rem] bg-[#D9D9D9] rounded-3xl">
+          <img
+            src={require('../../public/whitePlane.png')}
+            className=" mx-auto my-auto absolute"
+            onClick={() => handleSendMessage()}
+          ></img>
+        </div>
       </div>
     </div>
   );
