@@ -1,59 +1,93 @@
-import React, { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ServiceTitle } from '../Main/ServiceTitle';
-import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userInfo } from '../../atom/user';
 import { profileEditState } from '../../atom/profile';
-import { UserDto } from '../../interfaces/User.dto';
-import { EditUserProfileDto } from '../../interfaces/Edit-User-Profile.dto';
 import axiosInstance from '../../api/axios';
 
 export const ProfileEdit = () => {
-  const user = useRecoilValue(userInfo);
-  const setProfileEdit = useSetRecoilState(profileEditState);
+  const [user, setUser] = useRecoilState(userInfo);
   const [profileImage, setProfileImage] = useState(user.profile);
-  const nickNameRef = useRef('');
-  const selfIntroductionRef = useRef('');
+  const [formData, setFormData] = useState<FormData | null>(null);
+  const setProfileEdit = useSetRecoilState(profileEditState);
+
+  const nickNameRef = useRef(user.nickName);
+  const selfIntroductionRef = useRef(user.selfIntroduction);
+  const profileImageRef = useRef(user.profile);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log('submit');
     setProfileEdit(false);
-    //data patch 요청
+
+    try {
+      if (formData && formData.get('image')) {
+        const res = await axiosInstance.post('/upload', formData);
+        profileImageRef.current = res.data.url;
+      }
+      if (
+        nickNameRef.current !== user.nickName ||
+        selfIntroductionRef.current !== user.selfIntroduction ||
+        profileImageRef.current !== user.profile
+      ) {
+        const newProfile = {
+          ...(profileImageRef.current !== user.profile && {
+            profile: profileImageRef.current,
+          }),
+          ...(nickNameRef.current !== user.nickName && {
+            nickName: nickNameRef.current,
+          }),
+          ...(selfIntroductionRef.current !== user.selfIntroduction && {
+            selfIntroduction: selfIntroductionRef.current,
+          }),
+        };
+
+        const res = await axiosInstance.patch(`/user/${user.id}`, newProfile);
+        console.log(res.status);
+        if (res.status === 200) {
+          setUser((prevUser) => ({
+            ...prevUser,
+            nickName: nickNameRef.current,
+            selfIntroduction: selfIntroductionRef.current,
+            profile: profileImageRef.current,
+          }));
+        }
+      }
+    } catch (error: any) {
+      console.error('Error:', error);
+      if (error.response.status === 409) alert('이미 존재하는 닉네임입니다.');
+    }
   };
 
   const handleChangeImageClick = () => {
     // fileInputRef의 클릭 이벤트를 발생시킴
-    //트리거 발생하면 handleImageChange 실행됨
+    // 트리거 발생하면 handleImageChange 실행됨
     if (fileInputRef.current) fileInputRef.current.click();
   };
 
-  const handleImageChange = async (e: any) => {
+  const handleImageChange = (e: any) => {
     const file = e.target.files[0];
     const reader = new FileReader();
-    const formData = new FormData();
 
     try {
-      //이미지 미리보기
-      reader.onloadend = () => {
+      // 이미지 미리보기
+      reader.onload = () => {
         if (reader.result) setProfileImage(reader.result.toString());
       };
+
       if (file) {
         reader.readAsDataURL(file);
-        //서버에 image patch 요청
+        reader.onloadend = () => {
+          const newFormData = new FormData();
+
+          newFormData.append('image', file);
+          setFormData(newFormData);
+        };
+      } else {
+        setProfileImage('');
       }
-
-      formData.append('profileImage', file); //key: value
-
-      /*
-        multipart/form-data를 보내려면 FormData 개체를 사용할 수 있습니다.
-        FormData를 사용하여 이미지를 보낼 때 Axios는 FormData 개체를 감지하고 
-        자동으로 Content-Type 헤더를 multipart/form-data로 설정합니다. 
-      */
-      const res = await axiosInstance.post('uri', formData);
-      //서버한테 바이너리 이미지 주면 uri로 바꿔서 받아옴
-      setProfileImage(res.data.imageUrl);
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error('Error image load:', error);
     }
   };
 
@@ -65,7 +99,6 @@ export const ProfileEdit = () => {
         break;
       case 'selfIntroduction':
         selfIntroductionRef.current = value;
-        console.log(value);
         break;
       default:
         break;
@@ -150,12 +183,13 @@ export const ProfileEdit = () => {
               />
             </div>
             <div className="flex w-full h-28 py-3 flex-grow-0">
-              <button className="flex w-full h-full" type="submit">
-                <div className="flex w-full h-full justify-center items-center bg-progressBlue rounded-full shadow-xl">
-                  <span className="text-[2rem] font-semibold text-white">
-                    Submit
-                  </span>
-                </div>
+              <button
+                className="flex w-full h-full justify-center items-center bg-progressBlue rounded-full shadow-xl"
+                type="submit"
+              >
+                <span className="text-[2rem] font-semibold text-white">
+                  Submit
+                </span>
               </button>
             </div>
           </div>
