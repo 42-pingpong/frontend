@@ -6,7 +6,7 @@ export const GameSocket = io(GURL, {
   transports: ['websocket'],
   autoConnect: false,
   auth: (cb) => {
-    const token = 'Bearer' + localStorage.getItem('token');
+    const token = 'Bearer ' + localStorage.getItem('token');
     cb({ token });
   },
 });

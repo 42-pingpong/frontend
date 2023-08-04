@@ -1,7 +1,7 @@
 import React from 'react';
 import { UserDto } from '../../interfaces/User.dto';
 import { StatusSocket } from '../../sockets/StatusSocket';
-import { RequestFriendDto } from '../../interfaces/Request-Friend.dto';
+import { CreateRequestFriendDto } from '../../interfaces/Request-Friend.dto';
 
 export const SearchUserList = ({
   props,
@@ -10,7 +10,7 @@ export const SearchUserList = ({
   props: UserDto;
   isDuplicated: boolean;
 }) => {
-  const RequestData: RequestFriendDto = {
+  const RequestData: CreateRequestFriendDto = {
     requestedUserId: props.id,
   };
 
