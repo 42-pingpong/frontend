@@ -4,7 +4,7 @@ import { loginState, userInfo } from '../../atom/user';
 import { StatusSocket } from '../../sockets/StatusSocket';
 import { useEffect, useState } from 'react';
 import React from 'react';
-import { RequestFriendFromUserDto } from '../../interfaces/Request-Friend.dto';
+import { ResponseNotificationDto } from '../../interfaces/Request-Friend.dto';
 
 const Profile = () => {
   const userInfoObj = useRecoilValue(userInfo);
@@ -28,16 +28,18 @@ const Profile = () => {
   }, [isLoggedIn]);
 
   useEffect(() => {
+    if (!isLoggedIn) return;
+
     StatusSocket.on(
       'request-friend-from-user',
-      (data: RequestFriendFromUserDto) => {
+      (data: ResponseNotificationDto) => {
         console.log('request-friend-from-user socket on');
         //전달받은 data저장해야됨
         console.log(data);
       }
     );
     setNotification(true);
-  }, [StatusSocket]);
+  }, [isLoggedIn]);
 
   return (
     <div className=" flex flex-row justify-center items-center">

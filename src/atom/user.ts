@@ -19,7 +19,7 @@ export const userInfo = atom({
   },
 });
 
-export const friendList = atom<UserDto[]>({
-  key: 'friendList',
+export const friendListState = atom<UserDto[]>({
+  key: 'friendListState',
   default: [],
 });

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { friendList, loginState, userInfo } from '../../atom/user';
+import { friendListState, loginState, userInfo } from '../../atom/user';
 import { StatusSocket } from '../../sockets/StatusSocket';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { StatusIcon } from './StatusIcon';
@@ -11,14 +11,14 @@ import { fetchFriendList } from '../../api/Friend/Friend';
 export const FriendList = () => {
   const isLogin = useRecoilValue(loginState);
   const [userInfoState] = useRecoilState(userInfo);
-  const [friendListState, setFriendListState] = useRecoilState(friendList);
+  const [friendList, setFriendList] = useRecoilState(friendListState);
 
   useEffect(() => {
     const handleChangeFriendStatus = (data: UserDto) => {
       console.log('change-status');
       console.log(data);
 
-      setFriendListState((prevList) =>
+      setFriendList((prevList) =>
         prevList.map((item) =>
           item.id === data.id ? { ...item, status: data.status } : item
         )
@@ -35,7 +35,7 @@ export const FriendList = () => {
   useEffect(() => {
     const fetchFriendListAndSetState = async () => {
       const data = await fetchFriendList(userInfoState.id);
-      setFriendListState(data);
+      setFriendList(data);
     };
 
     if (isLogin) {
@@ -55,7 +55,7 @@ export const FriendList = () => {
           <StatusIcon props={{ status: 'ingame', color: 'bg-blue-400' }} />
         </div>
         <div className="flex flex-col w-full h-full p-1 overflow-y-auto mt-3 mb-10">
-          {friendListState.map((item) => (
+          {friendList.map((item) => (
             <Friend key={item.id} props={item} />
           ))}
         </div>

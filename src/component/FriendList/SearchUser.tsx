@@ -1,10 +1,16 @@
 import React from 'react';
 import { UserDto } from '../../interfaces/User.dto';
 import { StatusSocket } from '../../sockets/StatusSocket';
-import { RequestFriendDto } from '../../interfaces/Request-Friend.dto';
+import { CreateRequestFriendDto } from '../../interfaces/Request-Friend.dto';
 
-export const SearchUserList = ({ props }: { props: UserDto }) => {
-  const RequestData: RequestFriendDto = {
+export const SearchUserList = ({
+  props,
+  isDuplicated,
+}: {
+  props: UserDto;
+  isDuplicated: boolean;
+}) => {
+  const RequestData: CreateRequestFriendDto = {
     requestedUserId: props.id,
   };
 
@@ -31,8 +37,16 @@ export const SearchUserList = ({ props }: { props: UserDto }) => {
             : 'bg-blue-400 '
         } w-5 h-5 mr-3 rounded-full `}
       ></div>
-      <div className="flex w-10 h-6" onClick={handleAddFriend}>
-        <img src={require('../../public/plus.png')} className="opacity-50" />
+      <div className="flex w-10 h-6">
+        {isDuplicated ? (
+          <img src={require('../../public/plus.png')} className="opacity-20" /> // 이미 친구인 경우
+        ) : (
+          <img
+            src={require('../../public/plus.png')}
+            className="opacity-50"
+            onClick={handleAddFriend}
+          />
+        )}
       </div>
     </div>
   );
