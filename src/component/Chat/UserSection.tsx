@@ -1,7 +1,14 @@
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { StatusIcon } from '../FriendList/StatusIcon';
+import { useNavigate } from 'react-router-dom';
+import { Friend } from '../FriendList/Friend';
+import { useRecoilValue } from 'recoil';
+import { friendList } from '../../atom/user';
 
 export const UserSection = () => {
+  const friendListState = useRecoilValue(friendList);
+
+  const navigation = useNavigate();
   return (
     <div id="friends-section" className="flex-col flex h-full">
       <div className="flex">
@@ -16,11 +23,18 @@ export const UserSection = () => {
           <StatusIcon props={{ status: 'offline', color: 'bg-red-400' }} />
           <StatusIcon props={{ status: 'ingame', color: 'bg-blue-400' }} />
         </div>
-        {/*<div className="flex flex-col w-full h-full overflow-y-auto mt-3 mb-10">
-          {userData.map((item) => (
-            <User key={item.id} props={item} />
+        <div className="flex flex-col w-full h-full overflow-y-auto mt-3 mb-10">
+          {friendListState.map((item) => (
+            <Friend key={item.id} props={item} />
           ))}
-        </div>*/}
+        </div>
+        <div className="relative ">
+          <img
+            src={require('../../public/quit.png')}
+            className=" mx-auto float-right mb-5 w-9 h-7"
+            onClick={() => navigation('/')}
+          ></img>
+        </div>
       </div>
     </div>
   );

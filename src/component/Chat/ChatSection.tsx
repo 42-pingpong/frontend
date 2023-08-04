@@ -12,8 +12,7 @@ export interface chatForm {
 }
 
 export const ChatSection = () => {
-  const input = useRef('');
-  const [reset, setReset] = useState('');
+  const [input, setInput] = useState('');
   const data: chatForm[] = [
     {
       id: 1,
@@ -60,21 +59,17 @@ export const ChatSection = () => {
     {
       id: 8,
       nickname: 'nick1',
-      text: '잉잉잉잉',
+      text: '잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉잉',
       sender: 'jina',
     },
   ];
 
   const handleSendMessage = () => {
-    console.log(input.current);
-    input.current = '';
-    setReset('');
+    if (input === '') return;
+    console.log(input);
+    setInput('');
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    input.current = e.target.value;
-    setReset(e.target.value);
-  };
   // const params = useParams();
   // console.log(params);
 
@@ -107,17 +102,20 @@ export const ChatSection = () => {
         <input
           type="text"
           className="text-xl absolute px-5 bottom-10 rounded-[50px] shadow-lg w-[80%] h-[3rem] bg-[#D9D9D9] justify-center"
-          onChange={(e) => handleInputChange(e)}
+          onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') handleSendMessage();
           }}
-          value={reset}
+          value={input}
+          autoFocus
         ></input>
-        <div className="absolute right-0 bottom-10 shadow-lg w-12  h-[3rem] bg-[#D9D9D9] rounded-3xl">
+        <div
+          className="absolute right-5 bottom-10 shadow-lg h-[3rem] w-[6%] bg-[#D9D9D9] rounded-3xl"
+          onClick={() => handleSendMessage()}
+        >
           <img
             src={require('../../public/whitePlane.png')}
-            className=" mx-auto my-auto absolute"
-            onClick={() => handleSendMessage()}
+            className=" mx-auto mt-2.5 w-7 h-7"
           ></img>
         </div>
       </div>
