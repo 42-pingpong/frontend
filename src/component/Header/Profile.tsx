@@ -9,7 +9,9 @@ import { ResponseNotificationDto } from '../../interfaces/Request-Friend.dto';
 const Profile = () => {
   const userInfoObj = useRecoilValue(userInfo);
   const isLoggedIn = useRecoilValue(loginState);
-  const setNotificationList = useSetRecoilState(notificationState);
+  //const setNotificationList = useSetRecoilState(notificationState);
+  const [notificationList, setNotificationList] =
+    useRecoilState(notificationState);
   const [notification, setNotification] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] =
     useRecoilState(profileModalState);
@@ -18,15 +20,23 @@ const Profile = () => {
   );
 
   useEffect(() => {
+    console.log('notificationList');
+    console.log(notificationList);
+  }, [notificationList]);
+
+  useEffect(() => {
     if (isLoggedIn) {
       //test용 나중에 지워라
       // setNotification(true);
 
       //여기서부터 따라가면 됨
-      const saveNotificationList = (data: ResponseNotificationDto[]) => {
+      const saveNotificationList = (
+        data: ResponseNotificationDto[] | ResponseNotificationDto
+      ) => {
         console.log('request-friend-from-user');
         console.log(data);
-        setNotificationList(data);
+        const dataArray = Array.isArray(data) ? data : [data];
+        setNotificationList(dataArray);
         setNotification(true);
       };
 
