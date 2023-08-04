@@ -20,8 +20,9 @@ const Profile = () => {
   useEffect(() => {
     if (isLoggedIn) {
       //test용 나중에 지워라
-      setNotification(true);
+      // setNotification(true);
 
+      //여기서부터 따라가면 됨
       const saveNotificationList = (data: ResponseNotificationDto[]) => {
         console.log('request-friend-from-user');
         console.log(data);
@@ -43,6 +44,7 @@ const Profile = () => {
   const handelNotificationClicked = () => {
     setIsNotificationModalOpen(!isNotificationModalOpen);
     setNotification(false);
+    //여기서 noti list requestedId 뮤한테 보내야됨
   };
 
   return (

@@ -6,46 +6,46 @@ import { notificationState } from '../../atom/notification';
 import { ResponseNotificationDto } from '../../interfaces/Request-Friend.dto';
 import { useEffect } from 'react';
 
-const requestingUser = {
-  id: 12345,
-  nickName: 'soobal',
-};
+// const requestingUser = {
+//   id: 12345,
+//   nickName: 'soobal',
+// };
 
-const list: ResponseNotificationDto[] = [
-  {
-    requestId: 1,
-    requestingUser: requestingUser,
-    requestType: 'F',
-    isAccepted: 'P',
-    createdAt: '2023-08-04T07:33:34.662Z',
-    pastTime: '1시간 전',
-  },
-  {
-    requestId: 2,
-    requestingUser: requestingUser,
-    requestType: 'G',
-    isAccepted: 'P',
-    createdAt: '2023-08-04T06:33:34.662Z',
-    pastTime: '2시간 전',
-  },
-  {
-    requestId: 3,
-    requestingUser: requestingUser,
-    requestType: 'C',
-    isAccepted: 'P',
-    createdAt: '2023-08-04T05:33:34.662Z',
-    pastTime: '3시간 전',
-  },
-];
+// const list: ResponseNotificationDto[] = [
+//   {
+//     requestId: 1,
+//     requestingUser: requestingUser,
+//     requestType: 'F',
+//     isAccepted: 'P',
+//     createdAt: '2023-08-04T07:33:34.662Z',
+//     pastTime: '1시간 전',
+//   },
+//   {
+//     requestId: 2,
+//     requestingUser: requestingUser,
+//     requestType: 'G',
+//     isAccepted: 'P',
+//     createdAt: '2023-08-04T06:33:34.662Z',
+//     pastTime: '2시간 전',
+//   },
+//   {
+//     requestId: 3,
+//     requestingUser: requestingUser,
+//     requestType: 'C',
+//     isAccepted: 'P',
+//     createdAt: '2023-08-04T05:33:34.662Z',
+//     pastTime: '3시간 전',
+//   },
+// ];
 
 export const NotificationModal = () => {
   const [isModalOpen, setIsModalOpen] = useRecoilState(notificationModalState);
   const [notificationList, setNotificationList] =
     useRecoilState(notificationState);
 
-  useEffect(() => {
-    setNotificationList(list);
-  }, []);
+  // useEffect(() => {
+  //   setNotificationList(list);
+  // }, []);
 
   const closeModal = (e: any) => {
     const modalContent = document.getElementById('notification-modal-content');
