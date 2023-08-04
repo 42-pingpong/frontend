@@ -6,32 +6,12 @@ import { ServiceTitle } from '../Main/ServiceTitle';
 import { StatusIcon } from './StatusIcon';
 import { Friend } from './Friend';
 import { UserDto } from '../../interfaces/User.dto';
-import { useQuery } from 'react-query';
 import { fetchFriendList } from '../../api/Friend/Friend';
-import { friendProfileModalState } from '../../atom/modal';
 
 export const FriendList = () => {
   const isLogin = useRecoilValue(loginState);
   const [userInfoState] = useRecoilState(userInfo);
   const [friendListState, setFriendListState] = useRecoilState(friendList);
-
-  const { data } = useQuery(
-    ['userList', userInfoState.id, isLogin],
-    () => fetchFriendList(userInfoState.id),
-    {
-      enabled: !!isLogin, // 로그인 상태일 때만 쿼리를 실행합니다.
-      staleTime: 60 * 1000, // 1분
-      refetchOnWindowFocus: false, // 포커스가 바뀌어도 새로고침을 하지 않음
-      onSuccess: (data) => {
-        setFriendListState(data);
-      },
-    }
-  );
-
-  useEffect(() => {
-    console.log('call');
-    console.log(friendListState);
-  }, [friendListState]);
 
   useEffect(() => {
     const handleChangeFriendStatus = (data: UserDto) => {
@@ -51,6 +31,17 @@ export const FriendList = () => {
       StatusSocket.off('change-status', handleChangeFriendStatus);
     };
   }, []);
+
+  useEffect(() => {
+    const fetchFriendListAndSetState = async () => {
+      const data = await fetchFriendList(userInfoState.id);
+      setFriendListState(data);
+    };
+
+    if (isLogin) {
+      fetchFriendListAndSetState();
+    }
+  }, [isLogin]);
 
   return (
     <div className="flex h-full flex-col">
