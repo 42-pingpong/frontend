@@ -14,6 +14,7 @@ export const Friend = ({ props }: { props: UserDto }) => {
   const setClicked = useSetRecoilState(friendProfileModalState);
   const setFriendProfile = useSetRecoilState(clickedFriendProfileState);
   const navigation = useNavigate();
+
   return (
     <div className="flex w-full h-20 bg-sky rounded-full my-3 shadow-md shadow-gray-300 items-center p-4 justify-between">
       <div
