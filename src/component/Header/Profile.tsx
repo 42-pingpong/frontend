@@ -2,7 +2,7 @@ import { notificationModalState, profileModalState } from '../../atom/modal';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { loginState, userInfo } from '../../atom/user';
 import { StatusSocket } from '../../sockets/StatusSocket';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { notificationState } from '../../atom/notification';
 import {
   CheckedAlarmDto,
@@ -24,14 +24,15 @@ const Profile = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      //여기서부터 따라가면 됨
+      console.log('saveNotificationList called');
       const saveNotificationList = (
         data: ResponseNotificationDto[] | ResponseNotificationDto
       ) => {
-        console.log('request-friend-from-user');
-        console.log(data);
-        const dataArray = Array.isArray(data) ? data : [data];
-        setNotificationList(dataArray);
+        if (data === null) return;
+        const dataArray: ResponseNotificationDto[] = Array.isArray(data)
+          ? data
+          : [data];
+        setNotificationList((prev) => [...prev, ...dataArray]);
         setNotification(true);
       };
 
@@ -44,7 +45,7 @@ const Profile = () => {
         StatusSocket.disconnect();
       };
     }
-  }, [isLoggedIn]);
+  }, []);
 
   useEffect(() => {
     if (
@@ -52,11 +53,9 @@ const Profile = () => {
       notificationList.length > 0 &&
       prevNotificationList.current !== notificationList
     ) {
-      const checkedAlarmList: CheckedAlarmDto[] = notificationList.map(
-        (item) => ({
-          requestId: item.requestId,
-        })
-      );
+      const checkedAlarmList: CheckedAlarmDto[] = notificationList
+        .filter((item) => !isUserDuplicated(item.requestId))
+        .map((item) => ({ requestId: item.requestId }));
 
       console.log('checkedAlarmList');
       console.log(checkedAlarmList);
@@ -64,6 +63,11 @@ const Profile = () => {
       prevNotificationList.current = notificationList;
     }
   }, [notificationList, isNotificationModalOpen, isLoggedIn]);
+
+  //나중에 utils로 빼기
+  const isUserDuplicated = (id: number) => {
+    return prevNotificationList.current.some((item) => item.requestId === id);
+  };
 
   const handelNotificationClicked = () => {
     setIsNotificationModalOpen(!isNotificationModalOpen);
