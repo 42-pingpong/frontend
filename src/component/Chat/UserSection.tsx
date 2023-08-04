@@ -3,10 +3,10 @@ import { StatusIcon } from '../FriendList/StatusIcon';
 import { useNavigate } from 'react-router-dom';
 import { Friend } from '../FriendList/Friend';
 import { useRecoilValue } from 'recoil';
-import { friendList } from '../../atom/user';
+import { friendListState } from '../../atom/user';
 
 export const UserSection = () => {
-  const friendListState = useRecoilValue(friendList);
+  const friendList = useRecoilValue(friendListState);
 
   const navigation = useNavigate();
   return (
@@ -24,7 +24,7 @@ export const UserSection = () => {
           <StatusIcon props={{ status: 'ingame', color: 'bg-blue-400' }} />
         </div>
         <div className="flex flex-col w-full h-full overflow-y-auto mt-3 mb-10">
-          {friendListState.map((item) => (
+          {friendList.map((item) => (
             <Friend key={item.id} props={item} />
           ))}
         </div>
