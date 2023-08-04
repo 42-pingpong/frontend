@@ -1,9 +1,7 @@
 import { useRecoilState } from 'recoil';
-import { notificationModalState, profileModalState } from '../../atom/modal';
-import { useNavigate } from 'react-router-dom';
-import { userInfo } from '../../atom/user';
-import './styles.css';
+import { notificationModalState } from '../../atom/modal';
 import { RequestFriend } from '../FriendList/RequestFriend';
+import './styles.css';
 
 export const data = [
   {

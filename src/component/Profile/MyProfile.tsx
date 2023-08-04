@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { friendListState, userInfo } from '../../atom/user';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { profileEditState } from '../../atom/profile';
 import { UserDto } from '../../interfaces/User.dto';
 
@@ -10,7 +9,7 @@ export const MyProfile = ({ nickName }: { nickName?: string }) => {
   const data = useRecoilValue<UserDto[]>(friendListState).find(
     (item) => ':' + item.nickName === nickName
   );
-  const [profileEdit, setProfileEdit] = useRecoilState(profileEditState);
+  const setProfileEdit = useSetRecoilState(profileEditState);
   const user = nickName !== undefined ? data : userInfoObj;
 
   return (

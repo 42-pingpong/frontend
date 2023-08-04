@@ -4,7 +4,7 @@ import { Main } from './Main';
 
 export const TokenSave = () => {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const ac = searchParams.get('accessToken');
 
   useEffect(() => {

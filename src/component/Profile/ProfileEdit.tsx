@@ -21,7 +21,7 @@ export const ProfileEdit = () => {
     console.log('submit');
 
     try {
-      if (formData && formData.get('image')) {
+      if (formData?.get('image')) {
         const res = await axiosInstance.post('/upload', formData);
         profileImageRef.current = res.data.url;
       }
