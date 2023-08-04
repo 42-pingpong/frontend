@@ -2,6 +2,10 @@ export interface CreateRequestFriendDto {
   requestedUserId: number;
 }
 
+export interface CheckedAlarmDto {
+  requestId: number;
+}
+
 export interface ResponseNotificationDto {
   requestId: number;
   requestingUser: {

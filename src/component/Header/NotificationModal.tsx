@@ -3,6 +3,7 @@ import { notificationModalState } from '../../atom/modal';
 import { RequestFriend } from '../FriendList/RequestFriend';
 import './styles.css';
 import { notificationState } from '../../atom/notification';
+import { useEffect } from 'react';
 
 export const NotificationModal = () => {
   const [isModalOpen, setIsModalOpen] = useRecoilState(notificationModalState);

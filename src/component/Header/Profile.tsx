@@ -2,14 +2,16 @@ import { notificationModalState, profileModalState } from '../../atom/modal';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { loginState, userInfo } from '../../atom/user';
 import { StatusSocket } from '../../sockets/StatusSocket';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { notificationState } from '../../atom/notification';
-import { ResponseNotificationDto } from '../../interfaces/Request-Friend.dto';
+import {
+  CheckedAlarmDto,
+  ResponseNotificationDto,
+} from '../../interfaces/Request-Friend.dto';
 
 const Profile = () => {
   const userInfoObj = useRecoilValue(userInfo);
   const isLoggedIn = useRecoilValue(loginState);
-  //const setNotificationList = useSetRecoilState(notificationState);
   const [notificationList, setNotificationList] =
     useRecoilState(notificationState);
   const [notification, setNotification] = useState(false);
@@ -18,17 +20,10 @@ const Profile = () => {
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useRecoilState(
     notificationModalState
   );
-
-  useEffect(() => {
-    console.log('notificationList');
-    console.log(notificationList);
-  }, [notificationList]);
+  const prevNotificationList = useRef<ResponseNotificationDto[]>([]);
 
   useEffect(() => {
     if (isLoggedIn) {
-      //test용 나중에 지워라
-      // setNotification(true);
-
       //여기서부터 따라가면 됨
       const saveNotificationList = (
         data: ResponseNotificationDto[] | ResponseNotificationDto
@@ -51,10 +46,28 @@ const Profile = () => {
     }
   }, [isLoggedIn]);
 
+  useEffect(() => {
+    if (
+      isNotificationModalOpen &&
+      notificationList.length > 0 &&
+      prevNotificationList.current !== notificationList
+    ) {
+      const checkedAlarmList: CheckedAlarmDto[] = notificationList.map(
+        (item) => ({
+          requestId: item.requestId,
+        })
+      );
+
+      console.log('checkedAlarmList');
+      console.log(checkedAlarmList);
+      StatusSocket.emit('checked-alarm', checkedAlarmList);
+      prevNotificationList.current = notificationList;
+    }
+  }, [notificationList, isNotificationModalOpen, isLoggedIn]);
+
   const handelNotificationClicked = () => {
     setIsNotificationModalOpen(!isNotificationModalOpen);
     setNotification(false);
-    //여기서 noti list requestedId 뮤한테 보내야됨
   };
 
   return (
