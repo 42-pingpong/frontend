@@ -8,6 +8,7 @@ import { Friend } from './Friend';
 import { UserDto } from '../../interfaces/User.dto';
 import { useQuery } from 'react-query';
 import { fetchFriendList } from '../../api/Friend/Friend';
+import { friendProfileModalState } from '../../atom/modal';
 
 export const FriendList = () => {
   const isLogin = useRecoilValue(loginState);
@@ -28,13 +29,20 @@ export const FriendList = () => {
   );
 
   useEffect(() => {
+    console.log('call');
+    console.log(friendListState);
+  }, [friendListState]);
+
+  useEffect(() => {
     const handleChangeFriendStatus = (data: UserDto) => {
       console.log('change-status');
       console.log(data);
-      const newList = friendListState.map((item) =>
-        item.id === data.id ? { ...item, status: data.status } : item
+
+      setFriendListState((prevList) =>
+        prevList.map((item) =>
+          item.id === data.id ? { ...item, status: data.status } : item
+        )
       );
-      setFriendListState(newList);
     };
 
     StatusSocket.on('change-status', handleChangeFriendStatus);
