@@ -16,12 +16,11 @@ export const SearchUserList = ({
 
   const handleAddFriend = () => {
     console.log('handleAddFriend socket emit');
-    StatusSocket.emit('request-friend', RequestData);
+    StatusSocket.emit('request-friend', JSON.stringify(RequestData));
   };
 
   return (
     <div className="flex w-full h-20 bg-sky rounded-full my-3 shadow-md shadow-gray-300 items-center p-4 justify-between">
-      {/*보더는 나중에 뺄까*/}
       <div className="w-14 h-14 rounded-full border-2">
         <img src={require('../../public/soo.png')} />
       </div>
