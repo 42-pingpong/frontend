@@ -8,7 +8,7 @@ import axiosInstance from '../../api/axios';
 import { UserDto } from '../../interfaces/User.dto';
 import { SearchUserList } from '../FriendList/SearchUser';
 import { chatRoomState, currentRoomIdState } from '../../atom/chat';
-import { IChatRoom } from '../../interfaces/Chatting-Format.dto';
+import { IChat, IChatRoom } from '../../interfaces/Chatting-Format.dto';
 
 const roomtypeList = ['Public', 'Protected', 'Private'];
 
@@ -30,7 +30,7 @@ export const CreateChattingRoomModal = () => {
     currentParticipants: 1,
     maxParticipants: 0,
     ownerId: user.id,
-    roomId: cuurentRoomId,
+    // roomId: cuurentRoomId,
     // DTO에 없는데 필요할 것 같아서 일단 적어둠
     // memebers: [],
   });
@@ -112,11 +112,16 @@ export const CreateChattingRoomModal = () => {
     // 이거 어떤 소켓으로 emit해야하는지 생각중
 
     console.log(formValue);
-    setCurrentRoomId((prev) => prev + 1);
+
+    // setCurrentRoomId((prev) => prev + 1);
     if (formValue.maxParticipants === 0) {
       formValue.maxParticipants = formValue.currentParticipants;
     }
-    setChatRoomList((prev) => [...prev, formValue]);
+
+    ChatSocket.emit('group-chat-create', formValue, (res: IChatRoom) =>
+      setChatRoomList((prev) => [...prev, res])
+    );
+    // setChatRoomList((prev) => [...prev, formValue]);
     setChattingState(!chattingState);
   };
 

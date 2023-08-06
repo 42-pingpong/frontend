@@ -20,5 +20,5 @@ export interface IChatRoom {
   currentParticipants: number;
   maxParticipants: number;
   ownerId?: number;
-  roomId: number;
+  roomId?: number;
 }

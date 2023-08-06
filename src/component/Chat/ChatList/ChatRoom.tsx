@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ServiceTitle } from '../../Main/ServiceTitle';
 import { ChatList } from './ChatList';
 import './styles.css';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { chatRoomState } from '../../../atom/chat';
+import { ChatSocket } from '../../../sockets/ChatSocket';
+import { IChatRoom } from '../../../interfaces/Chatting-Format.dto';
+import { Chat } from '../Chat';
 
 // export interface chatRoomList {
 //   id: number;
@@ -86,8 +89,26 @@ export const ChatRoom = () => {
   //     permission: 'public',
   //   },
   // ];
+  const [ChatRoomList, setChatRoomList] = useRecoilState(chatRoomState);
 
-  const ChatRoomList = useRecoilValue(chatRoomState);
+  const handleChatRoomList = (data: IChatRoom) => {
+    setChatRoomList((prev) => [...prev, data]);
+  };
+
+  useEffect(() => {
+    ChatSocket.connect();
+    ChatSocket.on('group-chat-update', handleChatRoomList);
+    ChatSocket.emit('group-chat-list', (data: IChatRoom[]) => {
+      setChatRoomList([...data]);
+    });
+
+    return () => {
+      ChatSocket.off('group-chat-update', handleChatRoomList);
+      ChatSocket.off('group-chat-list');
+      ChatSocket.disconnect();
+      console.log('chatsocket disconnect');
+    };
+  }, []);
 
   return (
     <div className="flex flex-col h-full">
