@@ -7,6 +7,8 @@ import { friendListState, userInfo } from '../../atom/user';
 import axiosInstance from '../../api/axios';
 import { UserDto } from '../../interfaces/User.dto';
 import { SearchUserList } from '../FriendList/SearchUser';
+import { chatRoomState, currentRoomIdState } from '../../atom/chat';
+import { IChatRoom } from '../../interfaces/Chatting-Format.dto';
 
 const roomtypeList = ['Public', 'Protected', 'Private'];
 
@@ -18,13 +20,17 @@ export const CreateChattingRoomModal = () => {
   const friendList = useRecoilValue(friendListState);
   const focusRef = useRef<any>(null);
   const [memberFocus, setMemberFocus] = useState(false);
+  const [chatRoomList, setChatRoomList] = useRecoilState(chatRoomState);
+  const [cuurentRoomId, setCurrentRoomId] = useRecoilState(currentRoomIdState);
 
-  const [formValue, setFormValue] = useState<CreateGroupchatDto>({
+  const [formValue, setFormValue] = useState<IChatRoom>({
     chatName: '',
     password: '',
     levelOfPublicity: 'Public',
+    currentParticipants: 1,
     maxParticipants: 0,
     ownerId: user.id,
+    roomId: cuurentRoomId,
     // DTO에 없는데 필요할 것 같아서 일단 적어둠
     // memebers: [],
   });
@@ -92,14 +98,36 @@ export const CreateChattingRoomModal = () => {
   const excludeMeFriendList = (data: any) =>
     data.filter((item: UserDto) => item.id !== user.id);
 
+  const handleSubmit = async () => {
+    // const res = await axiosInstance.post('/groupchat', formValue);
+    // if (res.data !== undefined) {
+    //   const chatId = res.data.id;
+    //   const socket = ChatSocket.getInstance();
+    // socket.createChat(chatId);
+    // setChattingState(!chattingState);
+    // } ?? 코파일럿이 뭔가 만들어 줌
+
+    // formValue.currentParticipants += formValue.members.length;
+
+    // 이거 어떤 소켓으로 emit해야하는지 생각중
+
+    console.log(formValue);
+    setCurrentRoomId((prev) => prev + 1);
+    if (formValue.maxParticipants === 0) {
+      formValue.maxParticipants = formValue.currentParticipants;
+    }
+    setChatRoomList((prev) => [...prev, formValue]);
+    setChattingState(!chattingState);
+  };
+
   return (
     <div className="background bg-[rgba(0,0,0,0.2)]" onClick={closeModal}>
       <div
         id="chattingroom-content"
-        className="min-w-[500px] w-[35vw] h-[65vh] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[10vh] grid grid-cols-1 grid-rows-4"
+        className="min-w-[500px] w-[30vw] h-[65vh] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[10vh] grid grid-cols-1 grid-rows-4"
       >
         <div className="grid-rows-1">
-          <p className="py-[7%] px-[8%]  font-sans font-[320]  text-[35px] leading-[41px] tracking-tighter text-[#5D777B]">
+          <p className="py-[7%] px-[8%]  font-sans font-[320]  text-[35px] leading-[41px] tracking-tighter text-[#5D777B] pb-10">
             Create Chatting Room
           </p>
           <div className="pb-[6%] px-[8%] flex justify-center space-x-[5vw] text-[#5D777B] text-2xl font-light tracking-tight">
@@ -137,7 +165,7 @@ export const CreateChattingRoomModal = () => {
                 Max Participant
               </h1>
               <input
-                name="maxParticipant"
+                name="maxParticipants"
                 type="number"
                 min="1"
                 max="1000"
@@ -145,9 +173,15 @@ export const CreateChattingRoomModal = () => {
                 onChange={(e) => handleOnChange(e)}
               ></input>
               {/* 이거 위치 */}
-              <p className=" text-[#5D777B] text-2xl absolute right-[15%] bottom-[6.4vh] font-light">
-                / 1000
-              </p>
+              {formValue.levelOfPublicity === 'Public' ? (
+                <p className=" text-[#5D777B] text-2xl absolute right-[15%] bottom-[75px] font-light">
+                  / 1000
+                </p>
+              ) : (
+                <p className=" text-[#5D777B] text-2xl absolute right-[15%] bottom-6 font-light">
+                  / 1000
+                </p>
+              )}
             </div>
           ) : (
             <></>
@@ -216,9 +250,7 @@ export const CreateChattingRoomModal = () => {
           <button
             type="button"
             className="right-0  inline-block float-right mr-[10%] mb-[5%]"
-            // 이런식으로 전달하는게 맞겠쥬?
-            // onClick={() => ChatSocket.emit('createRoom', formValue)}
-            onClick={() => console.log(formValue)}
+            onClick={() => handleSubmit()}
           >
             <p className="font-sans not-italic font-[320] text-2xl leading-[41px] tracking-tighter text-[#5D777B]">
               Create

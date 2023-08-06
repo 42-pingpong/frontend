@@ -5,13 +5,15 @@ import { useParams } from 'react-router-dom';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChatSocket } from '../../sockets/ChatSocket';
 import { IChat } from '../../interfaces/Chatting-Format.dto';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { userInfo } from '../../atom/user';
+import { chatRoomState } from '../../atom/chat';
 
 export const ChatSection = () => {
   const [input, setInput] = useState('');
   const [chat, setChat] = useState<IChat[]>([]);
   const userInfoState = useRecoilValue(userInfo);
+  const chatRoomList = useRecoilValue(chatRoomState);
 
   // const data: IChat[] = [
   //   {
@@ -98,29 +100,21 @@ export const ChatSection = () => {
     setInput('');
   };
 
-  // const params = useParams();
-  // console.log(params);
+  const id = useParams();
+  console.log(id);
 
-  // params 써서 방 정보 불러오는 거 필요할 것 같아염 ~
+  const chatRoom = chatRoomList.find((room) => room.roomId === Number(id.id));
 
   return (
     <div id="chat-section" className="flex flex-col h-full">
       <div className="flex">
         <ServiceTitle title="Chat" nonAddButton={true} />
       </div>
-      <div className="rounded-3xl mx-auto w-[500px] z-10">
-        <ChatList
-          key="1"
-          props={{
-            id: 1,
-            title: '채팅방1',
-            people: 2,
-            maxPeople: 4,
-            permission: 'public',
-          }}
-        />
-      </div>
-
+      {chatRoom && (
+        <div className="rounded-3xl mx-auto w-[500px] z-10">
+          <ChatList props={chatRoom} />
+        </div>
+      )}
       <div className="rounded-3xl shadow-xl h-[50%] flex-grow relative flex justify-center">
         <div className="w-full h-[85%] justify-between overflow-y-auto py-3 items-center z-10">
           {chat.map((item) => (
