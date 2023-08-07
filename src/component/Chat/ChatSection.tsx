@@ -70,34 +70,38 @@ export const ChatSection = () => {
           <ChatList props={chatRoom} />
         </div>
       )}
-      <div className="rounded-3xl shadow-2xl py-10 px-8 flex-grow relative flex justify-center">
-        <div className="w-full h-[85%] justify-between overflow-y-auto py-3 items-center z-10">
-          {chat.map((item) => (
-            <ChattingBubble
-              key={item.id}
-              props={item}
-              nickName={userInfoState.nickName}
-            />
-          ))}
+      <div className="flex h-full flex-col rounded-3xl shadow-2xl flex-grow pt-14 items-center">
+        <div className="flex w-full h-[800px] justify-between items-center p-14 z-10">
+          <div className="flex flex-col w-full h-full px-2 overflow-y-auto">
+            {chat.map((item) => (
+              <ChattingBubble
+                key={item.id}
+                props={item}
+                nickName={userInfoState.nickName}
+              />
+            ))}
+          </div>
         </div>
-        <input
-          type="text"
-          className="text-xl absolute px-5 bottom-10 rounded-[50px] shadow-md w-[80%] h-[3rem] bg-[#D9D9D9] justify-center outline-none"
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') handleSendMessage();
-          }}
-          value={input}
-          autoFocus
-        ></input>
-        <div
-          className="absolute right-5 bottom-10 shadow-md h-[3rem] w-[6%] bg-[#D9D9D9] rounded-3xl"
-          onClick={() => handleSendMessage()}
-        >
-          <img
-            src={require('../../public/whitePlane.png')}
-            className=" mx-auto mt-2.5 w-7 h-7"
-          ></img>
+        <div className="flex flex-row justify-between w-full px-16 items-center  h-[6rem]">
+          <input
+            type="text"
+            className="text-xl px-5 bottom-10 rounded-[50px] shadow-md w-[90%] h-[3rem] bg-[#D9D9D9] justify-center outline-none"
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSendMessage();
+            }}
+            value={input}
+            autoFocus
+          ></input>
+          <div
+            className="right-5 bottom-10 shadow-md h-[3rem] w-[6%] bg-[#D9D9D9] rounded-3xl"
+            onClick={() => handleSendMessage()}
+          >
+            <img
+              src={require('../../public/whitePlane.png')}
+              className=" mx-auto mt-2.5 w-7 h-7"
+            ></img>
+          </div>
         </div>
       </div>
     </div>
