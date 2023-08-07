@@ -18,6 +18,7 @@ const ConditionalProfileDisplay = () => {
       try {
         const res = await axiosInstance.get<UserDto>(`/user/me`);
         const userData = res.data;
+        console.log('userDataCalled');
 
         if (userData.id !== undefined) {
           setIsLoggedIn(true);
@@ -28,7 +29,7 @@ const ConditionalProfileDisplay = () => {
       }
     };
     fetchData();
-  }, [isLoggedIn]);
+  }, []);
 
   return (
     <div className="flex items-center mr-3">
