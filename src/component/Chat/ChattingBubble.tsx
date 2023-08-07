@@ -1,7 +1,15 @@
-import { chatForm } from './ChatSection';
+import { ChatDTO } from '../../interfaces/Chatting-Format.dto';
 
-export const Chatting = ({ props }: { props: chatForm }) => {
-  return props.sender !== 'me' ? (
+export const ChattingBubble = ({
+  props,
+  nickName,
+}: {
+  props: ChatDTO;
+  nickName: string;
+}) => {
+  const sender = props.nickName === nickName ? 'me' : 'you';
+
+  return sender !== 'me' ? (
     <div className="flex">
       <div className="w-14 h-14 rounded-full border-2 flex mb-[2.5%]">
         <img src={require('../../public/soo.png')} />
