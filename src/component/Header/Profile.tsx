@@ -1,13 +1,14 @@
 import { notificationModalState, profileModalState } from '../../atom/modal';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { loginState, userInfo } from '../../atom/user';
+import { friendListState, loginState, userInfo } from '../../atom/user';
 import { StatusSocket } from '../../sockets/StatusSocket';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { notificationState } from '../../atom/notification';
+import { notiResponseState, notificationState } from '../../atom/notification';
 import {
   CheckedAlarmDto,
   ResponseNotificationDto,
 } from '../../interfaces/Request-Friend.dto';
+import { UserDto } from '../../interfaces/User.dto';
 
 const Profile = () => {
   const userInfoObj = useRecoilValue(userInfo);
@@ -20,19 +21,39 @@ const Profile = () => {
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useRecoilState(
     notificationModalState
   );
+  const [notiResultList, setNotiResultList] = useRecoilState(notiResponseState);
+  const [FriendList, setFriendList] = useRecoilState(friendListState);
   const prevNotificationList = useRef<ResponseNotificationDto[]>([]);
 
   useEffect(() => {
     if (isLoggedIn) {
-      console.log('saveNotificationList called');
       const saveNotificationList = (
         data: ResponseNotificationDto[] | ResponseNotificationDto
       ) => {
+        console.log('saveNotificationList called');
         const dataArray = Array.isArray(data) ? data : [data];
         if (dataArray.length === 0) return;
 
+        const filteredDataArray = dataArray.filter(
+          (item) => item.isAccepted !== 'Y'
+        );
+        if (filteredDataArray.length === 0) return;
+
         console.log(dataArray);
-        setNotificationList((prevList) => [...prevList, ...dataArray]);
+        console.log(filteredDataArray);
+        setNotificationList((prevList) => [...prevList, ...filteredDataArray]);
+        setNotification(true);
+      };
+
+      const saveNotiResultList = (data: UserDto | UserDto[]) => {
+        console.log('saveNoti Result List called');
+        const dataArray = Array.isArray(data) ? data : [data];
+        if (dataArray.length === 0) return;
+
+        setFriendList((prevList) => [...prevList, ...dataArray]);
+
+        console.log(dataArray);
+        setNotiResultList((prevList) => [...prevList, ...dataArray]);
         setNotification(true);
       };
 
@@ -40,6 +61,7 @@ const Profile = () => {
       StatusSocket.connect();
 
       StatusSocket.on('alarms', saveNotificationList);
+      StatusSocket.on('accept-friend', saveNotiResultList);
       StatusSocket.on('request-friend-from-user', saveNotificationList);
 
       return () => {
