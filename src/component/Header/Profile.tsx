@@ -33,7 +33,10 @@ const Profile = () => {
 
       console.log('connect');
       StatusSocket.connect();
-
+      StatusSocket.on('alarms', (data) => {
+        console.log('alarms');
+        console.log(data);
+      });
       StatusSocket.on('request-friend-from-user', saveNotificationList);
 
       return () => {
