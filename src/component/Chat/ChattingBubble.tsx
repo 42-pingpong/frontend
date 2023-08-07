@@ -56,7 +56,6 @@ export const ChattingBubble = ({
       >
         <img src={require('../../public/soo.png')} />
       </div>
-      {profileRightClickModal && <ChatUserRightClickModal x={x} y={y} />}
     </div>
   );
 };
