@@ -25,18 +25,20 @@ const Profile = () => {
   useEffect(() => {
     if (isLoggedIn) {
       console.log('saveNotificationList called');
-      const saveNotificationList = (data: ResponseNotificationDto) => {
+      const saveNotificationList = (
+        data: ResponseNotificationDto[] | ResponseNotificationDto
+      ) => {
         if (data === null) return;
-        setNotificationList((prevList) => [...prevList, data]);
+        const isDataArray = Array.isArray(data) ? data : [data];
+
+        setNotificationList((prevList) => [...prevList, ...isDataArray]);
         setNotification(true);
       };
 
       console.log('connect');
       StatusSocket.connect();
-      StatusSocket.on('alarms', (data) => {
-        console.log('alarms');
-        console.log(data);
-      });
+
+      StatusSocket.on('alarms', saveNotificationList);
       StatusSocket.on('request-friend-from-user', saveNotificationList);
 
       return () => {
