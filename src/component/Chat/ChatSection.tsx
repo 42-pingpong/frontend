@@ -4,51 +4,55 @@ import { ChattingBubble } from './ChattingBubble';
 import { useParams } from 'react-router-dom';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChatSocket } from '../../sockets/ChatSocket';
-import { IChat } from '../../interfaces/Chatting-Format.dto';
+import { ChatDTO } from '../../interfaces/Chatting-Format.dto';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userInfo } from '../../atom/user';
 import { chatRoomState } from '../../atom/chat';
 
 export const ChatSection = () => {
   const [input, setInput] = useState('');
-  const [chat, setChat] = useState<IChat[]>([]);
+  const [chat, setChat] = useState<ChatDTO[]>([]);
   const userInfoState = useRecoilValue(userInfo);
   const chatRoomList = useRecoilValue(chatRoomState);
 
-  const data: IChat[] = [];
+  const data: ChatDTO[] = [];
+
+  const id = useParams();
+  console.log(id);
 
   useEffect(() => {
-    const massageHandler = (data: IChat) => setChat((prev) => [...prev, data]);
+    const massageHandler = (data: ChatDTO) =>
+      setChat((prev) => [...prev, data]);
 
-    ChatSocket.connect();
+    console.log('??');
+    ChatSocket.emit('join-room', id.id?.toString());
     ChatSocket.on('chat-message', massageHandler);
 
     return () => {
-      ChatSocket.disconnect();
       ChatSocket.off('chat-message', massageHandler);
+      console.log('leave');
+      ChatSocket.emit('leave-room', id.id);
     };
   }, []);
 
   const handleSendMessage = () => {
     if (input === '') return;
 
-    const newChat: IChat = {
+    const newChat: ChatDTO = {
+      roomId: String(id.id),
       nickName: userInfoState.nickName,
       text: input,
     };
 
     console.log('newChat: ', newChat);
 
-    ChatSocket.emit('chat-message', newChat, (chat: IChat) => {
+    ChatSocket.emit('chat-message', newChat, (chat: ChatDTO) => {
       setChat((prev) => {
         return [...prev, newChat];
       });
     });
     setInput('');
   };
-
-  const id = useParams();
-  console.log(id);
 
   const chatRoom = chatRoomList.find((room) => room.roomId === Number(id.id));
 

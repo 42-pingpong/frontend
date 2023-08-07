@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
-import { IChatRoom } from '../interfaces/Chatting-Format.dto';
+import { ChatRoomDTO } from '../interfaces/Chatting-Format.dto';
 
-export const chatRoomState = atom<IChatRoom[]>({
+export const chatRoomState = atom<ChatRoomDTO[]>({
   key: 'chatRoomState',
   default: [],
 });

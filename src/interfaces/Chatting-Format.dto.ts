@@ -1,10 +1,11 @@
-export interface IChat {
+export interface ChatDTO {
+  roomId: string;
   id?: number;
   nickName: string;
   text: string;
 }
 
-// export interface IChatRoom {
+// export interface ChatRoomDTO {
 //   id: number;
 //   title: string;
 //   people: number;
@@ -12,8 +13,8 @@ export interface IChat {
 //   permission: string;
 // }
 
-export interface IChatRoom {
-  log?: IChat[];
+export interface ChatRoomDTO {
+  log?: ChatDTO[];
   chatName: string;
   password?: string;
   levelOfPublicity: string;

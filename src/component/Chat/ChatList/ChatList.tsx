@@ -4,25 +4,12 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { clickedRoomIdState, passwordModalState } from '../../../atom/modal';
 import { chatRoomState } from '../../../atom/chat';
 import { ChatSocket } from '../../../sockets/ChatSocket';
-import { IChatRoom } from '../../../interfaces/Chatting-Format.dto';
+import { ChatRoomDTO } from '../../../interfaces/Chatting-Format.dto';
 
-export const ChatList = ({ props }: { props: IChatRoom }) => {
+export const ChatList = ({ props }: { props: ChatRoomDTO }) => {
   const navigation = useNavigate();
   const setPassword = useSetRecoilState(passwordModalState);
   const setRoomId = useSetRecoilState(clickedRoomIdState);
-  const [chatRoomList, setChatRoomList] = useRecoilState(chatRoomState);
-
-  useEffect(() => {
-    const handleChatRoomList = () => {
-      setChatRoomList((prev) => [...prev, props]);
-    };
-
-    ChatSocket.on('chatRoomList', handleChatRoomList);
-
-    return () => {
-      ChatSocket.off('chatRoomList', handleChatRoomList);
-    };
-  }, []);
 
   return (
     <div

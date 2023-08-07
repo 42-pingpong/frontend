@@ -5,28 +5,25 @@ import './styles.css';
 import { useRecoilState } from 'recoil';
 import { chatRoomState } from '../../../atom/chat';
 import { ChatSocket } from '../../../sockets/ChatSocket';
-import { IChatRoom } from '../../../interfaces/Chatting-Format.dto';
+import { ChatRoomDTO } from '../../../interfaces/Chatting-Format.dto';
 import { Chat } from '../Chat';
 
 export const ChatRoom = () => {
   const [ChatRoomList, setChatRoomList] = useRecoilState(chatRoomState);
 
-  const handleChatRoomList = (data: IChatRoom) => {
+  const handleChatRoomList = (data: ChatRoomDTO) => {
     setChatRoomList((prev) => [...prev, data]);
   };
 
   useEffect(() => {
-    ChatSocket.connect();
     ChatSocket.on('group-chat-update', handleChatRoomList);
-    ChatSocket.emit('group-chat-list', (data: IChatRoom[]) => {
+    ChatSocket.emit('group-chat-list', (data: ChatRoomDTO[]) => {
       setChatRoomList([...data]);
     });
 
     return () => {
       ChatSocket.off('group-chat-update', handleChatRoomList);
       ChatSocket.off('group-chat-list');
-      ChatSocket.disconnect();
-      console.log('chatsocket disconnect');
     };
   }, []);
 

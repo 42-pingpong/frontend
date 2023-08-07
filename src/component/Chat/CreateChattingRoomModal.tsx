@@ -8,7 +8,7 @@ import axiosInstance from '../../api/axios';
 import { UserDto } from '../../interfaces/User.dto';
 import { SearchUserList } from '../FriendList/SearchUser';
 import { chatRoomState, currentRoomIdState } from '../../atom/chat';
-import { IChat, IChatRoom } from '../../interfaces/Chatting-Format.dto';
+import { ChatDTO, ChatRoomDTO } from '../../interfaces/Chatting-Format.dto';
 
 const roomtypeList = ['Public', 'Protected', 'Private'];
 
@@ -23,7 +23,7 @@ export const CreateChattingRoomModal = () => {
   const [chatRoomList, setChatRoomList] = useRecoilState(chatRoomState);
   const [cuurentRoomId, setCurrentRoomId] = useRecoilState(currentRoomIdState);
 
-  const [formValue, setFormValue] = useState<IChatRoom>({
+  const [formValue, setFormValue] = useState<ChatRoomDTO>({
     chatName: '',
     password: '',
     levelOfPublicity: 'Public',
@@ -118,7 +118,7 @@ export const CreateChattingRoomModal = () => {
       formValue.maxParticipants = formValue.currentParticipants;
     }
 
-    ChatSocket.emit('group-chat-create', formValue, (res: IChatRoom) =>
+    ChatSocket.emit('create-room', formValue, (res: ChatRoomDTO) =>
       setChatRoomList((prev) => [...prev, res])
     );
     // setChatRoomList((prev) => [...prev, formValue]);

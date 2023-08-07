@@ -1,13 +1,23 @@
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import ConditionalProfileDisplay from './ConditionalProfileDisplay';
 import { Link } from 'react-router-dom';
 import { profileModalState } from '../../atom/modal';
+import { useEffect } from 'react';
+import { ChatSocket } from '../../sockets/ChatSocket';
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useRecoilState(profileModalState);
   const handleModal = () => {
     if (isModalOpen) setIsModalOpen(false);
   };
+  useEffect(() => {
+    ChatSocket.connect();
+
+    return () => {
+      ChatSocket.disconnect();
+    };
+  }, []);
+
   return (
     <header className="sticky top-0 z-10">
       <nav className=" bg-white px-3 py-1.5 shadow-lg rounded-b-3xl">

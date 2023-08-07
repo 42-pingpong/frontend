@@ -1,10 +1,10 @@
-import { IChat } from '../../interfaces/Chatting-Format.dto';
+import { ChatDTO } from '../../interfaces/Chatting-Format.dto';
 
 export const ChattingBubble = ({
   props,
   nickName,
 }: {
-  props: IChat;
+  props: ChatDTO;
   nickName: string;
 }) => {
   const sender = props.nickName === nickName ? 'me' : 'you';
