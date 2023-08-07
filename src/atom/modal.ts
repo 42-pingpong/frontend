@@ -11,6 +11,11 @@ export const notificationModalState = atom<boolean>({
   default: false,
 });
 
+export const chattingProfileOnRightClickModalState = atom<boolean>({
+  key: 'chattingProfileOnRightClickModalState',
+  default: false,
+});
+
 export const chattingModalState = atom<boolean>({
   key: 'chattingModalState',
   default: false,
