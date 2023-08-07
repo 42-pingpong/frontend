@@ -4,7 +4,7 @@ import { ChattingBubble } from './ChattingBubble';
 import { useParams } from 'react-router-dom';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChatSocket } from '../../sockets/ChatSocket';
-import { ChatDTO } from '../../interfaces/Chatting-Format.dto';
+import { ChatDTO, ChatRoomDTO } from '../../interfaces/Chatting-Format.dto';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userInfo } from '../../atom/user';
 import { chatRoomState } from '../../atom/chat';
@@ -18,18 +18,22 @@ export const ChatSection = () => {
   const data: ChatDTO[] = [];
 
   const id = useParams();
-  console.log(id);
 
   useEffect(() => {
     const massageHandler = (data: ChatDTO) =>
       setChat((prev) => [...prev, data]);
 
-    console.log('??');
     ChatSocket.emit('join-room', id.id?.toString());
     ChatSocket.on('chat-message', massageHandler);
+    // ChatSocket.on('group-chat-info', (data: ChatRoomDTO) => {
+    //   if (data === null || data === undefined || data.log === undefined) return;
+    //   console.log('log', data.log);
+    //   setChat(data.log);
+    // });
 
     return () => {
       ChatSocket.off('chat-message', massageHandler);
+      ChatSocket.off('group-chat-info');
       console.log('leave');
       ChatSocket.emit('leave-room', id.id);
     };
