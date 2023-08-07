@@ -2,9 +2,10 @@ import { useRecoilState } from 'recoil';
 import {
   chattingProfileOnRightClickModalState,
   friendProfileModalState,
-} from '../../atom/modal';
-import { UserDto } from '../../interfaces/User.dto';
+} from '../../../atom/modal';
+import { UserDto } from '../../../interfaces/User.dto';
 import { useNavigate } from 'react-router-dom';
+import { FuncButton } from './FuncButton';
 
 interface Props {
   x: number;
@@ -37,13 +38,21 @@ export const ChatUserRightClickModal = (props: Props) => {
   if (props.y > 900) props.y -= 300;
 
   return (
-    <div className="background bg-[rgba(0,0,0,0.1)]" onClick={closeModal}>
+    <div
+      aria-hidden={true}
+      className="background bg-[rgba(0,0,0,0.1)]"
+      onClick={closeModal}
+    >
       <div
         id="chat-profile-right-content"
-        className={`relative flex flex-col  w-[28rem] h-[24rem] z-10 bg-white rounded-3xl shadow-lg`}
+        className={`relative flex flex-col w-[11rem] h-[15rem] z-10 bg-white rounded-3xl shadow-lg items-center justify-center py-2`}
         style={{ left: `${props.x + 20}px`, top: `${props.y - 20}px` }}
       >
-        <span className="profile-button-text"> Profile </span>
+        <FuncButton name={'Kick'} />
+        <FuncButton name={'Ban'} />
+        <FuncButton name={'Mute'} />
+        <FuncButton name={'Profile'} />
+        <FuncButton name={'Go PingPong'} />
       </div>
       <button
         id="modal-close-button"

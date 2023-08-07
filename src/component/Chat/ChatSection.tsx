@@ -71,7 +71,7 @@ export const ChatSection = () => {
         </div>
       )}
       <div className="flex h-full flex-col rounded-3xl shadow-2xl flex-grow pt-14 items-center">
-        <div className="flex w-full h-[800px] justify-between items-center p-14 z-10">
+        <div className="flex w-full h-[85%] md:h-[800px] justify-between items-center px-14 z-10 overflow-y-auto">
           <div className="flex flex-col w-full h-full px-2 overflow-y-auto">
             {chat.map((item) => (
               <ChattingBubble
@@ -82,7 +82,7 @@ export const ChatSection = () => {
             ))}
           </div>
         </div>
-        <div className="flex flex-row justify-between w-full px-16 items-center  h-[6rem]">
+        <div className="flex flex-row justify-between w-full px-16 items-center mt-5 h-[6rem]">
           <input
             type="text"
             className="text-xl px-5 bottom-10 rounded-[50px] shadow-md w-[90%] h-[3rem] bg-[#D9D9D9] justify-center outline-none"

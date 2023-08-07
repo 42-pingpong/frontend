@@ -7,7 +7,7 @@ import {
   friendProfileModalState,
 } from '../../atom/modal';
 import { ChatDTO } from '../../interfaces/Chatting-Format.dto';
-import { ChatUserRightClickModal } from './ChatUserRightClickModal';
+import { ChatUserRightClickModal } from './inChatModal/ChatUserRightClickModal';
 
 export const ChattingBubble = ({
   props,
