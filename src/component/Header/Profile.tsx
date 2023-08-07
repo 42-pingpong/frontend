@@ -32,7 +32,6 @@ const Profile = () => {
         if (dataArray.length === 0) return;
 
         console.log(dataArray);
-
         setNotificationList((prevList) => [...prevList, ...dataArray]);
         setNotification(true);
       };
