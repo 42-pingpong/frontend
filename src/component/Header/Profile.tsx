@@ -28,10 +28,11 @@ const Profile = () => {
       const saveNotificationList = (
         data: ResponseNotificationDto[] | ResponseNotificationDto
       ) => {
-        if (data === null) return;
-        const isDataArray = Array.isArray(data) ? data : [data];
+        const dataArray = Array.isArray(data) ? data : [data];
+        if (dataArray.length === 0) return;
 
-        setNotificationList((prevList) => [...prevList, ...isDataArray]);
+        console.log(dataArray);
+        setNotificationList((prevList) => [...prevList, ...dataArray]);
         setNotification(true);
       };
 
