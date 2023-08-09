@@ -1,5 +1,5 @@
 export interface ChatDTO {
-  groupChatId: string;
+  roomId: string;
   id?: number;
   nickName: string;
   text: string;

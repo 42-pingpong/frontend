@@ -8,6 +8,7 @@ import { ChatDTO, ChatRoomDTO } from '../../interfaces/Chatting-Format.dto';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { userInfo } from '../../atom/user';
 import { chatRoomState } from '../../atom/chat';
+import { Chat } from './Chat';
 
 export const ChatSection = () => {
   const [input, setInput] = useState('');
@@ -21,10 +22,11 @@ export const ChatSection = () => {
 
   useEffect(() => {
     const massageHandler = (data: ChatDTO) => {
+      console.log('chat-message-on');
+      console.log('data', data);
       setChat((prev) => [...prev, data]);
     };
 
-    ChatSocket.emit('join-room', id.id?.toString());
     ChatSocket.on('chat-message', massageHandler);
     // ChatSocket.on('group-chat-info', (data: ChatRoomDTO) => {
     //   if (data === null || data === undefined || data.log === undefined) return;
@@ -44,14 +46,15 @@ export const ChatSection = () => {
     if (input === '') return;
 
     const newChat: ChatDTO = {
-      groupChatId: String(id.id),
+      roomId: String(id.id),
       nickName: userInfoState.nickName,
       text: input,
     };
 
-    console.log('newChat: ', newChat);
-
+    // ChatSocket.emit('chat-message', newChat);
     ChatSocket.emit('chat-message', newChat, (chat: ChatDTO) => {
+      console.log('chat-messase-emit');
+      console.log('newChat: ', newChat);
       setChat((prev) => {
         return [...prev, newChat];
       });
@@ -98,7 +101,7 @@ export const ChatSection = () => {
           ></input>
           <div
             className="right-5 bottom-10 shadow-md h-[3rem] w-[6%] bg-[#D9D9D9] rounded-3xl"
-            onClick={() => handleSendMessage()}
+            onClick={handleSendMessage}
           >
             <img
               src={require('../../public/whitePlane.png')}

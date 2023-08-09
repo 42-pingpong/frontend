@@ -25,13 +25,9 @@ export const CreateChattingRoomModal = () => {
 
   const [formValue, setFormValue] = useState<CreateGroupchatDto>({
     chatName: '',
-    levelOfPublicity: '',
-    // currentParticipants: 1,
+    levelOfPublicity: 'Pub',
     maxParticipants: 0,
     ownerId: user.id,
-    // groupChatId: cuurentRoomId,
-    // DTO에 없는데 필요할 것 같아서 일단 적어둠
-    // memebers: [],
   });
 
   // 멤버 인풋창 포커스 벗어나면 닫히게
@@ -103,24 +99,14 @@ export const CreateChattingRoomModal = () => {
   const excludeMeFriendList = (data: any) =>
     data.filter((item: UserDto) => item.id !== user.id);
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     console.log(formValue);
-
-    // setCurrentRoomId((prev) => prev + 1);
-    // if (formValue.maxParticipants === 0) {
-    //   formValue.maxParticipants = formValue.currentParticipants;
-    // }
 
     formValue.maxParticipants = Number(formValue.maxParticipants);
 
-    if (formValue.levelOfPublicity === '') {
-      setFormValue({ ...formValue, levelOfPublicity: 'Pub' });
-    }
-
-    ChatSocket.emit('create-room', formValue);
-    // ChatSocket.emit('create-room', formValue, (res: ChatRoomDTO) =>
-    //   setChatRoomList((prev) => [...prev, res])
-    // );
+    ChatSocket.emit('create-room', formValue, (res: ChatRoomDTO) => {
+      setChatRoomList((prev) => [...prev, res]);
+    });
     setChattingState(!chattingState);
   };
 
