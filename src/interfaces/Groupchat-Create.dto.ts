@@ -16,9 +16,9 @@ export interface CreateGroupchatDto {
   chatName: string;
   password: string;
   levelOfPublicity: string;
-  currentParticipants: number;
+  // currentParticipants: number;
   maxParticipants: number;
   ownerId: number;
-  roomId: number;
+  // roomId: number;
   //   memebers: string[];
 }
