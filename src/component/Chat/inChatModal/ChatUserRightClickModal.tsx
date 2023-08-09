@@ -51,7 +51,7 @@ export const ChatUserRightClickModal = (props: Props) => {
         <FuncButton name={'Kick'} />
         <FuncButton name={'Ban'} />
         <FuncButton name={'Mute'} />
-        <FuncButton name={'Profile'} />
+        <FuncButton name={'Block'} />
         <FuncButton name={'Go PingPong'} />
       </div>
       <button

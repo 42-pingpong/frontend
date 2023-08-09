@@ -8,6 +8,7 @@ import {
 } from '../../atom/modal';
 import { ChatDTO } from '../../interfaces/Chatting-Format.dto';
 import { ChatUserRightClickModal } from './inChatModal/ChatUserRightClickModal';
+import { useNavigate } from 'react-router-dom';
 
 export const ChattingBubble = ({
   props,
@@ -17,12 +18,17 @@ export const ChattingBubble = ({
   nickName: string;
 }) => {
   const sender = props.nickName === nickName ? 'me' : 'you';
+  const navigate = useNavigate();
 
   const [profileRightClickModal, setProfileRightClickModal] = useRecoilState(
     chattingProfileOnRightClickModalState
   );
   const [x, setX] = useRecoilState(clickedXState);
   const [y, setY] = useRecoilState(clickedYState);
+
+  const onLeftClickHandler = () => {
+    navigate(`/profile/${nickName}`);
+  };
 
   const onRightClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -36,6 +42,7 @@ export const ChattingBubble = ({
       <div
         className="w-14 h-14 rounded-full border-2 flex mb-[2.5%]"
         onContextMenu={onRightClickHandler}
+        onClick={onLeftClickHandler}
       >
         <img src={require('../../public/soo.png')} />
       </div>
