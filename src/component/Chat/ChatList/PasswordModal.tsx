@@ -3,7 +3,7 @@ import { passwordModalState } from '../../../atom/modal';
 import { useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-export const PasswordModal = ({ roomId }: { roomId: string }) => {
+export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
   const [password, setPassword] = useRecoilState(passwordModalState);
   const inputPasswordRef = useRef('');
   const navigation = useNavigate();
@@ -30,7 +30,7 @@ export const PasswordModal = ({ roomId }: { roomId: string }) => {
     const res = inputPasswordRef.current === '111';
 
     if (res === true) {
-      navigation(`/chat/${roomId}`);
+      navigation(`/chat/${groupChatId}`);
       setPassword(false);
     }
   };

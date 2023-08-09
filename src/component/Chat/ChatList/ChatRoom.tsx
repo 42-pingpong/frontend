@@ -35,7 +35,7 @@ export const ChatRoom = () => {
       <div className="flex flex-grow p-10 bg-white w-full h-60 rounded-[2rem] shadow-2xl ">
         <div className="grid grid-cols-1 lg:grid-cols-2 w-full gap-y-7 gap-x-10 overflow-y-auto p-3 items-center justify-center">
           {ChatRoomList.map((item) => (
-            <ChatList key={item.roomId} props={item} />
+            <ChatList key={item.groupChatId} props={item} />
           ))}
         </div>
       </div>
