@@ -1,5 +1,5 @@
 export interface ChatDTO {
-  roomId: string;
+  groupChatId: string;
   id?: number;
   nickName: string;
   text: string;
@@ -21,5 +21,5 @@ export interface ChatRoomDTO {
   currentParticipants: number;
   maxParticipants: number;
   ownerId?: number;
-  roomId?: number;
+  groupChatId?: number;
 }

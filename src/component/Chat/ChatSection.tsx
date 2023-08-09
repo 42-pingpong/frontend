@@ -43,7 +43,7 @@ export const ChatSection = () => {
     if (input === '') return;
 
     const newChat: ChatDTO = {
-      roomId: String(id.id),
+      groupChatId: String(id.id),
       nickName: userInfoState.nickName,
       text: input,
     };
@@ -58,7 +58,9 @@ export const ChatSection = () => {
     setInput('');
   };
 
-  const chatRoom = chatRoomList.find((room) => room.roomId === Number(id.id));
+  const chatRoom = chatRoomList.find(
+    (room) => room.groupChatId === Number(id.id)
+  );
 
   return (
     <div id="chat-section" className="flex flex-col h-full">

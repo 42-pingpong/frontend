@@ -23,14 +23,13 @@ export const CreateChattingRoomModal = () => {
   const [chatRoomList, setChatRoomList] = useRecoilState(chatRoomState);
   const [cuurentRoomId, setCurrentRoomId] = useRecoilState(currentRoomIdState);
 
-  const [formValue, setFormValue] = useState<ChatRoomDTO>({
+  const [formValue, setFormValue] = useState<CreateGroupchatDto>({
     chatName: '',
-    password: '',
-    levelOfPublicity: 'Public',
-    currentParticipants: 1,
+    levelOfPublicity: 'Pub',
+    // currentParticipants: 1,
     maxParticipants: 0,
     ownerId: user.id,
-    // roomId: cuurentRoomId,
+    // groupChatId: cuurentRoomId,
     // DTO에 없는데 필요할 것 같아서 일단 적어둠
     // memebers: [],
   });
@@ -114,10 +113,11 @@ export const CreateChattingRoomModal = () => {
     console.log(formValue);
 
     // setCurrentRoomId((prev) => prev + 1);
-    if (formValue.maxParticipants === 0) {
-      formValue.maxParticipants = formValue.currentParticipants;
-    }
+    // if (formValue.maxParticipants === 0) {
+    //   formValue.maxParticipants = formValue.currentParticipants;
+    // }
 
+    formValue.maxParticipants = Number(formValue.maxParticipants);
     ChatSocket.emit('create-room', formValue, (res: ChatRoomDTO) =>
       setChatRoomList((prev) => [...prev, res])
     );
