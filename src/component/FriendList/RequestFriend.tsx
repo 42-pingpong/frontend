@@ -1,27 +1,59 @@
 import React from 'react';
-import { ResponseNotificationDto } from '../../interfaces/Request-Friend.dto';
+import {
+  CheckedAlarmDto,
+  ResponseNotificationDto,
+} from '../../interfaces/Request-Friend.dto';
+import { StatusSocket } from '../../sockets/StatusSocket';
+import { useRecoilState } from 'recoil';
+import { notificationState } from '../../atom/notification';
 
 export const RequestFriend = ({
   props,
 }: {
   props: ResponseNotificationDto;
 }) => {
+  const [notiList, setNotiList] = useRecoilState(notificationState);
   const handleAcceptRequest = () => {
+    const data: CheckedAlarmDto = {
+      requestId: props.requestId,
+    };
+
     console.log('accept');
     if (props.requestType === 'F') {
+      StatusSocket.emit('accept-friend', data);
       console.log('친구 요청 수락');
     } else if (props.requestType === 'G') {
-      console.log('친구 요청 거절');
+      console.log('게임 요청 수락');
     }
+
+    const updatedNotiList = notiList.filter(
+      (item) => item.requestId !== props.requestId
+    );
+    console.log('알람 삭제');
+    console.log(updatedNotiList);
+    setNotiList(updatedNotiList);
   };
 
   const handleRejectRequest = () => {
     console.log('reject');
+
+    const data: CheckedAlarmDto = {
+      requestId: props.requestId,
+    };
+
     if (props.requestType === 'F') {
+      StatusSocket.emit('reject-friend', data);
       console.log('친구 요청 거절');
     } else if (props.requestType === 'G') {
       console.log('게임 요청 거절');
     }
+
+    const updatedNotiList = notiList.filter(
+      (item) => item.requestId !== props.requestId
+    );
+    console.log('알람 삭제');
+    console.log(updatedNotiList);
+    setNotiList(updatedNotiList);
   };
 
   return (

@@ -2,13 +2,15 @@ import { useRecoilState } from 'recoil';
 import { notificationModalState } from '../../atom/modal';
 import { RequestFriend } from '../FriendList/RequestFriend';
 import './styles.css';
-import { notificationState } from '../../atom/notification';
-import { useEffect } from 'react';
+import { notiResponseState, notificationState } from '../../atom/notification';
+import { ResponseFriend } from '../FriendList/ResponseFriend';
 
 export const NotificationModal = () => {
   const [isModalOpen, setIsModalOpen] = useRecoilState(notificationModalState);
   const [notificationList, setNotificationList] =
     useRecoilState(notificationState);
+  const [notificationResultList, setNotificationResultList] =
+    useRecoilState(notiResponseState);
 
   const closeModal = (e: any) => {
     const modalContent = document.getElementById('notification-modal-content');
@@ -32,6 +34,9 @@ export const NotificationModal = () => {
         <div className="flex flex-col w-full h-full overflow-y-auto py-3">
           {notificationList?.map((item) => (
             <RequestFriend key={item.requestId} props={item} />
+          ))}
+          {notificationResultList?.map((item) => (
+            <ResponseFriend key={item.id} props={item} />
           ))}
         </div>
         <div className="absolute top-3 right-5 p-0  text-gray-400 text-lg">
