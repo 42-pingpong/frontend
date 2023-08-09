@@ -25,12 +25,11 @@ export const CreateChattingRoomModal = () => {
 
   const [formValue, setFormValue] = useState<CreateGroupchatDto>({
     chatName: '',
-    password: '',
     levelOfPublicity: 'Pub',
     // currentParticipants: 1,
     maxParticipants: 0,
     ownerId: user.id,
-    // roomId: cuurentRoomId,
+    // groupChatId: cuurentRoomId,
     // DTO에 없는데 필요할 것 같아서 일단 적어둠
     // memebers: [],
   });

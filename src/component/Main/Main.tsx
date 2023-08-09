@@ -57,7 +57,7 @@ export const Main = () => {
           y={clickedY}
         />
       )}
-      {isPasswordModalOpen && <PasswordModal roomId={clickedRoomId} />}
+      {isPasswordModalOpen && <PasswordModal groupChatId={clickedRoomId} />}
     </div>
   );
 };
