@@ -15,7 +15,7 @@ export const ChatList = ({ props }: { props: ChatRoomDTO }) => {
     <div
       className="flex relative w-full h-16 md:h-24 bg-sky p-2 rounded-full shadow-md shadow-gray-300 justify-between items-center"
       onClick={() =>
-        props.levelOfPublicity === 'protected'
+        props.levelOfPublicity === 'Prot'
           ? (setPassword(true), setRoomId(`${props.groupChatId}`))
           : navigation(`/chat/${props.groupChatId}`)
       }
@@ -28,13 +28,13 @@ export const ChatList = ({ props }: { props: ChatRoomDTO }) => {
       </div>
       <div className="flex relative w-16 text-gray-500 text-lg md:text-2xl">
         <span>
-          {props.currentParticipants} / {props.maxParticipants}
+          {props.curParticipants} / {props.maxParticipants}
         </span>
       </div>
       <div className="flex relative mr-3 w-12 h-12 text-gray-500 text-lg md:text-2xl justify-center items-center">
-        {props.levelOfPublicity === 'private' ? (
+        {props.levelOfPublicity === 'Priv' ? (
           <span>me</span>
-        ) : props.levelOfPublicity === 'protected' ? (
+        ) : props.levelOfPublicity === 'Prot' ? (
           <img
             src={require('../../../public/lock.png')}
             alt="lock"

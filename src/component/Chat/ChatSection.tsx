@@ -20,8 +20,9 @@ export const ChatSection = () => {
   const id = useParams();
 
   useEffect(() => {
-    const massageHandler = (data: ChatDTO) =>
+    const massageHandler = (data: ChatDTO) => {
       setChat((prev) => [...prev, data]);
+    };
 
     ChatSocket.emit('join-room', id.id?.toString());
     ChatSocket.on('chat-message', massageHandler);
@@ -67,12 +68,12 @@ export const ChatSection = () => {
       <div className="flex">
         <ServiceTitle title="Chat" nonAddButton={true} />
       </div>
-      {chatRoom && (
-        <div className="rounded-3xl mx-auto w-[500px] z-10">
-          <ChatList props={chatRoom} />
-        </div>
-      )}
-      <div className="flex h-full flex-col rounded-3xl shadow-2xl flex-grow pt-14 items-center">
+      <div className="flex relative h-full flex-col rounded-3xl shadow-2xl flex-grow pt-14 items-center">
+        {chatRoom && (
+          <div className="absolute top-[-3rem] left-1/2 transform -translate-x-1/2 rounded-3xl mx-auto w-[500px] z-10">
+            <ChatList props={chatRoom} />
+          </div>
+        )}
         <div className="flex w-full h-[85%] md:h-[800px] justify-between items-center px-14 z-10 overflow-y-auto">
           <div className="flex flex-col w-full h-full px-2 overflow-y-auto">
             {chat.map((item) => (

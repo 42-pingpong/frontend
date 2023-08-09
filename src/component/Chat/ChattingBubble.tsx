@@ -60,6 +60,7 @@ export const ChattingBubble = ({
       <div
         className="w-14 h-14 rounded-full border-2 flex mb-[2.5%] "
         onContextMenu={onRightClickHandler}
+        onClick={onLeftClickHandler}
       >
         <img src={require('../../public/soo.png')} />
       </div>

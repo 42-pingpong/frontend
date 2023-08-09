@@ -5,21 +5,11 @@ export interface ChatDTO {
   text: string;
 }
 
-// export interface ChatRoomDTO {
-//   id: number;
-//   title: string;
-//   people: number;
-//   maxPeople: number;
-//   permission: string;
-// }
-
 export interface ChatRoomDTO {
-  log?: ChatDTO[];
   chatName: string;
-  password?: string;
   levelOfPublicity: string;
-  currentParticipants: number;
+  curParticipants: number;
   maxParticipants: number;
-  ownerId?: number;
-  groupChatId?: number;
+  groupChatId: number;
+  password?: string;
 }

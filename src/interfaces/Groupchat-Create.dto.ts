@@ -14,11 +14,11 @@
 
 export interface CreateGroupchatDto {
   chatName: string;
-  // password: string;
   levelOfPublicity: string;
   // currentParticipants: number;
   maxParticipants: number;
   ownerId: number;
   // groupChatId: number;
   //   memebers: string[];
+  password?: string;
 }

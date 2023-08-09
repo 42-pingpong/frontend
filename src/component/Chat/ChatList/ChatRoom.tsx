@@ -10,6 +10,7 @@ import { Chat } from '../Chat';
 
 export const ChatRoom = () => {
   const [ChatRoomList, setChatRoomList] = useRecoilState(chatRoomState);
+  console.log(ChatRoomList);
 
   const handleChatRoomList = (data: ChatRoomDTO) => {
     setChatRoomList((prev) => [...prev, data]);

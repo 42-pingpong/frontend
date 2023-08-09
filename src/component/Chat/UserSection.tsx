@@ -14,9 +14,6 @@ export const UserSection = () => {
       <div className="flex">
         <ServiceTitle title="User" nonAddButton={true} />
       </div>
-
-      <div className="md:h-20 w-60"></div>
-
       <div className="flex flex-col w-full h-[50%] flex-grow px-10 rounded-3xl shadow-2xl">
         <div className="flex flex-row h-14 w-full justify-between mt-10 px-3">
           <StatusIcon props={{ status: 'online', color: 'bg-green-400' }} />
