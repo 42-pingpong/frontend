@@ -26,12 +26,8 @@ export const CreateChattingRoomModal = () => {
   const [formValue, setFormValue] = useState<CreateGroupchatDto>({
     chatName: '',
     levelOfPublicity: 'Pub',
-    // currentParticipants: 1,
     maxParticipants: 0,
     ownerId: user.id,
-    // groupChatId: cuurentRoomId,
-    // DTO에 없는데 필요할 것 같아서 일단 적어둠
-    // memebers: [],
   });
 
   // 멤버 인풋창 포커스 벗어나면 닫히게
@@ -69,7 +65,13 @@ export const CreateChattingRoomModal = () => {
   };
 
   const handleRoomtype = (e: any) => {
-    setFormValue((prev) => ({ ...prev, levelOfPublicity: e.target.id }));
+    let roomtype: string;
+
+    if (e.target.id === 'Public') roomtype = 'Pub';
+    else if (e.target.id === 'Protected') roomtype = 'Prot';
+    else roomtype = 'Priv';
+    setFormValue((prev) => ({ ...prev, levelOfPublicity: roomtype }));
+    // setFormValue((prev) => ({ ...prev, levelOfPublicity: e.target.id }));
   };
 
   const handleOnChange = (e: any) => {
@@ -97,31 +99,14 @@ export const CreateChattingRoomModal = () => {
   const excludeMeFriendList = (data: any) =>
     data.filter((item: UserDto) => item.id !== user.id);
 
-  const handleSubmit = async () => {
-    // const res = await axiosInstance.post('/groupchat', formValue);
-    // if (res.data !== undefined) {
-    //   const chatId = res.data.id;
-    //   const socket = ChatSocket.getInstance();
-    // socket.createChat(chatId);
-    // setChattingState(!chattingState);
-    // } ?? 코파일럿이 뭔가 만들어 줌
-
-    // formValue.currentParticipants += formValue.members.length;
-
-    // 이거 어떤 소켓으로 emit해야하는지 생각중
-
+  const handleSubmit = () => {
     console.log(formValue);
 
-    // setCurrentRoomId((prev) => prev + 1);
-    // if (formValue.maxParticipants === 0) {
-    //   formValue.maxParticipants = formValue.currentParticipants;
-    // }
-
     formValue.maxParticipants = Number(formValue.maxParticipants);
-    ChatSocket.emit('create-room', formValue, (res: ChatRoomDTO) =>
-      setChatRoomList((prev) => [...prev, res])
-    );
-    // setChatRoomList((prev) => [...prev, formValue]);
+
+    ChatSocket.emit('create-room', formValue, (res: ChatRoomDTO) => {
+      setChatRoomList((prev) => [...prev, res]);
+    });
     setChattingState(!chattingState);
   };
 
@@ -164,7 +149,7 @@ export const CreateChattingRoomModal = () => {
             ></input>
           </div>
 
-          {formValue.levelOfPublicity !== 'Private' ? (
+          {formValue.levelOfPublicity !== 'Priv' ? (
             <div className="px-[8%] text-[#5D777B] text-2xl relative ">
               <h1 className="pb-3 font-light tracking-tight">
                 Max Participant
@@ -178,7 +163,7 @@ export const CreateChattingRoomModal = () => {
                 onChange={(e) => handleOnChange(e)}
               ></input>
               {/* 이거 위치 */}
-              {formValue.levelOfPublicity === 'Public' ? (
+              {formValue.levelOfPublicity === 'Pub' ? (
                 <p className=" text-[#5D777B] text-2xl absolute right-[15%] bottom-[75px] font-light">
                   / 1000
                 </p>
@@ -191,7 +176,7 @@ export const CreateChattingRoomModal = () => {
           ) : (
             <></>
           )}
-          {formValue.levelOfPublicity !== 'Private' ? (
+          {formValue.levelOfPublicity !== 'Priv' ? (
             <div className="px-[8%] text-[#5D777B] text-2xl relative ">
               <h1 className="pb-3 font-light tracking-tight"> Member</h1>
               <input
@@ -236,7 +221,7 @@ export const CreateChattingRoomModal = () => {
             <></>
           )}
 
-          {formValue.levelOfPublicity === 'Protected' ? (
+          {formValue.levelOfPublicity === 'Prot' ? (
             <div className="px-[8%] text-[#5D777B] text-2xl">
               <h1 className="pb-3 font-light tracking-tight"> Password </h1>
               <input
