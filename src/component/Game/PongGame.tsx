@@ -32,6 +32,7 @@ export const PongGame = ({ props }: { props: number }) => {
   const [loop, setLoop] = useState(false);
 
   const [ballXState, setBallXState] = useRecoilState(ballX);
+  // const [ballXState, setBallXState] = useRecoilState(ballX);
   const [ballYState, setBallYState] = useRecoilState(ballY);
   const [ballSpeedXState, setBallSpeedXState] = useRecoilState(ballSpeedX);
   const [ballSpeedYState, setBallSpeedYState] = useRecoilState(ballSpeedY);
@@ -50,56 +51,87 @@ export const PongGame = ({ props }: { props: number }) => {
       setStart(start);
     });
 
-    GameSocket.on('w-move', () => {
-      setPlayer2PaddleState((prevY) => Math.max(prevY + 30, 0));
+    GameSocket.on('move', (e: string) => {
+      console.log('front', e);
+
+      if (e === 'w') {
+        setPlayer1PaddleState((prev) => Math.max(prev - 30, 0));
+      } else if (e === 's') {
+        setPlayer1PaddleState((prev) => Math.max(prev + 30, 0));
+      } else if (e === 'ArrowUp') {
+        setPlayer2PaddleState((prevY) => Math.max(prevY - 30, 0));
+      } else if (e === 'ArrowDown') {
+        setPlayer2PaddleState((prevY) => Math.max(prevY + 30, 0));
+      }
     });
 
-    GameSocket.on('s-move', () => {
-      setPlayer2PaddleState((prevY) => Math.max(prevY - 30, 0));
-    });
+    GameSocket.on('ballX', (x: number[]) => {
+      console.log('emit ballX ', x[0], x[1]);
+      console.log('on ballX ', x);
+      if (x[1] === undefined) {
+        setBallXState(x[0]);
+      } else setBallXState((prev) => prev + x[1]);
 
-    GameSocket.on('up-move', () => {
-      setPlayer1PaddleState((prevY) =>
-        Math.min(prevY + 30, containerHeight - paddleHeight)
-      );
+      // setBallXState(x);
     });
+    GameSocket.on('ballY', (y: number[]) => {
+      console.log('emit ballY ', y, y[1]);
+      if (y[1] === undefined) {
+        setBallYState(y[0]);
+      } else setBallYState((prev) => prev + y[1]);
+    });
+    // GameSocket.on('w-move', () => {
+    //   setPlayer1PaddleState((prevY) => Math.max(prevY - 30, 0));
+    // });
 
-    GameSocket.on('down-move', () => {
-      setPlayer1PaddleState((prevY) =>
-        Math.min(prevY - 30, containerHeight - paddleHeight)
-      );
-    });
+    // GameSocket.on('s-move', () => {
+    //   setPlayer1PaddleState((prevY) => Math.max(prevY + 30, 0));
+    // });
+
+    // GameSocket.on('up-move', () => {
+    //   setPlayer2PaddleState((prevY) =>
+    //     Math.min(prevY - 30, containerHeight - paddleHeight)
+    //   );
+    // });
+
+    // GameSocket.on('down-move', () => {
+    //   setPlayer2PaddleState((prevY) =>
+    //     Math.min(prevY + 30, containerHeight - paddleHeight)
+    //   );
+    // });
 
     return () => {
       GameSocket.off('start');
       // GameSocket.off('play');
-      GameSocket.off('w-move');
-      GameSocket.off('s-move');
-      GameSocket.off('up-move');
-      GameSocket.off('down-move');
+      // GameSocket.off('w-move');
+      // GameSocket.off('s-move');
+      // GameSocket.off('up-move');
+      // GameSocket.off('down-move');
+      GameSocket.off('move');
+      GameSocket.off('ballX-set');
+      GameSocket.off('ballY-set');
     };
   }, []);
 
   /** 키 이벤트 (테스트 하려고 ws 키 넣었는데 게임 연결하면 paddle2(위아래 화살표) 만 해도 될 것 같음) */
   const handleKeyDown = (e: KeyboardEvent) => {
+    e.preventDefault();
     if (props === 1) {
       if (e.key === 'w') {
-        GameSocket.emit('w');
+        GameSocket.emit('move', 'w');
         // setPlayer2PaddleState((prevY) => Math.max(prevY - 30, 0));
       } else if (e.key === 's') {
-        GameSocket.emit('s');
+        GameSocket.emit('move', 's');
         // setPlayer2PaddleState((prevY) =>
         //   Math.min(prevY + 30, containerHeight - paddleHeight)
         // );
       }
     } else {
       if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        GameSocket.emit('up');
+        GameSocket.emit('move', 'ArrowUp');
         // setPlayer1PaddleState((prevY) => Math.max(prevY - 30, 0));
       } else if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        GameSocket.emit('down');
+        GameSocket.emit('move', 'ArrowDown');
         // setPlayer1PaddleState((prevY) =>
         //   Math.min(prevY + 30, containerHeight - paddleHeight)
         // );
@@ -129,14 +161,15 @@ export const PongGame = ({ props }: { props: number }) => {
       ballXState === 0
         ? setMyScoreState((prev) => prev + 1)
         : setOtherScoreState((prev) => prev + 1);
-      setBallXState(correctedX);
+      GameSocket.emit('ballX-set', correctedX);
+      // setBallXState(correctedX);
       setBallSpeedXState((prevSpeedX) => -prevSpeedX);
     }
 
     if (ballYState < 0 || ballYState > containerHeight - ballSize) {
       const correctedY = ballYState < 0 ? 0 : containerHeight - ballSize;
 
-      setBallYState(correctedY);
+      GameSocket.emit('ballY-set', correctedY);
 
       setBallSpeedYState((prevSpeedY) => -prevSpeedY);
     }
@@ -158,8 +191,11 @@ export const PongGame = ({ props }: { props: number }) => {
   }, [start]);
 
   useEffect(() => {
-    setBallXState((prevX) => prevX + ballSpeedXState);
-    setBallYState((prevY) => prevY + ballSpeedYState);
+    console.log(ballXState, ballSpeedXState, ballYState, ballSpeedYState);
+    GameSocket.emit('ballX-set', ballXState, ballSpeedXState);
+    // setBallXState((prevX) => prevX + ballSpeedXState);
+    GameSocket.emit('ballY-set', ballYState, ballSpeedYState);
+    // setBallYState((prevY) => prevY + ballSpeedYState);
     setLoop(false);
     if (player2ScoreState > 5 || player1ScoreState > 5) {
       setStart(false);
