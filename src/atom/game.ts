@@ -45,12 +45,27 @@ export const otherPaddle = atom({
   default: 295,
 });
 
-export const start = atom({
-  key: 'start',
+export const startState = atom({
+  key: 'startState',
   default: false,
 });
 
 export const end = atom({
   key: 'end',
   default: false,
+});
+
+export const playerNumber = atom({
+  key: 'playerNumber',
+  default: 0,
+});
+
+export const player1NameState = atom({
+  key: 'player1Name',
+  default: '',
+});
+
+export const player2NameState = atom({
+  key: 'player2Name',
+  default: '',
 });
