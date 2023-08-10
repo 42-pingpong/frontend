@@ -1,7 +1,10 @@
-import React from 'react';
-import { useRecoilState } from 'recoil';
-import { newMatching } from '../../atom/game';
+import React, { useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { newMatching, playerNumber } from '../../atom/game';
 import { addUserModalState, chattingModalState } from '../../atom/modal';
+import { userInfo } from '../../atom/user';
+import { useNavigate } from 'react-router-dom';
+import { GameSocket } from '../../sockets/GameSocket';
 
 interface ServiceTitleProps {
   title: string;
@@ -12,6 +15,31 @@ export const ServiceTitle = (props: ServiceTitleProps) => {
   const [matching, setMatching] = useRecoilState(newMatching);
   const [chatstate, setChatstate] = useRecoilState(chattingModalState);
   const [addUser, setAddUser] = useRecoilState(addUserModalState);
+  const [playerNum, setPlayerNum] = useRecoilState(playerNumber);
+  const user = useRecoilValue(userInfo);
+  const navigation = useNavigate();
+
+  useEffect(() => {
+    GameSocket.on('join', (roomName: string) => {
+      console.log('join ', roomName);
+
+      setMatching(false);
+      navigation('/game/' + roomName);
+    });
+    GameSocket.on('player-number', (data: number) => {
+      if (data === 1) {
+        setPlayerNum(1);
+        // GameSocket.emit('player1-id', user.id);
+      } else {
+        setPlayerNum(2);
+        // GameSocket.emit('player2-id', user.id);
+      }
+    });
+    return () => {
+      GameSocket.off('join');
+      GameSocket.off('player-number');
+    };
+  }, []);
 
   return (
     <div className="flex h-full ml-5 items-center">
@@ -25,7 +53,8 @@ export const ServiceTitle = (props: ServiceTitleProps) => {
           className="ml-2 mt-1 w-5 h-5 md:w-6 md:h-6 opacity-70"
           onClick={() =>
             props.title === 'Game'
-              ? setMatching(!matching)
+              ? (setMatching(!matching),
+                GameSocket.emit('enter-queue', user.id))
               : props.title === 'Chat'
               ? setChatstate(!chatstate)
               : props.title === 'Friends'

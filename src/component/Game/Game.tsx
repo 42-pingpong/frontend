@@ -13,7 +13,6 @@ export const Game = () => {
         </div>
 
         <div className="game:col-span-1">
-          {/* 창 작아지면 채팅창 걍 사라지게 해뒀어염 */}
           <div
             id="chat-section"
             className="col-span-1 row-span-6 h-[80vh] game:block hidden"

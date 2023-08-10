@@ -18,7 +18,7 @@ function App() {
             <Route path="/" element={<Main />} />
             <Route path="/token" element={<TokenSave />} />
             <Route path="/chat/:id" element={<Chat />} />
-            <Route path="/game" element={<Game />} />
+            <Route path="/game/:p1/:p2" element={<Game />} />
             <Route path="/profile/:nickName?" element={<Profile />} />
           </Routes>
         </BrowserRouter>

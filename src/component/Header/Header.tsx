@@ -5,6 +5,7 @@ import { profileModalState } from '../../atom/modal';
 import { useEffect, useState } from 'react';
 import { ChatSocket } from '../../sockets/ChatSocket';
 import { ChatDTO } from '../../interfaces/Chatting-Format.dto';
+import { GameSocket } from '../../sockets/GameSocket';
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useRecoilState(profileModalState);
@@ -12,10 +13,12 @@ const Header = () => {
   useEffect(() => {
     ChatSocket.connect();
     console.log('chat connect');
+    GameSocket.connect();
 
     return () => {
       console.log('chat disconnect');
       ChatSocket.disconnect();
+      GameSocket.disconnect();
     };
   }, []);
 
