@@ -70,12 +70,12 @@ export const player2NameState = atom({
   default: '',
 });
 
-export const sendingXState = atom({
-  key: 'sendingX',
+export const displayXState = atom({
+  key: 'displayX',
   default: 0,
 });
 
-export const sendingYState = atom({
-  key: 'sendingY',
+export const displayYState = atom({
+  key: 'displayY',
   default: 0,
 });

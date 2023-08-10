@@ -13,8 +13,8 @@ import {
   player1NameState,
   player2NameState,
   startState,
-  sendingXState,
-  sendingYState,
+  displayXState,
+  displayYState,
 } from '../../atom/game';
 import { GameSocket } from '../../sockets/GameSocket';
 
@@ -47,8 +47,8 @@ export const PongGame = ({ props }: { props: number }) => {
   const player1Name = useRecoilValue(player1NameState);
   const player2Name = useRecoilValue(player2NameState);
 
-  const [sendingX, setSendingX] = useRecoilState(sendingXState);
-  const [sendingY, setSendingY] = useRecoilState(sendingYState);
+  const [displayX, setDisplayX] = useRecoilState(displayXState);
+  const [displayY, setDisplayY] = useRecoilState(displayYState);
 
   useEffect(() => {
     GameSocket.on('ready', (start: boolean) => {
@@ -69,14 +69,14 @@ export const PongGame = ({ props }: { props: number }) => {
       }
     });
 
-    GameSocket.on('ballX', (sendingX: number) => {
-      console.log('emit ballX ', sendingX);
-      setBallXState(() => sendingX);
+    GameSocket.on('ballX', (x: number) => {
+      // console.log('emit ballX ', x);
+      setDisplayX(() => x);
     });
 
-    GameSocket.on('ballY', (sendingY: number) => {
-      console.log('emit ballY ', sendingY);
-      setBallYState(() => sendingY);
+    GameSocket.on('ballY', (y: number) => {
+      // console.log('emit ballY ', y);
+      setDisplayY(() => y);
     });
 
     return () => {
@@ -127,7 +127,8 @@ export const PongGame = ({ props }: { props: number }) => {
         ? setMyScoreState((prev) => prev + 1)
         : setOtherScoreState((prev) => prev + 1);
 
-      setBallXState(correctedX);
+      // setBallXState(correctedX);
+      GameSocket.emit('ballX-set', correctedX);
       setBallSpeedXState((prevSpeedX) => -prevSpeedX);
     }
 
@@ -135,6 +136,7 @@ export const PongGame = ({ props }: { props: number }) => {
       const correctedY = ballYState < 0 ? 0 : containerHeight - ballSize;
 
       setBallYState(correctedY);
+      GameSocket.emit('ballY-set', correctedY);
       setBallSpeedYState((prevSpeedY) => -prevSpeedY);
     }
   };
@@ -160,6 +162,8 @@ export const PongGame = ({ props }: { props: number }) => {
     // GameSocket.emit('ballX-set', ballXState, ballSpeedXState);
     // GameSocket.emit('ballY-set', ballYState, ballSpeedYState);
     setBallYState((prevY) => prevY + ballSpeedYState);
+    GameSocket.emit('ballX-set', ballXState);
+    GameSocket.emit('ballY-set', ballYState);
     setLoop(false);
     if (player2ScoreState > 5 || player1ScoreState > 5) {
       setStart(false);
@@ -170,10 +174,6 @@ export const PongGame = ({ props }: { props: number }) => {
   useEffect(() => {
     handleBallOutOfBound();
     handleBallCollisions();
-    setSendingX(ballXState);
-    setSendingY(ballYState);
-    GameSocket.emit('ballX-set', sendingX);
-    GameSocket.emit('ballY-set', sendingY);
   }, [ballXState, ballYState]);
 
   const Start = () => {
@@ -226,7 +226,7 @@ export const PongGame = ({ props }: { props: number }) => {
           ></div>
           <div
             className="absolute w-[30px] h-[30px] bg-[#727DE3] rounded-[50%]"
-            style={{ top: sendingY, left: sendingX }}
+            style={{ top: displayY, left: displayX }}
           ></div>
         </div>
       </div>
@@ -250,7 +250,7 @@ export const PongGame = ({ props }: { props: number }) => {
         ></div>
         <div
           className="absolute w-[30px] h-[30px] bg-[#727DE3] rounded-[50%]"
-          style={{ top: sendingY, left: sendingX }}
+          style={{ top: displayY, left: displayX }}
         ></div>
       </div>
     </div>
@@ -270,7 +270,7 @@ export const PongGame = ({ props }: { props: number }) => {
         ></div>
         <div
           className="absolute w-[30px] h-[30px] bg-[#727DE3] rounded-[50%]"
-          style={{ top: sendingY, left: sendingX }}
+          style={{ top: displayY, left: displayX }}
         ></div>
       </div>
     </div>
