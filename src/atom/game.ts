@@ -69,3 +69,13 @@ export const player2NameState = atom({
   key: 'player2Name',
   default: '',
 });
+
+export const sendingXState = atom({
+  key: 'sendingX',
+  default: 0,
+});
+
+export const sendingYState = atom({
+  key: 'sendingY',
+  default: 0,
+});
