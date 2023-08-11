@@ -1,10 +1,8 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import {
   chattingProfileOnRightClickModalState,
-  clickedFriendProfileState,
   clickedXState,
   clickedYState,
-  friendProfileModalState,
 } from '../../atom/modal';
 import { ChatDTO } from '../../interfaces/Chatting-Format.dto';
 import { ChatUserRightClickModal } from './inChatModal/ChatUserRightClickModal';
