@@ -25,7 +25,8 @@ export const ChattingBubble = ({
   const [y, setY] = useRecoilState(clickedYState);
 
   const onLeftClickHandler = () => {
-    navigate(`/profile/${nickName}`);
+    if (sender === 'me') navigate('/profile');
+    else navigate(`/profile/:${nickName}`);
   };
 
   const onRightClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
