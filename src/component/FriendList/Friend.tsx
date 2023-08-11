@@ -15,6 +15,11 @@ export const Friend = ({ props }: { props: UserDto }) => {
   const setFriendProfile = useSetRecoilState(clickedFriendProfileState);
   const navigation = useNavigate();
 
+  const handleDirectMessage = () => {
+    //socket emit
+    navigation(`/chat/${props.nickName}`);
+  };
+
   return (
     <div className="flex w-full h-20 bg-sky rounded-full my-3 shadow-md shadow-gray-300 items-center p-4 justify-between">
       <div
@@ -36,7 +41,7 @@ export const Friend = ({ props }: { props: UserDto }) => {
         <img
           src={require('../../public/plane.png')}
           className="ml-3"
-          onClick={() => navigation(`/chat/${props.nickName}`)}
+          onClick={handleDirectMessage}
         />
       </div>
       <div
