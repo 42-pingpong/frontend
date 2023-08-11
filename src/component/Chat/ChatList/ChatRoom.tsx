@@ -33,11 +33,26 @@ export const ChatRoom = () => {
       <div className="flex">
         <ServiceTitle title="Chat" />
       </div>
-      <div className="flex flex-grow p-10 bg-white w-full h-60 rounded-[2rem] shadow-2xl ">
-        <div className="grid grid-cols-1 lg:grid-cols-2 w-full gap-y-7 gap-x-10 overflow-y-auto p-3 items-center justify-center">
-          {ChatRoomList.map((item) => (
-            <ChatList key={item.groupChatId} props={item} />
-          ))}
+      <div className="flex flex-grow flex-col px-10 pt-5 pb-10 bg-white w-full h-60 rounded-[2rem] shadow-2xl ">
+        <div className="flex flex-row w-full h-16 shadow-[0_25px_10px_-20px_rgba(0,0,0,0.05)]">
+          <span className="flex justify-center w-full items-center font-bold text-3xl text-borderBlue px-5 mb-1">
+            Group Chat
+          </span>
+          <span className="flex justify-center w-full items-center font-bold text-3xl text-borderBlue px-5 mb-1">
+            Direct Message
+          </span>
+        </div>
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-y-7 overflow-y-auto w-full items-center justify-center">
+          <div className="grid p-5">
+            {ChatRoomList.map((item) => (
+              <ChatList key={item.groupChatId} props={item} />
+            ))}
+          </div>
+          <div className="grid p-5">
+            {ChatRoomList.map((item) => (
+              <ChatList key={item.groupChatId} props={item} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
