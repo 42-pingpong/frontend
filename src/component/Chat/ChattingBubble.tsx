@@ -1,10 +1,8 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import {
   chattingProfileOnRightClickModalState,
-  clickedFriendProfileState,
   clickedXState,
   clickedYState,
-  friendProfileModalState,
 } from '../../atom/modal';
 import { ChatDTO } from '../../interfaces/Chatting-Format.dto';
 import { ChatUserRightClickModal } from './inChatModal/ChatUserRightClickModal';
@@ -27,7 +25,8 @@ export const ChattingBubble = ({
   const [y, setY] = useRecoilState(clickedYState);
 
   const onLeftClickHandler = () => {
-    navigate(`/profile/${nickName}`);
+    if (sender === 'me') navigate('/profile');
+    else navigate(`/profile/:${nickName}`);
   };
 
   const onRightClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {

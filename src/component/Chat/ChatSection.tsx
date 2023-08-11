@@ -2,23 +2,20 @@ import { ChatList } from './ChatList/ChatList';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { ChattingBubble } from './ChattingBubble';
 import { useParams } from 'react-router-dom';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ChatSocket } from '../../sockets/ChatSocket';
-import { ChatDTO, ChatRoomDTO } from '../../interfaces/Chatting-Format.dto';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { ChatDTO } from '../../interfaces/Chatting-Format.dto';
+import { useRecoilValue } from 'recoil';
 import { userInfo } from '../../atom/user';
 import { chatRoomState } from '../../atom/chat';
-import { Chat } from './Chat';
 
 export const ChatSection = () => {
   const [input, setInput] = useState('');
   const [chat, setChat] = useState<ChatDTO[]>([]);
   const userInfoState = useRecoilValue(userInfo);
   const chatRoomList = useRecoilValue(chatRoomState);
-
-  const data: ChatDTO[] = [];
-
   const id = useParams();
+  const scrollBottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const massageHandler = (data: ChatDTO) => {
@@ -42,6 +39,13 @@ export const ChatSection = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (scrollBottomRef.current) {
+      scrollBottomRef.current.scrollTop = scrollBottomRef.current.scrollHeight;
+    }
+    console.log(scrollBottomRef.current);
+  }, [chat]);
+
   const handleSendMessage = () => {
     if (input === '') return;
 
@@ -51,7 +55,6 @@ export const ChatSection = () => {
       text: input,
     };
 
-    // ChatSocket.emit('chat-message', newChat);
     ChatSocket.emit('chat-message', newChat, (chat: ChatDTO) => {
       console.log('chat-messase-emit');
       console.log('newChat: ', newChat);
@@ -78,7 +81,10 @@ export const ChatSection = () => {
           </div>
         )}
         <div className="flex w-full h-[85%] md:h-[800px] justify-between items-center px-14 z-10 overflow-y-auto">
-          <div className="flex flex-col w-full h-full px-2 overflow-y-auto">
+          <div
+            className="flex flex-col w-full h-full px-2 overflow-y-auto"
+            ref={scrollBottomRef}
+          >
             {chat.map((item) => (
               <ChattingBubble
                 key={item.id}
@@ -87,6 +93,7 @@ export const ChatSection = () => {
               />
             ))}
           </div>
+          {/* <div ref={scrollBottomRef} /> */}
         </div>
         <div className="flex flex-row justify-between w-full px-16 items-center mt-5 h-[6rem]">
           <input
