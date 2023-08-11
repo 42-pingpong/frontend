@@ -72,10 +72,10 @@ export const player2NameState = atom({
 
 export const displayXState = atom({
   key: 'displayX',
-  default: 0,
+  default: 400,
 });
 
 export const displayYState = atom({
   key: 'displayY',
-  default: 0,
+  default: 200,
 });

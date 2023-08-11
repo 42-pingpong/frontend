@@ -30,7 +30,6 @@ export const PongGame = ({ props }: { props: number }) => {
   const [player1PaddleState, setPlayer1PaddleState] =
     useRecoilState(otherPaddle);
 
-  //   루프는 걍 돌리는 애만 해도 될 것 같아서 걍 state 썼어염
   const [loop, setLoop] = useState(false);
 
   const [ballXState, setBallXState] = useRecoilState(ballX);
@@ -61,21 +60,19 @@ export const PongGame = ({ props }: { props: number }) => {
       if (e === 'w') {
         setPlayer1PaddleState((prev) => Math.max(prev - 30, 0));
       } else if (e === 's') {
-        setPlayer1PaddleState((prev) => Math.max(prev + 30, 0));
+        setPlayer1PaddleState((prev) => Math.min(prev + 30, 0));
       } else if (e === 'ArrowUp') {
         setPlayer2PaddleState((prevY) => Math.max(prevY - 30, 0));
       } else if (e === 'ArrowDown') {
-        setPlayer2PaddleState((prevY) => Math.max(prevY + 30, 0));
+        setPlayer2PaddleState((prevY) => Math.min(prevY + 30, 0));
       }
     });
 
     GameSocket.on('ballX', (x: number) => {
-      // console.log('emit ballX ', x);
       setDisplayX(() => x);
     });
 
     GameSocket.on('ballY', (y: number) => {
-      // console.log('emit ballY ', y);
       setDisplayY(() => y);
     });
 
@@ -121,13 +118,14 @@ export const PongGame = ({ props }: { props: number }) => {
   };
 
   const handleBallOutOfBound = () => {
-    if (ballXState <= 0 || ballXState >= containerWidth - ballSize) {
+    if (ballXState < 0 || ballXState > containerWidth - ballSize) {
       const correctedX = containerWidth / 2;
+
       ballXState === 0
         ? setMyScoreState((prev) => prev + 1)
         : setOtherScoreState((prev) => prev + 1);
 
-      // setBallXState(correctedX);
+      setBallXState(correctedX);
       GameSocket.emit('ballX-set', correctedX);
       setBallSpeedXState((prevSpeedX) => -prevSpeedX);
     }
@@ -159,8 +157,6 @@ export const PongGame = ({ props }: { props: number }) => {
   useEffect(() => {
     console.log(ballXState, ballSpeedXState, ballYState, ballSpeedYState);
     setBallXState((prevX) => prevX + ballSpeedXState);
-    // GameSocket.emit('ballX-set', ballXState, ballSpeedXState);
-    // GameSocket.emit('ballY-set', ballYState, ballSpeedYState);
     setBallYState((prevY) => prevY + ballSpeedYState);
     GameSocket.emit('ballX-set', ballXState);
     GameSocket.emit('ballY-set', ballYState);
