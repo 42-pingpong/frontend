@@ -4,27 +4,31 @@ import { ChattingBubble } from './ChattingBubble';
 import { useParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { ChatSocket } from '../../sockets/ChatSocket';
-import { ChatDTO } from '../../interfaces/Chatting-Format.dto';
+import {
+  RequestGroupChatDTO,
+  ResponseGroupChatDTO,
+} from '../../interfaces/Chatting-Format.dto';
 import { useRecoilValue } from 'recoil';
 import { userInfo } from '../../atom/user';
 import { chatRoomState } from '../../atom/chat';
 
 export const ChatSection = () => {
   const [input, setInput] = useState('');
-  const [chat, setChat] = useState<ChatDTO[]>([]);
+  const [chat, setChat] = useState<ResponseGroupChatDTO[]>([]);
   const userInfoState = useRecoilValue(userInfo);
   const chatRoomList = useRecoilValue(chatRoomState);
   const id = useParams();
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const massageHandler = (data: ChatDTO) => {
-      console.log('chat-message-on');
+    const massageHandler = (data: ResponseGroupChatDTO) => {
+      console.log('group-message-on');
       console.log('data', data);
       setChat((prev) => [...prev, data]);
     };
 
-    ChatSocket.on('chat-message', massageHandler);
+    ChatSocket.on('group-message', massageHandler);
+
     // ChatSocket.on('group-chat-info', (data: ChatRoomDTO) => {
     //   if (data === null || data === undefined || data.log === undefined) return;
     //   console.log('log', data.log);
@@ -32,7 +36,7 @@ export const ChatSection = () => {
     // });
 
     return () => {
-      ChatSocket.off('chat-message', massageHandler);
+      ChatSocket.off('group-message', massageHandler);
       ChatSocket.off('group-chat-info');
       console.log('leave');
       ChatSocket.emit('leave-room', id.id);
@@ -49,19 +53,23 @@ export const ChatSection = () => {
   const handleSendMessage = () => {
     if (input === '') return;
 
-    const newChat: ChatDTO = {
-      roomId: String(id.id),
-      nickName: userInfoState.nickName,
-      text: input,
+    if (id.id === undefined) return;
+
+    const newChat: RequestGroupChatDTO = {
+      receivedGroupChatId: parseInt(id.id, 10),
+      senderId: userInfoState.id,
+      message: input,
     };
 
-    ChatSocket.emit('chat-message', newChat, (chat: ChatDTO) => {
+    console.log('newChat: ', newChat);
+    ChatSocket.emit('group-message', newChat, () => {
       console.log('chat-messase-emit');
-      console.log('newChat: ', newChat);
-      setChat((prev) => {
-        return [...prev, newChat];
-      });
+      //console.log('newChat: ', newChat);
+      //setChat((prev) => {
+      //  return [...prev, chat];
+      //});
     });
+    //ChatSocket.emit('group-message', newChat);
     setInput('');
   };
 
@@ -86,14 +94,9 @@ export const ChatSection = () => {
             ref={scrollBottomRef}
           >
             {chat.map((item) => (
-              <ChattingBubble
-                key={item.id}
-                props={item}
-                nickName={userInfoState.nickName}
-              />
+              <ChattingBubble key={item.messageInfo.messageId} props={item} />
             ))}
           </div>
-          {/* <div ref={scrollBottomRef} /> */}
         </div>
         <div className="flex flex-row justify-between w-full px-16 items-center mt-5 h-[6rem]">
           <input

@@ -1,8 +1,48 @@
-export interface ChatDTO {
-  roomId: string;
-  id?: number;
-  nickName: string;
-  text: string;
+/*
+ * GroupChatting
+ */
+export interface RequestGroupChatDTO {
+  message: string;
+  senderId: number;
+  receivedGroupChatId: number;
+}
+
+export interface ResponseGroupChatDTO {
+  groupChatMessageId: number;
+  receivedGroupChatId: number;
+  messageInfo: MessageInfoDTO;
+}
+
+/*
+ * DirectChatting
+ */
+export interface RequestDirectMessageDTO {
+  message: string;
+  senderId: number;
+  receiverId: number;
+}
+
+export interface ResponseDirectMessageDTO {
+  directMessageId: number;
+  receiveUserId: number;
+  receivedUserId: number;
+  messageInfo: MessageInfoDTO;
+}
+
+/*
+ * Common
+ */
+interface MessageInfoDTO {
+  messageId: number;
+  message: string;
+  createdAt: string;
+  sender: senderDTO;
+}
+
+interface senderDTO {
+  id: number;
+  nickname: string;
+  profile: string;
 }
 
 export interface ChatRoomDTO {

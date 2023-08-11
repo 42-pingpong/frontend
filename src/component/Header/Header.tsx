@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { profileModalState } from '../../atom/modal';
 import { useEffect, useState } from 'react';
 import { ChatSocket } from '../../sockets/ChatSocket';
-import { ChatDTO } from '../../interfaces/Chatting-Format.dto';
 import { GameSocket } from '../../sockets/GameSocket';
 
 const Header = () => {
