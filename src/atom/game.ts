@@ -5,42 +5,42 @@ export const newMatching = atom({
   default: false,
 });
 
-export const ballX = atom({
+export const ballXState = atom({
   key: 'ballX',
   default: 400, // Initial ball X position
 });
 
-export const ballY = atom({
+export const ballYState = atom({
   key: 'ballY',
   default: 200, // Initial ball Y position
 });
 
-export const ballSpeedX = atom({
+export const ballSpeedXState = atom({
   key: 'ballSpeedX',
   default: 8, // Initial ball speed in the X direction
 });
 
-export const ballSpeedY = atom({
+export const ballSpeedYState = atom({
   key: 'ballSpeedY',
   default: 8, // Initial ball speed in the Y direction
 });
 
-export const player2Score = atom({
+export const player2ScoreState = atom({
   key: 'player2Score',
   default: 0,
 });
 
-export const player1Score = atom({
+export const player1ScoreState = atom({
   key: 'player1Score',
   default: 0,
 });
 
-export const player2Paddle = atom({
+export const player2PaddleState = atom({
   key: 'player2Paddle',
   default: 295,
 });
 
-export const player1Paddle = atom({
+export const player1PaddleState = atom({
   key: 'player1Paddle',
   default: 295,
 });
@@ -50,12 +50,12 @@ export const startState = atom({
   default: false,
 });
 
-export const end = atom({
+export const endState = atom({
   key: 'end',
   default: false,
 });
 
-export const playerNumber = atom({
+export const playerNumberState = atom({
   key: 'playerNumber',
   default: 0,
 });
@@ -78,4 +78,9 @@ export const displayXState = atom({
 export const displayYState = atom({
   key: 'displayY',
   default: 200,
+});
+
+export const readyState = atom({
+  key: 'ready',
+  default: false,
 });

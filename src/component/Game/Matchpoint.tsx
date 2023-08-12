@@ -1,7 +1,7 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
-  player2Score,
-  player1Score,
+  player2ScoreState,
+  player1ScoreState,
   player1NameState,
   player2NameState,
 } from '../../atom/game';
@@ -10,9 +10,9 @@ import { useEffect, useState } from 'react';
 import { GameSocket } from '../../sockets/GameSocket';
 import { userInfo } from '../../atom/user';
 
-export const Matchpoint = ({ props }: { props: number }) => {
-  const [player1ScoreState, setPlayer1Score] = useRecoilState(player1Score);
-  const [player2ScoreState, setPlayer2Score] = useRecoilState(player2Score);
+export const Matchpoint = () => {
+  const [player1Score, setPlayer1Score] = useRecoilState(player1ScoreState);
+  const [player2Score, setPlayer2Score] = useRecoilState(player2ScoreState);
   const [player1Name, setPlayer1Name] = useRecoilState(player1NameState);
   const [player2Name, setPlayer2Name] = useRecoilState(player2NameState);
   const user = useRecoilValue(userInfo);
@@ -51,13 +51,13 @@ export const Matchpoint = ({ props }: { props: number }) => {
         className="px-10 font-semibold text-5xl text-gray-500 flex gap-10"
       >
         <div className=" grid-cols-1">
-          <span> {player1ScoreState} </span>
+          <span> {player1Score} </span>
         </div>
         <div className="px-auto text-5xl text-gray-500">
           <span> : </span>
         </div>
         <div className="font-semibold text-5xl text-gray-500">
-          <span> {player2ScoreState} </span>
+          <span> {player2Score} </span>
         </div>
       </div>
       <span className=" grid-cols-1 text-gray-500 text-3xl text-right pr-10">

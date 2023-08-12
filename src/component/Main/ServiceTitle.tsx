@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { newMatching, playerNumber } from '../../atom/game';
+import { newMatching, playerNumberState } from '../../atom/game';
 import { addUserModalState, chattingModalState } from '../../atom/modal';
 import { userInfo } from '../../atom/user';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,7 @@ export const ServiceTitle = (props: ServiceTitleProps) => {
   const [matching, setMatching] = useRecoilState(newMatching);
   const [chatstate, setChatstate] = useRecoilState(chattingModalState);
   const [addUser, setAddUser] = useRecoilState(addUserModalState);
-  const [playerNum, setPlayerNum] = useRecoilState(playerNumber);
+  const [playerNum, setPlayerNum] = useRecoilState(playerNumberState);
   const user = useRecoilValue(userInfo);
   const navigation = useNavigate();
 
@@ -29,10 +29,8 @@ export const ServiceTitle = (props: ServiceTitleProps) => {
     GameSocket.on('player-number', (data: number) => {
       if (data === 1) {
         setPlayerNum(1);
-        // GameSocket.emit('player1-id', user.id);
       } else {
         setPlayerNum(2);
-        // GameSocket.emit('player2-id', user.id);
       }
     });
     return () => {
