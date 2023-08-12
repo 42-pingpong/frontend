@@ -17,7 +17,7 @@ export const Friend = ({ props }: { props: UserDto }) => {
 
   const handleDirectMessage = () => {
     //socket emit
-    navigation(`/chat/${props.nickName}`);
+    navigation(`/direct-message/${props.id}`);
   };
 
   return (

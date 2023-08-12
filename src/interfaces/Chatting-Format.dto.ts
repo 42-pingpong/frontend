@@ -1,3 +1,5 @@
+import { UserDto } from './User.dto';
+
 /*
  * GroupChatting
  */
@@ -29,9 +31,14 @@ export interface RequestDirectMessageDTO {
 
 export interface ResponseDirectMessageDTO {
   directMessageId: number;
-  receiveUserId: number;
   receivedUserId: number;
+  receivedUser: UserDto;
   messageInfo: MessageInfoDTO;
+}
+
+export interface fetchRequestDirectMessageDTO {
+  userId: number;
+  targetId: number;
 }
 
 /*
