@@ -17,31 +17,31 @@ export const ballY = atom({
 
 export const ballSpeedX = atom({
   key: 'ballSpeedX',
-  default: 4, // Initial ball speed in the X direction
+  default: 8, // Initial ball speed in the X direction
 });
 
 export const ballSpeedY = atom({
   key: 'ballSpeedY',
-  default: 4, // Initial ball speed in the Y direction
+  default: 8, // Initial ball speed in the Y direction
 });
 
-export const myScore = atom({
-  key: 'myScore',
+export const player2Score = atom({
+  key: 'player2Score',
   default: 0,
 });
 
-export const otherScore = atom({
-  key: 'otherScore',
+export const player1Score = atom({
+  key: 'player1Score',
   default: 0,
 });
 
-export const myPaddle = atom({
-  key: 'myPaddle',
+export const player2Paddle = atom({
+  key: 'player2Paddle',
   default: 295,
 });
 
-export const otherPaddle = atom({
-  key: 'otherPaddle',
+export const player1Paddle = atom({
+  key: 'player1Paddle',
   default: 295,
 });
 
