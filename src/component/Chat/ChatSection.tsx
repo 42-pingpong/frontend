@@ -23,17 +23,12 @@ export const ChatSection = () => {
 
   useEffect(() => {
     const sendMessageHandler = (data: ResponseGroupChatDTO) => {
-      console.log('group-message-on');
-      console.log('data', data);
       setChat((prev) => [...prev, data]);
     };
 
     const fetchMessageHandler = (
       data: ResponseGroupChatDTO | ResponseGroupChatDTO[]
     ) => {
-      console.log('fetch-group-message-on');
-      console.log(chat);
-      console.log('data', data);
       setChat((prev) =>
         Array.isArray(data) ? [...prev, ...data] : [...prev, data]
       );
@@ -61,7 +56,6 @@ export const ChatSection = () => {
     if (scrollBottomRef.current) {
       scrollBottomRef.current.scrollTop = scrollBottomRef.current.scrollHeight;
     }
-    console.log(scrollBottomRef.current);
   }, [chat]);
 
   const handleSendMessage = () => {
@@ -73,7 +67,6 @@ export const ChatSection = () => {
       message: input,
     };
 
-    console.log('newChat: ', newChat);
     ChatSocket.emit('group-message', newChat);
     setInput('');
   };
