@@ -84,3 +84,8 @@ export const readyState = atom({
   key: 'ready',
   default: false,
 });
+
+export const roomIdState = atom({
+  key: 'roomId',
+  default: 0,
+});

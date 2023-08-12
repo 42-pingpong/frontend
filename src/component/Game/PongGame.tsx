@@ -16,6 +16,7 @@ import {
   displayXState,
   displayYState,
   readyState,
+  roomIdState,
 } from '../../atom/game';
 import { GameSocket } from '../../sockets/GameSocket';
 import { userInfo } from '../../atom/user';
@@ -27,7 +28,7 @@ export const PongGame = ({ props }: { props: number }) => {
 
   const containerWidth = 1400;
   const containerHeight = 830;
-  const WINSCORE = 100;
+  const WINSCORE = 0;
 
   const [player1Paddle, setPlayer1Paddle] = useRecoilState(player1PaddleState);
   const [player2Paddle, setPlayer2Paddle] = useRecoilState(player2PaddleState);
@@ -53,6 +54,7 @@ export const PongGame = ({ props }: { props: number }) => {
   const [ready, setReady] = useRecoilState(readyState);
 
   const user = useRecoilValue(userInfo);
+  const roomId = useRecoilValue(roomIdState);
 
   useEffect(() => {
     GameSocket.on('ready', (start: boolean) => {
@@ -187,12 +189,12 @@ export const PongGame = ({ props }: { props: number }) => {
       props === 1
         ? GameSocket.emit('end', {
             userId: user.id,
-            gameId: 2,
+            gameId: roomId,
             score: player1Score,
           })
         : GameSocket.emit('end', {
             userId: user.id,
-            gameId: 2,
+            gameId: roomId,
             score: player2Score,
           });
     }
