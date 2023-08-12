@@ -13,6 +13,11 @@ export interface ResponseGroupChatDTO {
   messageInfo: MessageInfoDTO;
 }
 
+export interface fetchRequestGroupChatDTO {
+  groupChatId: number;
+  userId: number;
+}
+
 /*
  * DirectChatting
  */

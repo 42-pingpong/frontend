@@ -9,8 +9,6 @@ import { userInfo } from '../../../atom/user';
 
 export const DirectMessageList = ({ props }: { props: ChatRoomDTO }) => {
   const navigation = useNavigate();
-  const setPassword = useSetRecoilState(passwordModalState);
-  const setRoomId = useSetRecoilState(clickedRoomIdState);
   const user = useRecoilValue(userInfo);
 
   const handleChatEnter = () => {
@@ -36,15 +34,6 @@ export const DirectMessageList = ({ props }: { props: ChatRoomDTO }) => {
           <span>
             {props.curParticipants} / {props.maxParticipants}
           </span>
-        </div>
-        <div className="flex relative mr-3 w-12 h-12 text-gray-500 text-lg md:text-2xl justify-center items-center">
-          {props.levelOfPublicity === 'Prot' && (
-            <img
-              src={require('../../../public/lock.png')}
-              alt="lock"
-              className="w-3 h-4 md:w-5 md:h-6 opacity-70"
-            />
-          )}
         </div>
       </div>
     </div>

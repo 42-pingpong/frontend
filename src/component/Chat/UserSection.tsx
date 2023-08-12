@@ -1,14 +1,22 @@
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { StatusIcon } from '../FriendList/StatusIcon';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Friend } from '../FriendList/Friend';
 import { useRecoilValue } from 'recoil';
 import { friendListState } from '../../atom/user';
+import { ChatSocket } from '../../sockets/ChatSocket';
 
 export const UserSection = () => {
   const friendList = useRecoilValue(friendListState);
-
   const navigation = useNavigate();
+  const id = useParams().id;
+
+  const handleLeaveGroupChatRoom = () => {
+    console.log('leave');
+    ChatSocket.emit('leave-room', id);
+    navigation('/');
+  };
+
   return (
     <div id="friends-section" className="flex-col flex h-full">
       <div className="flex">
@@ -29,7 +37,7 @@ export const UserSection = () => {
           <img
             src={require('../../public/quit.png')}
             className=" mx-auto float-right mb-5 w-9 h-7"
-            onClick={() => navigation('/')}
+            onClick={handleLeaveGroupChatRoom}
           ></img>
         </div>
       </div>

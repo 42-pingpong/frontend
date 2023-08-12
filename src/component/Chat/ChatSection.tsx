@@ -7,6 +7,7 @@ import { ChatSocket } from '../../sockets/ChatSocket';
 import {
   RequestGroupChatDTO,
   ResponseGroupChatDTO,
+  fetchRequestGroupChatDTO,
 } from '../../interfaces/Chatting-Format.dto';
 import { useRecoilValue } from 'recoil';
 import { userInfo } from '../../atom/user';
@@ -15,31 +16,44 @@ import { chatRoomState } from '../../atom/chat';
 export const ChatSection = () => {
   const [input, setInput] = useState('');
   const [chat, setChat] = useState<ResponseGroupChatDTO[]>([]);
-  const userInfoState = useRecoilValue(userInfo);
+  const user = useRecoilValue(userInfo);
   const chatRoomList = useRecoilValue(chatRoomState);
-  const id = useParams();
+  const id = useParams().id;
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const massageHandler = (data: ResponseGroupChatDTO) => {
+    const sendMessageHandler = (data: ResponseGroupChatDTO) => {
       console.log('group-message-on');
       console.log('data', data);
       setChat((prev) => [...prev, data]);
     };
 
-    ChatSocket.on('group-message', massageHandler);
+    const fetchMessageHandler = (
+      data: ResponseGroupChatDTO | ResponseGroupChatDTO[]
+    ) => {
+      console.log('fetch-group-message-on');
+      console.log(chat);
+      console.log('data', data);
+      setChat((prev) =>
+        Array.isArray(data) ? [...prev, ...data] : [...prev, data]
+      );
+    };
 
-    // ChatSocket.on('group-chat-info', (data: ChatRoomDTO) => {
-    //   if (data === null || data === undefined || data.log === undefined) return;
-    //   console.log('log', data.log);
-    //   setChat(data.log);
-    // });
+    if (id === undefined) return;
+
+    const requestFetchLog: fetchRequestGroupChatDTO = {
+      groupChatId: parseInt(id, 10),
+      userId: user.id,
+    };
+
+    ChatSocket.emit('fetch-group-message', requestFetchLog);
+
+    ChatSocket.on('fetch-group-message', fetchMessageHandler);
+
+    ChatSocket.on('group-message', sendMessageHandler);
 
     return () => {
-      ChatSocket.off('group-message', massageHandler);
-      ChatSocket.off('group-chat-info');
-      console.log('leave');
-      ChatSocket.emit('leave-room', id.id);
+      ChatSocket.off('group-message', sendMessageHandler);
     };
   }, []);
 
@@ -52,30 +66,19 @@ export const ChatSection = () => {
 
   const handleSendMessage = () => {
     if (input === '') return;
-
-    if (id.id === undefined) return;
-
+    if (id === undefined) return;
     const newChat: RequestGroupChatDTO = {
-      receivedGroupChatId: parseInt(id.id, 10),
-      senderId: userInfoState.id,
+      receivedGroupChatId: parseInt(id, 10),
+      senderId: user.id,
       message: input,
     };
 
     console.log('newChat: ', newChat);
-    ChatSocket.emit('group-message', newChat, () => {
-      console.log('chat-messase-emit');
-      //console.log('newChat: ', newChat);
-      //setChat((prev) => {
-      //  return [...prev, chat];
-      //});
-    });
-    //ChatSocket.emit('group-message', newChat);
+    ChatSocket.emit('group-message', newChat);
     setInput('');
   };
 
-  const chatRoom = chatRoomList.find(
-    (room) => room.groupChatId === Number(id.id)
-  );
+  const chatRoom = chatRoomList.find((room) => room.groupChatId === Number(id));
 
   return (
     <div id="chat-section" className="flex flex-col h-full">

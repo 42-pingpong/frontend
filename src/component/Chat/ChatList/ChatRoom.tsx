@@ -3,16 +3,21 @@ import { ServiceTitle } from '../../Main/ServiceTitle';
 import { ChatList } from './ChatList';
 import './styles.css';
 import { useRecoilState } from 'recoil';
-import { chatRoomState } from '../../../atom/chat';
+import { chatRoomState, dmRoomState } from '../../../atom/chat';
 import { ChatSocket } from '../../../sockets/ChatSocket';
 import { ChatRoomDTO } from '../../../interfaces/Chatting-Format.dto';
 import { Chat } from '../Chat';
 
 export const ChatRoom = () => {
   const [ChatRoomList, setChatRoomList] = useRecoilState(chatRoomState);
+  const [DMRoomList, setDMRoomList] = useRecoilState(dmRoomState);
 
   const handleChatRoomList = (data: ChatRoomDTO) => {
     setChatRoomList((prev) => [...prev, data]);
+  };
+
+  const handleDMRoomList = (data: ChatRoomDTO) => {
+    setDMRoomList((prev) => [...prev, data]);
   };
 
   useEffect(() => {

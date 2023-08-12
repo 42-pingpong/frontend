@@ -8,6 +8,11 @@ export const chatRoomState = atom<ChatRoomDTO[]>({
   default: [],
 });
 
+export const dmRoomState = atom<ChatRoomDTO[]>({
+  key: 'dmRoomState',
+  default: [],
+});
+
 export const currentRoomIdState = atom<number>({
   key: 'currentRoomIdState',
   default: 1,
