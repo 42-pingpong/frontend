@@ -25,6 +25,7 @@ export const PongGame = ({ props }: { props: number }) => {
 
   const containerWidth = 1400;
   const containerHeight = 830;
+  const WINSCORE = 0;
 
   const [player1PaddleState, setPlayer1PaddleState] =
     useRecoilState(player1Paddle);
@@ -38,10 +39,8 @@ export const PongGame = ({ props }: { props: number }) => {
   const [ballSpeedXState, setBallSpeedXState] = useRecoilState(ballSpeedX);
   const [ballSpeedYState, setBallSpeedYState] = useRecoilState(ballSpeedY);
 
-  const [player1ScoreState, setPlayer1ScoreState] =
-    useRecoilState(player1Score);
-  const [player2ScoreState, setPlayer2ScoreState] =
-    useRecoilState(player2Score);
+  const player1ScoreState = useRecoilValue(player1Score);
+  const player2ScoreState = useRecoilValue(player2Score);
 
   const [start, setStart] = useRecoilState(startState);
   const [endState, setEndState] = useRecoilState(end);
@@ -51,7 +50,6 @@ export const PongGame = ({ props }: { props: number }) => {
 
   const [displayX, setDisplayX] = useRecoilState(displayXState);
   const [displayY, setDisplayY] = useRecoilState(displayYState);
-  const [endEmit, setEndEmit] = useState(false);
 
   useEffect(() => {
     GameSocket.on('ready', (start: boolean) => {
@@ -151,7 +149,7 @@ export const PongGame = ({ props }: { props: number }) => {
   };
 
   useEffect(() => {
-    if (start === true) {
+    if (start === true && endState === false) {
       window.addEventListener('keydown', handleKeyDown);
       const interval = setInterval(() => {
         setLoop(true);
@@ -172,11 +170,15 @@ export const PongGame = ({ props }: { props: number }) => {
       GameSocket.emit('ballY-set', ballYState);
     }
     setLoop(false);
-    if (player2ScoreState > 5 || player1ScoreState > 5) {
+    if (player2ScoreState > WINSCORE || player1ScoreState > WINSCORE) {
       setStart(false);
       setEndState(true);
     }
   }, [loop]);
+
+  useEffect(() => {
+    GameSocket.emit('end', { userId: 1, gameId: 2, score: 3 });
+  }, [endState]);
 
   useEffect(() => {
     handleBallOutOfBound();
@@ -204,11 +206,6 @@ export const PongGame = ({ props }: { props: number }) => {
     const winner =
       player2ScoreState > player1ScoreState ? player2Name : player1Name;
 
-    // GameSocket.emit('end');
-    if (endEmit === false) {
-      console.log('end emit');
-      GameSocket.emit('end', { userId: 1, gameId: 2, score: 3 });
-    }
     if (endState === true) {
       return (
         <div className="justify-center flex mt-[300px]">
