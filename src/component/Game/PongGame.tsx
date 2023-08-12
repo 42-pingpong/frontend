@@ -88,6 +88,7 @@ export const PongGame = ({ props }: { props: number }) => {
     });
 
     return () => {
+      GameSocket.off('ready');
       GameSocket.off('start');
       GameSocket.off('move');
       GameSocket.off('ballX');
