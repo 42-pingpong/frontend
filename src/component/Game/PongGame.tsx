@@ -177,7 +177,8 @@ export const PongGame = ({ props }: { props: number }) => {
   }, [loop]);
 
   useEffect(() => {
-    GameSocket.emit('end', { userId: 1, gameId: 2, score: 3 });
+    if (endState === true)
+      GameSocket.emit('end', { userId: 1, gameId: 2, score: 3 });
   }, [endState]);
 
   useEffect(() => {
