@@ -51,8 +51,7 @@ export const PongGame = ({ props }: { props: number }) => {
 
   const [displayX, setDisplayX] = useRecoilState(displayXState);
   const [displayY, setDisplayY] = useRecoilState(displayYState);
-
-  console.log('player ', props);
+  const [endEmit, setEndEmit] = useState(false);
 
   useEffect(() => {
     GameSocket.on('ready', (start: boolean) => {
@@ -174,7 +173,6 @@ export const PongGame = ({ props }: { props: number }) => {
     }
     setLoop(false);
     if (player2ScoreState > 5 || player1ScoreState > 5) {
-      console.log('end');
       setStart(false);
       setEndState(true);
     }
@@ -206,7 +204,11 @@ export const PongGame = ({ props }: { props: number }) => {
     const winner =
       player2ScoreState > player1ScoreState ? player2Name : player1Name;
 
-    GameSocket.emit('end');
+    // GameSocket.emit('end');
+    if (endEmit === false) {
+      console.log('end emit');
+      GameSocket.emit('end', { userId: 1, gameId: 2, score: 3 });
+    }
     if (endState === true) {
       return (
         <div className="justify-center flex mt-[300px]">
