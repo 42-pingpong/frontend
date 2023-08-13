@@ -6,7 +6,7 @@ import {
   player2NameState,
 } from '../../atom/game';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { GameSocket } from '../../sockets/GameSocket';
 import { userInfo } from '../../atom/user';
 

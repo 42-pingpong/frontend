@@ -1,14 +1,21 @@
+import React, { useState, useEffect } from 'react';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { Matchpoint } from './Matchpoint';
 import { PongGame } from './PongGame';
 import { useRecoilValue } from 'recoil';
-import { playerNumberState } from '../../atom/game';
+import { playerNumberState, roomIdState } from '../../atom/game';
+import { ResetGameRecoilStatus } from './ResetGameRecoilStatus';
 
 export const GameSection = () => {
+  console.log('GameSection rendered');
+
+  ResetGameRecoilStatus();
+
   const playerNum = useRecoilValue(playerNumberState);
 
   return (
     <div id="game-section" className="flex flex-col h-full">
+      {/* <ResetGameRecoilStatus />; */}
       <div className="flex">
         <ServiceTitle title="Pong" nonAddButton={true} />
       </div>

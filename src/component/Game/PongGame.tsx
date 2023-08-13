@@ -56,6 +56,10 @@ export const PongGame = ({ props }: { props: number }) => {
   const user = useRecoilValue(userInfo);
   const roomId = useRecoilValue(roomIdState);
 
+  console.log(ballX, ballY);
+  console.log(end);
+  console.log(roomId);
+
   useEffect(() => {
     GameSocket.on('ready', (start: boolean) => {
       setReady(start);
@@ -171,6 +175,7 @@ export const PongGame = ({ props }: { props: number }) => {
   }, [start]);
 
   useEffect(() => {
+    console.log(props, ballX, ballY);
     if (props === 1) {
       setBallX((prevX) => prevX + ballSpeedX);
       setBallY((prevY) => prevY + ballSpeedY);
