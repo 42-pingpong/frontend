@@ -4,38 +4,51 @@ import { ChattingBubble } from './ChattingBubble';
 import { useParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { ChatSocket } from '../../sockets/ChatSocket';
-import { ChatDTO } from '../../interfaces/Chatting-Format.dto';
+import {
+  RequestGroupChatDTO,
+  ResponseGroupChatDTO,
+  fetchRequestGroupChatDTO,
+} from '../../interfaces/Chatting-Format.dto';
 import { useRecoilValue } from 'recoil';
 import { userInfo } from '../../atom/user';
 import { chatRoomState } from '../../atom/chat';
 
 export const ChatSection = () => {
   const [input, setInput] = useState('');
-  const [chat, setChat] = useState<ChatDTO[]>([]);
-  const userInfoState = useRecoilValue(userInfo);
+  const [chat, setChat] = useState<ResponseGroupChatDTO[]>([]);
+  const user = useRecoilValue(userInfo);
   const chatRoomList = useRecoilValue(chatRoomState);
-  const id = useParams();
+  const id = useParams().id;
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const massageHandler = (data: ChatDTO) => {
-      console.log('chat-message-on');
-      console.log('data', data);
+    const sendMessageHandler = (data: ResponseGroupChatDTO) => {
       setChat((prev) => [...prev, data]);
     };
 
-    ChatSocket.on('chat-message', massageHandler);
-    // ChatSocket.on('group-chat-info', (data: ChatRoomDTO) => {
-    //   if (data === null || data === undefined || data.log === undefined) return;
-    //   console.log('log', data.log);
-    //   setChat(data.log);
-    // });
+    const fetchMessageHandler = (
+      data: ResponseGroupChatDTO | ResponseGroupChatDTO[]
+    ) => {
+      setChat((prev) =>
+        Array.isArray(data) ? [...prev, ...data] : [...prev, data]
+      );
+    };
+
+    if (id === undefined) return;
+
+    const requestFetchLog: fetchRequestGroupChatDTO = {
+      groupChatId: parseInt(id, 10),
+      userId: user.id,
+    };
+
+    ChatSocket.emit('fetch-group-message', requestFetchLog);
+
+    ChatSocket.on('fetch-group-message', fetchMessageHandler);
+
+    ChatSocket.on('group-message', sendMessageHandler);
 
     return () => {
-      ChatSocket.off('chat-message', massageHandler);
-      ChatSocket.off('group-chat-info');
-      console.log('leave');
-      ChatSocket.emit('leave-room', id.id);
+      ChatSocket.off('group-message', sendMessageHandler);
     };
   }, []);
 
@@ -43,31 +56,22 @@ export const ChatSection = () => {
     if (scrollBottomRef.current) {
       scrollBottomRef.current.scrollTop = scrollBottomRef.current.scrollHeight;
     }
-    console.log(scrollBottomRef.current);
   }, [chat]);
 
   const handleSendMessage = () => {
     if (input === '') return;
-
-    const newChat: ChatDTO = {
-      roomId: String(id.id),
-      nickName: userInfoState.nickName,
-      text: input,
+    if (id === undefined) return;
+    const newChat: RequestGroupChatDTO = {
+      receivedGroupChatId: parseInt(id, 10),
+      senderId: user.id,
+      message: input,
     };
 
-    ChatSocket.emit('chat-message', newChat, (chat: ChatDTO) => {
-      console.log('chat-messase-emit');
-      console.log('newChat: ', newChat);
-      setChat((prev) => {
-        return [...prev, newChat];
-      });
-    });
+    ChatSocket.emit('group-message', newChat);
     setInput('');
   };
 
-  const chatRoom = chatRoomList.find(
-    (room) => room.groupChatId === Number(id.id)
-  );
+  const chatRoom = chatRoomList.find((room) => room.groupChatId === Number(id));
 
   return (
     <div id="chat-section" className="flex flex-col h-full">
@@ -86,14 +90,9 @@ export const ChatSection = () => {
             ref={scrollBottomRef}
           >
             {chat.map((item) => (
-              <ChattingBubble
-                key={item.id}
-                props={item}
-                nickName={userInfoState.nickName}
-              />
+              <ChattingBubble key={item.messageInfo.messageId} props={item} />
             ))}
           </div>
-          {/* <div ref={scrollBottomRef} /> */}
         </div>
         <div className="flex flex-row justify-between w-full px-16 items-center mt-5 h-[6rem]">
           <input

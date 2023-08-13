@@ -1,15 +1,18 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import {
   chattingProfileOnRightClickModalState,
   clickedXState,
   clickedYState,
-} from '../../atom/modal';
-import { ResponseGroupChatDTO } from '../../interfaces/Chatting-Format.dto';
-import { ChatUserRightClickModal } from './inChatModal/ChatUserRightClickModal';
-import { useNavigate } from 'react-router-dom';
-import { userInfo } from '../../atom/user';
+} from '../../../atom/modal';
+import { userInfo } from '../../../atom/user';
+import { ResponseDirectMessageDTO } from '../../../interfaces/Chatting-Format.dto';
 
-export const ChattingBubble = ({ props }: { props: ResponseGroupChatDTO }) => {
+export const DirectMessageBubble = ({
+  props,
+}: {
+  props: ResponseDirectMessageDTO;
+}) => {
   const user = useRecoilValue(userInfo);
   const sender = props.messageInfo.sender.id === user.id ? 'me' : 'you';
   const navigate = useNavigate();
@@ -45,16 +48,15 @@ export const ChattingBubble = ({ props }: { props: ResponseGroupChatDTO }) => {
         />
       </div>
 
-      <div className="text-xl mb-[2.5%] px-5 py-2 rounded-[50px] shadow-md max-w-[50%] bg-[#D9D9D9] justify-center mx-[1.5%] relative">
+      <div className="text-xl mb-[2.5%] px-5 py-2 rounded-[50px] shadow-md max-w-[50%] bg-[#D9D9D9] justify-center items-center mx-[1.5%] relative">
         <span className="mt-1 mx-1 inline-block">
           {props.messageInfo.message}
         </span>
       </div>
-      {profileRightClickModal && <ChatUserRightClickModal x={x} y={y} />}
     </div>
   ) : (
     <div className="flex">
-      <div className="text-xl mb-[2.5%] px-5 py-2 rounded-[50px] shadow-md max-w-[50%] bg-sky justify-center mx-[1.5%] ml-auto relative">
+      <div className="text-xl mb-[2.5%] px-5 py-2 rounded-[50px] shadow-md max-w-[50%] bg-sky justify-center items-center mx-[1.5%] ml-auto relative">
         <span className="mt-1 mx-1 inline-block">
           {props.messageInfo.message}
         </span>
