@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { ChatSection } from './ChatSection';
-import { UserSection } from './UserSection';
+import { UserSection } from './User/UserSection';
 
 export const Chat = () => {
   return (

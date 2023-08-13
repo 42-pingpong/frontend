@@ -1,13 +1,14 @@
-import { ServiceTitle } from '../Main/ServiceTitle';
-import { StatusIcon } from '../FriendList/StatusIcon';
+import { ServiceTitle } from '../../Main/ServiceTitle';
+import { StatusIcon } from '../../FriendList/StatusIcon';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Friend } from '../FriendList/Friend';
+import { Friend } from '../../FriendList/Friend';
 import { useRecoilValue } from 'recoil';
-import { friendListState } from '../../atom/user';
-import { ChatSocket } from '../../sockets/ChatSocket';
+import { friendListState } from '../../../atom/user';
+import { ChatSocket } from '../../../sockets/ChatSocket';
+import { currentChatInfoState } from '../../../atom/chat';
 
 export const UserSection = () => {
-  const friendList = useRecoilValue(friendListState);
+  const currentChatInfo = useRecoilValue(currentChatInfoState);
   const navigation = useNavigate();
   const id = useParams().id;
 
@@ -29,6 +30,8 @@ export const UserSection = () => {
           <StatusIcon props={{ status: 'ingame', color: 'bg-blue-400' }} />
         </div>
         <div className="flex flex-col w-full h-full overflow-y-auto mt-3 mb-10">
+          <span>owner</span>
+          currentChatInfo.owner && <Friend props={currentChatInfo.owner} />
           {friendList.map((item) => (
             <Friend key={item.id} props={item} />
           ))}
