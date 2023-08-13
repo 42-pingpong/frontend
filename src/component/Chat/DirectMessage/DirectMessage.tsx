@@ -19,7 +19,7 @@ export const DirectMessage = () => {
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const sendMessageHandler = (data: ResponseDirectMessageDTO) => {
+    const handelDmResponse = (data: ResponseDirectMessageDTO) => {
       console.log(data);
       setDm((prev) => [...prev, data]);
     };
@@ -44,10 +44,14 @@ export const DirectMessage = () => {
 
     ChatSocket.on('fetch-direct-message', fetchMessageHandler);
 
-    ChatSocket.on('direct-message', sendMessageHandler);
+    ChatSocket.on('direct-message', handelDmResponse);
+    ChatSocket.on('error', (err) => {
+      console.log('error');
+      console.log(err);
+    });
 
     return () => {
-      ChatSocket.off('direct-message', sendMessageHandler);
+      ChatSocket.off('direct-message', handelDmResponse);
     };
   }, []);
 
