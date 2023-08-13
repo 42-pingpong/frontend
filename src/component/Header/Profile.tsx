@@ -9,6 +9,8 @@ import {
   ResponseNotificationDto,
 } from '../../interfaces/Request-Friend.dto';
 import { UserDto } from '../../interfaces/User.dto';
+import { ChatSocket } from '../../sockets/ChatSocket';
+import { GameSocket } from '../../sockets/GameSocket';
 
 const Profile = () => {
   const userInfoObj = useRecoilValue(userInfo);
@@ -27,39 +29,17 @@ const Profile = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      const saveNotificationList = (
-        data: ResponseNotificationDto[] | ResponseNotificationDto
-      ) => {
-        console.log('saveNotificationList called');
-        const dataArray = Array.isArray(data) ? data : [data];
-        if (dataArray.length === 0) return;
-
-        const filteredDataArray = dataArray.filter(
-          (item) => item.isAccepted !== 'Y'
-        );
-        if (filteredDataArray.length === 0) return;
-
-        console.log(dataArray);
-        console.log(filteredDataArray);
-        setNotificationList((prevList) => [...prevList, ...filteredDataArray]);
-        setNotification(true);
-      };
-
-      const saveNotiResultList = (data: UserDto | UserDto[]) => {
-        console.log('saveNoti Result List called');
-        const dataArray = Array.isArray(data) ? data : [data];
-        if (dataArray.length === 0) return;
-
-        setFriendList((prevList) => [...prevList, ...dataArray]);
-
-        console.log(dataArray);
-        setNotiResultList((prevList) => [...prevList, ...dataArray]);
-        setNotification(true);
-      };
-
-      console.log('connect');
+      /**
+       * socket connect
+       */
+      console.log('all socket connect');
       StatusSocket.connect();
+      ChatSocket.connect();
+      GameSocket.connect();
 
+      /**
+       * alarm socket event
+       */
       StatusSocket.on('alarms', saveNotificationList);
       StatusSocket.on('accept-friend', saveNotiResultList);
       StatusSocket.on('request-friend-from-user', saveNotificationList);
@@ -67,6 +47,8 @@ const Profile = () => {
       return () => {
         StatusSocket.off('request-friend-from-user', saveNotificationList);
         StatusSocket.disconnect();
+        ChatSocket.disconnect();
+        GameSocket.disconnect();
       };
     }
   }, []);
@@ -81,12 +63,43 @@ const Profile = () => {
         .filter((item) => !isUserDuplicated(item.requestId))
         .map((item) => ({ requestId: item.requestId }));
 
-      console.log('checkedAlarmList');
-      console.log(checkedAlarmList);
       StatusSocket.emit('checked-alarm', checkedAlarmList);
       prevNotificationList.current = notificationList;
     }
   }, [notificationList, isNotificationModalOpen, isLoggedIn]);
+
+  /**
+   * alarm socket event handler
+   */
+  const saveNotificationList = (
+    data: ResponseNotificationDto[] | ResponseNotificationDto
+  ) => {
+    console.log('saveNotificationList called');
+    const dataArray = Array.isArray(data) ? data : [data];
+    if (dataArray.length === 0) return;
+
+    const filteredDataArray = dataArray.filter(
+      (item) => item.isAccepted !== 'Y'
+    );
+    if (filteredDataArray.length === 0) return;
+
+    console.log(dataArray);
+    console.log(filteredDataArray);
+    setNotificationList((prevList) => [...prevList, ...filteredDataArray]);
+    setNotification(true);
+  };
+
+  const saveNotiResultList = (data: UserDto | UserDto[]) => {
+    console.log('saveNoti Result List called');
+    const dataArray = Array.isArray(data) ? data : [data];
+    if (dataArray.length === 0) return;
+
+    setFriendList((prevList) => [...prevList, ...dataArray]);
+
+    console.log(dataArray);
+    setNotiResultList((prevList) => [...prevList, ...dataArray]);
+    setNotification(true);
+  };
 
   //나중에 utils로 빼기
   const isUserDuplicated = (id: number) => {

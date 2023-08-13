@@ -20,39 +20,13 @@ export const DirectMessage = () => {
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const handelDmResponse = (data: ResponseDirectMessageDTO) => {
-      console.log(data);
-      setDm((prev) => [...prev, data]);
-    };
-
-    const fetchMessageHandler = (
-      data: ResponseDirectMessageDTO | ResponseDirectMessageDTO[]
-    ) => {
-      console.log(data);
-      setDm((prev) =>
-        Array.isArray(data) ? [...prev, ...data] : [...prev, data]
-      );
-    };
-
-    if (id === undefined) return;
-
-    const requestFetchLog: fetchRequestDirectMessageDTO = {
-      userId: user.id,
-      targetId: parseInt(id, 10),
-    };
-
     ChatSocket.emit('fetch-direct-message', requestFetchLog);
-
     ChatSocket.on('fetch-direct-message', fetchMessageHandler);
-
     ChatSocket.on('direct-message', handelDmResponse);
-    ChatSocket.on('error', (err) => {
-      console.log('error');
-      console.log(err);
-    });
 
     return () => {
       ChatSocket.off('direct-message', handelDmResponse);
+      ChatSocket.off('fetch-direct-message', fetchMessageHandler);
     };
   }, []);
 
@@ -61,6 +35,27 @@ export const DirectMessage = () => {
       scrollBottomRef.current.scrollTop = scrollBottomRef.current.scrollHeight;
     }
   }, [dm]);
+
+  const handelDmResponse = (data: ResponseDirectMessageDTO) => {
+    console.log(data);
+    setDm((prev) => [...prev, data]);
+  };
+
+  const fetchMessageHandler = (
+    data: ResponseDirectMessageDTO | ResponseDirectMessageDTO[]
+  ) => {
+    console.log(data);
+    setDm((prev) =>
+      Array.isArray(data) ? [...prev, ...data] : [...prev, data]
+    );
+  };
+
+  if (id === undefined) return;
+
+  const requestFetchLog: fetchRequestDirectMessageDTO = {
+    userId: user.id,
+    targetId: parseInt(id, 10),
+  };
 
   const handleSendDm = () => {
     if (input === '') return;

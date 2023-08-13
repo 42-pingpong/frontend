@@ -10,10 +10,6 @@ import { ChatRoomDTO } from '../../../interfaces/Chatting-Format.dto';
 export const ChatRoom = () => {
   const [ChatRoomList, setChatRoomList] = useRecoilState(chatRoomState);
 
-  const handleChatRoomList = (data: ChatRoomDTO) => {
-    setChatRoomList((prev) => [...prev, data]);
-  };
-
   useEffect(() => {
     ChatSocket.emit('group-chat-list', (data: ChatRoomDTO[]) => {
       setChatRoomList([...data]);
@@ -26,7 +22,9 @@ export const ChatRoom = () => {
     };
   }, []);
 
-  console.log(ChatRoomList);
+  const handleChatRoomList = (data: ChatRoomDTO) => {
+    setChatRoomList((prev) => [...prev, data]);
+  };
 
   return (
     <div className="flex flex-col h-full">

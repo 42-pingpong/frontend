@@ -22,33 +22,13 @@ export const ChatSection = () => {
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const sendMessageHandler = (data: ResponseGroupChatDTO) => {
-      setChat((prev) => [...prev, data]);
-    };
-
-    const fetchMessageHandler = (
-      data: ResponseGroupChatDTO | ResponseGroupChatDTO[]
-    ) => {
-      setChat((prev) =>
-        Array.isArray(data) ? [...prev, ...data] : [...prev, data]
-      );
-    };
-
-    if (id === undefined) return;
-
-    const requestFetchLog: fetchRequestGroupChatDTO = {
-      groupChatId: parseInt(id, 10),
-      userId: user.id,
-    };
-
     ChatSocket.emit('fetch-group-message', requestFetchLog);
-
     ChatSocket.on('fetch-group-message', fetchMessageHandler);
-
     ChatSocket.on('group-message', sendMessageHandler);
 
     return () => {
       ChatSocket.off('group-message', sendMessageHandler);
+      ChatSocket.off('fetch-group-message', fetchMessageHandler);
     };
   }, []);
 
@@ -57,6 +37,24 @@ export const ChatSection = () => {
       scrollBottomRef.current.scrollTop = scrollBottomRef.current.scrollHeight;
     }
   }, [chat]);
+
+  if (id === undefined) return;
+  const requestFetchLog: fetchRequestGroupChatDTO = {
+    groupChatId: parseInt(id, 10),
+    userId: user.id,
+  };
+
+  const sendMessageHandler = (data: ResponseGroupChatDTO) => {
+    setChat((prev) => [...prev, data]);
+  };
+
+  const fetchMessageHandler = (
+    data: ResponseGroupChatDTO | ResponseGroupChatDTO[]
+  ) => {
+    setChat((prev) =>
+      Array.isArray(data) ? [...prev, ...data] : [...prev, data]
+    );
+  };
 
   const handleSendMessage = () => {
     if (input === '') return;
