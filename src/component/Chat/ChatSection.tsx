@@ -5,17 +5,19 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { ChatSocket } from '../../sockets/ChatSocket';
 import {
+  ChatRoomInfoDTO,
   RequestGroupChatDTO,
   ResponseGroupChatDTO,
   fetchRequestGroupChatDTO,
 } from '../../interfaces/Chatting-Format.dto';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { userInfo } from '../../atom/user';
-import { chatRoomState } from '../../atom/chat';
+import { chatRoomState, currentChatInfoState } from '../../atom/chat';
 
 export const ChatSection = () => {
   const [input, setInput] = useState('');
   const [chat, setChat] = useState<ResponseGroupChatDTO[]>([]);
+  const [curRoomInfo, setCurRoomInfo] = useRecoilState(currentChatInfoState);
   const user = useRecoilValue(userInfo);
   const chatRoomList = useRecoilValue(chatRoomState);
   const param = useParams().id;
@@ -23,12 +25,7 @@ export const ChatSection = () => {
   const id = param === undefined ? 0 : parseInt(param, 10);
 
   useEffect(() => {
-    ChatSocket.on('join-room', (data) => {
-      console.log(data);
-    });
-    ChatSocket.on('error', (data) => {
-      console.log(data);
-    });
+    ChatSocket.on('join-room', handleJoinChatRoom);
     ChatSocket.emit('fetch-group-message', requestFetchLog);
     ChatSocket.on('fetch-group-message', fetchMessageHandler);
     ChatSocket.on('group-message', sendMessageHandler);
@@ -44,6 +41,10 @@ export const ChatSection = () => {
       scrollBottomRef.current.scrollTop = scrollBottomRef.current.scrollHeight;
     }
   }, [chat]);
+
+  const handleJoinChatRoom = (data: ChatRoomInfoDTO) => {
+    setCurRoomInfo(data);
+  };
 
   const requestFetchLog: fetchRequestGroupChatDTO = {
     groupChatId: id,
