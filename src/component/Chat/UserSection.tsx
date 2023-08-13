@@ -22,7 +22,7 @@ export const UserSection = () => {
       <div className="flex">
         <ServiceTitle title="User" nonAddButton={true} />
       </div>
-      <div className="flex flex-col w-full h-[50%] flex-grow px-10 rounded-3xl shadow-2xl">
+      <div className="flex flex-col w-full h-[50%] flex-grow px-10 rounded-3xl shadow-2xl bg-slate-50">
         <div className="flex flex-row h-14 w-full justify-between mt-10 px-3">
           <StatusIcon props={{ status: 'online', color: 'bg-green-400' }} />
           <StatusIcon props={{ status: 'offline', color: 'bg-red-400' }} />
@@ -33,10 +33,10 @@ export const UserSection = () => {
             <Friend key={item.id} props={item} />
           ))}
         </div>
-        <div className="relative ">
+        <div className="relative">
           <img
             src={require('../../public/quit.png')}
-            className=" mx-auto float-right mb-5 w-9 h-7"
+            className=" mx-auto float-right mb-16 mr-3 w-9 h-7"
             onClick={handleLeaveGroupChatRoom}
           ></img>
         </div>
