@@ -3,13 +3,11 @@ import { ServiceTitle } from '../Main/ServiceTitle';
 import { Matchpoint } from './Matchpoint';
 import { PongGame } from './PongGame';
 import { useRecoilValue } from 'recoil';
-import { playerNumberState, roomIdState } from '../../atom/game';
+import { endState, playerNumberState, roomIdState } from '../../atom/game';
 import { ResetGameRecoilStatus } from './ResetGameRecoilStatus';
 
 export const GameSection = () => {
-  console.log('GameSection rendered');
-
-  ResetGameRecoilStatus();
+  const end = useRecoilValue(endState);
 
   const playerNum = useRecoilValue(playerNumberState);
 
