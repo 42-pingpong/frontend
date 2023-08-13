@@ -18,8 +18,9 @@ export const ChatSection = () => {
   const [chat, setChat] = useState<ResponseGroupChatDTO[]>([]);
   const user = useRecoilValue(userInfo);
   const chatRoomList = useRecoilValue(chatRoomState);
-  const id = useParams().id;
+  const param = useParams().id;
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
+  const id = param === undefined ? 0 : parseInt(param, 10);
 
   useEffect(() => {
     ChatSocket.emit('fetch-group-message', requestFetchLog);
@@ -38,9 +39,8 @@ export const ChatSection = () => {
     }
   }, [chat]);
 
-  if (id === undefined) return;
   const requestFetchLog: fetchRequestGroupChatDTO = {
-    groupChatId: parseInt(id, 10),
+    groupChatId: id,
     userId: user.id,
   };
 
@@ -60,7 +60,7 @@ export const ChatSection = () => {
     if (input === '') return;
     if (id === undefined) return;
     const newChat: RequestGroupChatDTO = {
-      receivedGroupChatId: parseInt(id, 10),
+      receivedGroupChatId: id,
       senderId: user.id,
       message: input,
     };

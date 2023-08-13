@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { ChatSection } from './ChatSection';
 import { UserSection } from './UserSection';
-import { ChatSocket } from '../../sockets/ChatSocket';
 
 export const Chat = () => {
   return (

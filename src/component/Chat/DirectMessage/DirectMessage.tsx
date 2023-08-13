@@ -16,8 +16,9 @@ export const DirectMessage = () => {
   const [input, setInput] = useState('');
   const [dm, setDm] = useState<ResponseDirectMessageDTO[]>([]);
   const user = useRecoilValue(userInfo);
-  const id = useParams().id;
+  const param = useParams().id;
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
+  const id = param === undefined ? 0 : parseInt(param, 10);
 
   useEffect(() => {
     ChatSocket.emit('fetch-direct-message', requestFetchLog);
@@ -50,11 +51,9 @@ export const DirectMessage = () => {
     );
   };
 
-  if (id === undefined) return;
-
   const requestFetchLog: fetchRequestDirectMessageDTO = {
     userId: user.id,
-    targetId: parseInt(id, 10),
+    targetId: id,
   };
 
   const handleSendDm = () => {
@@ -62,7 +61,7 @@ export const DirectMessage = () => {
     if (id === undefined) return;
 
     const newDm: RequestDirectMessageDTO = {
-      receiverId: parseInt(id, 10),
+      receiverId: id,
       senderId: user.id,
       message: input,
     };
@@ -84,7 +83,7 @@ export const DirectMessage = () => {
         <div className="flex relative h-full flex-col rounded-3xl shadow-2xl flex-grow pt-14 items-center bg-slate-50">
           {id && (
             <div className="absolute top-[-4rem] left-1/2 transform -translate-x-1/2 rounded-3xl mx-auto w-[500px] z-10">
-              <DirectMessageRoomSign id={id} />
+              <DirectMessageRoomSign id={id.toString()} />
             </div>
           )}
           <div className="flex w-full mt-[2%] h-[80%] md:h-[800px] justify-between items-center px-14 z-10 overflow-y-auto">
