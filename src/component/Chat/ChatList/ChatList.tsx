@@ -4,7 +4,10 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { clickedRoomIdState, passwordModalState } from '../../../atom/modal';
 import { chatRoomState } from '../../../atom/chat';
 import { ChatSocket } from '../../../sockets/ChatSocket';
-import { ChatRoomDTO } from '../../../interfaces/Chatting-Format.dto';
+import {
+  ChatRoomDTO,
+  JoinGroupChatDTO,
+} from '../../../interfaces/Chatting-Format.dto';
 import { userInfo } from '../../../atom/user';
 
 export const ChatList = ({ props }: { props: ChatRoomDTO }) => {
@@ -12,11 +15,19 @@ export const ChatList = ({ props }: { props: ChatRoomDTO }) => {
   const setPassword = useSetRecoilState(passwordModalState);
   const setRoomId = useSetRecoilState(clickedRoomIdState);
   const user = useRecoilValue(userInfo);
+
   const handleChatEnter = () => {
-    props.levelOfPublicity === 'Prot'
-      ? (setPassword(true), setRoomId(`${props.groupChatId}`))
-      : navigation(`/chat/${props.groupChatId}`);
-    ChatSocket.emit('join-room', `${props.groupChatId.toString()}`);
+    if (props.levelOfPublicity !== 'Prot') {
+      const requestJoinChatRoom: JoinGroupChatDTO = {
+        groupChatId: props.groupChatId,
+        userId: user.id,
+      };
+
+      navigation(`/chat/${props.groupChatId}`);
+      ChatSocket.emit('join-room', requestJoinChatRoom);
+    } else {
+      setPassword(true), setRoomId(`${props.groupChatId}`);
+    }
   };
 
   return (

@@ -16,43 +16,18 @@ export const DirectMessage = () => {
   const [input, setInput] = useState('');
   const [dm, setDm] = useState<ResponseDirectMessageDTO[]>([]);
   const user = useRecoilValue(userInfo);
-  const id = useParams().id;
+  const param = useParams().id;
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
+  const id = param === undefined ? 0 : parseInt(param, 10);
 
   useEffect(() => {
-    const handelDmResponse = (data: ResponseDirectMessageDTO) => {
-      console.log(data);
-      setDm((prev) => [...prev, data]);
-    };
-
-    const fetchMessageHandler = (
-      data: ResponseDirectMessageDTO | ResponseDirectMessageDTO[]
-    ) => {
-      console.log(data);
-      setDm((prev) =>
-        Array.isArray(data) ? [...prev, ...data] : [...prev, data]
-      );
-    };
-
-    if (id === undefined) return;
-
-    const requestFetchLog: fetchRequestDirectMessageDTO = {
-      userId: user.id,
-      targetId: parseInt(id, 10),
-    };
-
     ChatSocket.emit('fetch-direct-message', requestFetchLog);
-
     ChatSocket.on('fetch-direct-message', fetchMessageHandler);
-
     ChatSocket.on('direct-message', handelDmResponse);
-    ChatSocket.on('error', (err) => {
-      console.log('error');
-      console.log(err);
-    });
 
     return () => {
       ChatSocket.off('direct-message', handelDmResponse);
+      ChatSocket.off('fetch-direct-message', fetchMessageHandler);
     };
   }, []);
 
@@ -62,12 +37,31 @@ export const DirectMessage = () => {
     }
   }, [dm]);
 
+  const handelDmResponse = (data: ResponseDirectMessageDTO) => {
+    console.log(data);
+    setDm((prev) => [...prev, data]);
+  };
+
+  const fetchMessageHandler = (
+    data: ResponseDirectMessageDTO | ResponseDirectMessageDTO[]
+  ) => {
+    console.log(data);
+    setDm((prev) =>
+      Array.isArray(data) ? [...prev, ...data] : [...prev, data]
+    );
+  };
+
+  const requestFetchLog: fetchRequestDirectMessageDTO = {
+    userId: user.id,
+    targetId: id,
+  };
+
   const handleSendDm = () => {
     if (input === '') return;
     if (id === undefined) return;
 
     const newDm: RequestDirectMessageDTO = {
-      receiverId: parseInt(id, 10),
+      receiverId: id,
       senderId: user.id,
       message: input,
     };
@@ -89,7 +83,7 @@ export const DirectMessage = () => {
         <div className="flex relative h-full flex-col rounded-3xl shadow-2xl flex-grow pt-14 items-center bg-slate-50">
           {id && (
             <div className="absolute top-[-4rem] left-1/2 transform -translate-x-1/2 rounded-3xl mx-auto w-[500px] z-10">
-              <DirectMessageRoomSign id={id} />
+              <DirectMessageRoomSign id={id.toString()} />
             </div>
           )}
           <div className="flex w-full mt-[2%] h-[80%] md:h-[800px] justify-between items-center px-14 z-10 overflow-y-auto">

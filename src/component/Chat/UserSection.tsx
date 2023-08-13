@@ -36,7 +36,7 @@ export const UserSection = () => {
         <div className="relative">
           <img
             src={require('../../public/quit.png')}
-            className=" mx-auto float-right mb-16 mr-3 w-9 h-7"
+            className=" mx-auto float-right mb-12 mr-3 w-9 h-7"
             onClick={handleLeaveGroupChatRoom}
           ></img>
         </div>

@@ -5,50 +5,34 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { ChatSocket } from '../../sockets/ChatSocket';
 import {
+  ChatRoomInfoDTO,
   RequestGroupChatDTO,
   ResponseGroupChatDTO,
   fetchRequestGroupChatDTO,
 } from '../../interfaces/Chatting-Format.dto';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { userInfo } from '../../atom/user';
-import { chatRoomState } from '../../atom/chat';
+import { chatRoomState, currentChatInfoState } from '../../atom/chat';
 
 export const ChatSection = () => {
   const [input, setInput] = useState('');
   const [chat, setChat] = useState<ResponseGroupChatDTO[]>([]);
+  const [curRoomInfo, setCurRoomInfo] = useRecoilState(currentChatInfoState);
   const user = useRecoilValue(userInfo);
   const chatRoomList = useRecoilValue(chatRoomState);
-  const id = useParams().id;
+  const param = useParams().id;
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
+  const id = param === undefined ? 0 : parseInt(param, 10);
 
   useEffect(() => {
-    const sendMessageHandler = (data: ResponseGroupChatDTO) => {
-      setChat((prev) => [...prev, data]);
-    };
-
-    const fetchMessageHandler = (
-      data: ResponseGroupChatDTO | ResponseGroupChatDTO[]
-    ) => {
-      setChat((prev) =>
-        Array.isArray(data) ? [...prev, ...data] : [...prev, data]
-      );
-    };
-
-    if (id === undefined) return;
-
-    const requestFetchLog: fetchRequestGroupChatDTO = {
-      groupChatId: parseInt(id, 10),
-      userId: user.id,
-    };
-
+    ChatSocket.on('join-room', handleJoinChatRoom);
     ChatSocket.emit('fetch-group-message', requestFetchLog);
-
     ChatSocket.on('fetch-group-message', fetchMessageHandler);
-
     ChatSocket.on('group-message', sendMessageHandler);
 
     return () => {
       ChatSocket.off('group-message', sendMessageHandler);
+      ChatSocket.off('fetch-group-message', fetchMessageHandler);
     };
   }, []);
 
@@ -58,11 +42,32 @@ export const ChatSection = () => {
     }
   }, [chat]);
 
+  const handleJoinChatRoom = (data: ChatRoomInfoDTO) => {
+    setCurRoomInfo(data);
+  };
+
+  const requestFetchLog: fetchRequestGroupChatDTO = {
+    groupChatId: id,
+    userId: user.id,
+  };
+
+  const sendMessageHandler = (data: ResponseGroupChatDTO) => {
+    setChat((prev) => [...prev, data]);
+  };
+
+  const fetchMessageHandler = (
+    data: ResponseGroupChatDTO | ResponseGroupChatDTO[]
+  ) => {
+    setChat((prev) =>
+      Array.isArray(data) ? [...prev, ...data] : [...prev, data]
+    );
+  };
+
   const handleSendMessage = () => {
     if (input === '') return;
     if (id === undefined) return;
     const newChat: RequestGroupChatDTO = {
-      receivedGroupChatId: parseInt(id, 10),
+      receivedGroupChatId: id,
       senderId: user.id,
       message: input,
     };
