@@ -81,11 +81,11 @@ export const DirectMessage = () => {
           <ServiceTitle title="Direct Message" nonAddButton={true} />
         </div>
         <div className="flex relative h-full flex-col rounded-3xl shadow-2xl flex-grow pt-14 items-center bg-slate-50">
-          {id && (
+          {/*{dm[0] && (
             <div className="absolute top-[-4rem] left-1/2 transform -translate-x-1/2 rounded-3xl mx-auto w-[500px] z-10">
-              <DirectMessageRoomSign id={id.toString()} />
+              <DirectMessageRoomSign id={dm[0]?.receivedUser.nickName} />
             </div>
-          )}
+          )}*/}
           <div className="flex w-full mt-[2%] h-[80%] md:h-[800px] justify-between items-center px-14 z-10 overflow-y-auto">
             <div
               className="flex flex-col w-full h-full px-2 overflow-y-auto"

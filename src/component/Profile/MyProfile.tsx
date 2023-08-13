@@ -1,16 +1,37 @@
 import { ServiceTitle } from '../Main/ServiceTitle';
-import { friendListState, userInfo } from '../../atom/user';
+import { userInfo } from '../../atom/user';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { profileEditState } from '../../atom/profile';
 import { UserDto } from '../../interfaces/User.dto';
+import { useEffect, useState } from 'react';
+import axiosInstance from '../../api/axios';
 
-export const MyProfile = ({ nickName }: { nickName?: string }) => {
-  const userInfoObj = useRecoilValue(userInfo);
-  const data = useRecoilValue<UserDto[]>(friendListState).find(
-    (item) => ':' + item.nickName === nickName
-  );
+export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
+  const me = useRecoilValue(userInfo);
+  const [user, setUser] = useState<UserDto>({
+    id: 0,
+    level: 0,
+    nickName: '',
+    fullName: '',
+    email: '',
+    selfIntroduction: '',
+    status: '',
+    profile: '',
+  });
   const setProfileEdit = useSetRecoilState(profileEditState);
-  const user = nickName !== undefined ? data : userInfoObj;
+
+  useEffect(() => {
+    if (nickName === undefined) {
+      setUser(me);
+    } else {
+      fetchUser();
+    }
+  }, []);
+
+  const fetchUser = async () => {
+    const res = await axiosInstance.get(`/user/search?nickName=${nickName}`);
+    setUser(res.data[0]);
+  };
 
   return (
     <div className="flex flex-col h-full min-w-max">
@@ -21,14 +42,14 @@ export const MyProfile = ({ nickName }: { nickName?: string }) => {
         <div className="flex flex-row h-[25%] w-full items-center justify-center px-5 mt-3 bg-sky rounded-[3rem] shadow-lg">
           <div className="flex rounded-full border-borderBlue border-[6px] w-32 h-32 lg:w-40 lg:h-40">
             <img
-              src={user?.profile}
+              src={user.profile}
               alt="Profile"
               className="w-full h-full object-cover rounded-full"
             />
           </div>
           <div className="flex w-30 flex-grow flex-col h-full pl-2 justify-center ">
             <span className="w-full text-[2.8rem] font-bold text-center mb-3 text-gray-500">
-              {user?.nickName}
+              {user.nickName}
             </span>
           </div>
         </div>
@@ -38,10 +59,10 @@ export const MyProfile = ({ nickName }: { nickName?: string }) => {
               name
             </span>
             <span className="text-[1.8rem] font-semibold text-center text-gray-500">
-              {user?.fullName}
+              {user.fullName}
             </span>
             <span className="text-[1rem] text-center text-gray-500">
-              {user?.email}
+              {user.email}
             </span>
           </div>
           <div className="flex flex-col w-full h-32 flex-grow-0 items-start">
@@ -49,7 +70,7 @@ export const MyProfile = ({ nickName }: { nickName?: string }) => {
               intra level
             </span>
             <span className="text-[1.6rem] font-semibold text-center text-gray-500">
-              {user?.level}
+              {user.level}
             </span>
           </div>
           <div className="flex w-full h-32 flex-grow items-start flex-col">
@@ -57,7 +78,7 @@ export const MyProfile = ({ nickName }: { nickName?: string }) => {
               introduction
             </span>
             <span className="text-[1rem] font-semibold text-gray-500">
-              {user?.selfIntroduction}
+              {user.selfIntroduction}
             </span>
           </div>
           <div className="flex w-full h-28 py-3 flex-grow-0">

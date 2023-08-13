@@ -3,7 +3,6 @@ import { StatusIcon } from '../../FriendList/StatusIcon';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Friend } from '../../FriendList/Friend';
 import { useRecoilValue } from 'recoil';
-import { friendListState } from '../../../atom/user';
 import { ChatSocket } from '../../../sockets/ChatSocket';
 import { currentChatInfoState } from '../../../atom/chat';
 
@@ -31,14 +30,14 @@ export const UserSection = () => {
         </div>
         <div className="flex flex-col w-full h-full overflow-y-auto mt-3 mb-10">
           <span>owner</span>
-          currentChatInfo.owner && <Friend props={currentChatInfo.owner} />
+          {/*currentChatInfo.owner && <Friend props={currentChatInfo.owner} />
           {friendList.map((item) => (
             <Friend key={item.id} props={item} />
-          ))}
+          ))}*/}
         </div>
         <div className="relative">
           <img
-            src={require('../../public/quit.png')}
+            src={require('../../../public/quit.png')}
             className=" mx-auto float-right mb-12 mr-3 w-9 h-7"
             onClick={handleLeaveGroupChatRoom}
           ></img>

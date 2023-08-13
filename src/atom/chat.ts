@@ -49,7 +49,7 @@ export const currentChatInfoState = atom<ChatRoomInfoDTO>({
     password: '',
     owner: {
       id: 0,
-      nickname: '',
+      nickName: '',
       profile: '',
     },
     ownerId: 0,

@@ -84,6 +84,6 @@ interface MessageInfoDTO {
 
 interface senderDTO {
   id: number;
-  nickname: string;
+  nickName: string;
   profile: string;
 }

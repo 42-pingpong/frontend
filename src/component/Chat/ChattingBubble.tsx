@@ -22,7 +22,9 @@ export const ChattingBubble = ({ props }: { props: ResponseGroupChatDTO }) => {
 
   const onLeftClickHandler = () => {
     if (sender === 'me') navigate('/profile');
-    else navigate(`/profile/:${props.messageInfo.sender.nickname}`);
+    else {
+      navigate(`/profile/${props.messageInfo.sender.nickName}`);
+    }
   };
 
   const onRightClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {

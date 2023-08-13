@@ -6,7 +6,7 @@ export const loginState = atom<boolean>({
   default: false,
 });
 
-export const userInfo = atom({
+export const userInfo = atom<UserDto>({
   key: 'userInfo',
   default: {
     id: -1,
@@ -16,6 +16,7 @@ export const userInfo = atom({
     profile: '',
     selfIntroduction: '',
     level: 0,
+    status: '',
   },
 });
 
