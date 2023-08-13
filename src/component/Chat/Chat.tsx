@@ -11,6 +11,9 @@ export const Chat = () => {
   // 꼭 right click에서 롤 확인해라...
   useEffect(() => {
     ChatSocket.on('join-room', handleJoinChatRoom);
+    return () => {
+      ChatSocket.off('join-room', handleJoinChatRoom);
+    };
   }, []);
 
   const handleJoinChatRoom = (data: ChatRoomInfoDTO) => {
