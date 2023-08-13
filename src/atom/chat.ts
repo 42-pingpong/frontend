@@ -54,6 +54,6 @@ export const currentChatInfoState = atom<ChatRoomInfoDTO>({
     },
     ownerId: 0,
     admin: [],
-    joinedUsers: [],
+    joinedUser: [],
   },
 });

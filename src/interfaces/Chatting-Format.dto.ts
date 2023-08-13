@@ -22,7 +22,7 @@ export interface ChatRoomInfoDTO {
   owner: senderDTO;
   ownerId: number;
   admin: senderDTO[];
-  joinedUsers: senderDTO[];
+  joinedUser: senderDTO[];
 }
 
 export interface JoinGroupChatDTO {
