@@ -10,6 +10,7 @@ import {
 import { ChatSocket } from '../../../sockets/ChatSocket';
 import { ServiceTitle } from '../../Main/ServiceTitle';
 import { DirectMessageBubble } from './DirectMessageBubble';
+import { DirectMessageRoomSign } from './DirectMessageRoomSign';
 
 export const DirectMessage = () => {
   const [input, setInput] = useState('');
@@ -77,43 +78,50 @@ export const DirectMessage = () => {
   };
 
   return (
-    <div
-      id="dm-section"
-      className="flex flex-col h-full max-w-[1800px] py-20 px-40"
-    >
-      <div className="flex">
-        <ServiceTitle title="Direct Message" nonAddButton={true} />
-      </div>
-      <div className="flex relative h-[80vh] flex-col rounded-3xl shadow-2xl flex-grow pt-14 items-center">
-        <div className="flex w-full h-[85%] md:h-[800px] justify-between items-center px-14 z-10 overflow-y-auto">
-          <div
-            className="flex flex-col w-full h-full px-2 overflow-y-auto"
-            ref={scrollBottomRef}
-          >
-            {dm.map((item) => (
-              <DirectMessageBubble key={item.directMessageId} props={item} />
-            ))}
-          </div>
+    <div className="flex w-full h-full items-center justify-center">
+      <div
+        id="dm-section"
+        className="flex flex-col h-full w-[1800px] max-w-[1800px] py-20 px-40 mt-[3rem]"
+      >
+        <div className="flex">
+          <ServiceTitle title="Direct Message" nonAddButton={true} />
         </div>
-        <div className="flex flex-row justify-between w-full px-16 items-center mt-5 h-[6rem]">
-          <input
-            type="text"
-            className="text-xl px-5 bottom-10 rounded-[50px] shadow-md w-[90%] h-[3rem] bg-[#D9D9D9] justify-center outline-none"
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') handleSendDm();
-            }}
-            value={input}
-            autoFocus
-          ></input>
-          <div
-            className="right-5 bottom-10 shadow-md h-[3rem] w-[6%] bg-[#D9D9D9] rounded-3xl"
-            onClick={handleSendDm}
-          >
-            <img
-              src={require('../../../public/whitePlane.png')}
-              className=" mx-auto mt-2.5 w-7 h-7"
-            ></img>
+        <div className="flex relative h-full flex-col rounded-3xl shadow-2xl flex-grow pt-14 items-center">
+          {id && (
+            <div className="absolute top-[-3rem] left-1/2 transform -translate-x-1/2 rounded-3xl mx-auto w-[500px] z-10">
+              <DirectMessageRoomSign id={id} />
+            </div>
+          )}
+          <div className="flex w-full h-[85%] md:h-[800px] justify-between items-center px-14 z-10 overflow-y-auto">
+            <div
+              className="flex flex-col w-full h-full px-2 overflow-y-auto"
+              ref={scrollBottomRef}
+            >
+              {dm.map((item) => (
+                <DirectMessageBubble key={item.directMessageId} props={item} />
+              ))}
+            </div>
+          </div>
+          <div className="flex flex-row justify-between w-full px-16 items-center mt-5 h-[6rem]">
+            <input
+              type="text"
+              className="text-xl px-5 bottom-10 rounded-[50px] shadow-md w-[90%] h-[3rem] bg-[#D9D9D9] justify-center outline-none"
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleSendDm();
+              }}
+              value={input}
+              autoFocus
+            ></input>
+            <div
+              className="right-5 bottom-10 shadow-md h-[3rem] w-[6%] bg-[#D9D9D9] rounded-3xl"
+              onClick={handleSendDm}
+            >
+              <img
+                src={require('../../../public/whitePlane.png')}
+                className=" mx-auto mt-2.5 w-7 h-7"
+              ></img>
+            </div>
           </div>
         </div>
       </div>
