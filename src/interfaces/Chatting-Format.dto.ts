@@ -1,5 +1,36 @@
 import { UserDto } from './User.dto';
 
+/**
+ * ChatRoom
+ */
+export interface ChatRoomDTO {
+  chatName: string;
+  levelOfPublicity: string;
+  curParticipants: number;
+  maxParticipants: number;
+  groupChatId: number;
+  password?: string;
+}
+
+export interface ChatRoomInfoDTO {
+  chatName: string;
+  levelOfPublicity: string;
+  curParticipants: number;
+  maxParticipants: number;
+  groupChatId: number;
+  password?: string;
+  owner: senderDTO;
+  ownerId: number;
+  admin: senderDTO[];
+  joinedUsers: senderDTO[];
+}
+
+export interface JoinGroupChatDTO {
+  groupChatId: number;
+  userId: number;
+  password?: string;
+}
+
 /*
  * GroupChatting
  */
@@ -55,13 +86,4 @@ interface senderDTO {
   id: number;
   nickname: string;
   profile: string;
-}
-
-export interface ChatRoomDTO {
-  chatName: string;
-  levelOfPublicity: string;
-  curParticipants: number;
-  maxParticipants: number;
-  groupChatId: number;
-  password?: string;
 }

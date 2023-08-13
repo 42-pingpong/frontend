@@ -23,6 +23,12 @@ export const ChatSection = () => {
   const id = param === undefined ? 0 : parseInt(param, 10);
 
   useEffect(() => {
+    ChatSocket.on('join-room', (data) => {
+      console.log(data);
+    });
+    ChatSocket.on('error', (data) => {
+      console.log(data);
+    });
     ChatSocket.emit('fetch-group-message', requestFetchLog);
     ChatSocket.on('fetch-group-message', fetchMessageHandler);
     ChatSocket.on('group-message', sendMessageHandler);
