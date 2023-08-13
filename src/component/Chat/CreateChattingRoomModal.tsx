@@ -1,14 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { chattingModalState } from '../../atom/modal';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { CreateGroupchatDto } from '../../interfaces/Groupchat-Create.dto';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { ChatSocket } from '../../sockets/ChatSocket';
-import { friendListState, userInfo } from '../../atom/user';
+import { userInfo } from '../../atom/user';
 import axiosInstance from '../../api/axios';
 import { UserDto } from '../../interfaces/User.dto';
-import { SearchUserList } from '../FriendList/SearchUser';
-import { chatRoomState, currentRoomIdState } from '../../atom/chat';
-import { ChatDTO, ChatRoomDTO } from '../../interfaces/Chatting-Format.dto';
+import {
+  chatMemberListState,
+  chatRoomState,
+  createChatRoomState,
+} from '../../atom/chat';
+import { ChatRoomDTO } from '../../interfaces/Chatting-Format.dto';
+import { ChatSearchUserList } from './ChatSearchUser';
+import { ChatMembersModal } from './ChatMembersModal';
 
 const roomtypeList = ['Public', 'Protected', 'Private'];
 
@@ -17,51 +21,34 @@ export const CreateChattingRoomModal = () => {
   const user = useRecoilValue(userInfo);
   const [userList, setUserList] = useState<UserDto[]>([]);
   const memberRef = useRef('');
-  const friendList = useRecoilValue(friendListState);
-  const focusRef = useRef<any>(null);
   const [memberFocus, setMemberFocus] = useState(false);
-  const [chatRoomList, setChatRoomList] = useRecoilState(chatRoomState);
-  const [cuurentRoomId, setCurrentRoomId] = useRecoilState(currentRoomIdState);
-
-  const [formValue, setFormValue] = useState<CreateGroupchatDto>({
-    chatName: '',
-    levelOfPublicity: 'Pub',
-    maxParticipants: 0,
-    ownerId: user.id,
-  });
-
-  // 멤버 인풋창 포커스 벗어나면 닫히게
-  function handleFocus(e: any) {
-    if (focusRef.current && !focusRef.current.contains(e.target)) {
-      setMemberFocus(false);
-    }
-  }
+  const setChatRoomList = useSetRecoilState(chatRoomState);
+  const [formValue, setFormValue] = useRecoilState(createChatRoomState);
+  const [chatMembers, setChatMembers] = useRecoilState(chatMemberListState);
 
   useEffect(() => {
-    // 이벤트 리스너에 handleFocus 함수 등록
-    document.addEventListener('mousedown', handleFocus);
-
-    // 컴포넌트가 언마운트될 때 이벤트 리스너 해제
-    return () => {
-      document.removeEventListener('mousedown', handleFocus);
-    };
-  }, [focusRef]);
+    setFormValue({ ...formValue, ownerId: user.id });
+  }, []);
 
   const closeModal = (e: any) => {
     const modalContent = document.getElementById('chattingroom-content');
     const modalCloseButton = document.getElementById('modal-close-button');
+    const searchUserList = document.getElementById('search-user-list');
+    const memberList = document.getElementById('member-list');
 
     if (
-      modalContent &&
-      modalContent.contains(e.target) &&
+      ((modalContent && modalContent.contains(e.target)) ||
+        (searchUserList && searchUserList.contains(e.target)) ||
+        (memberList && memberList.contains(e.target))) &&
       e.target !== modalCloseButton
-    )
+    ) {
       e.stopPropagation();
-    else setChattingState(!chattingState);
+    } else setChattingState(!chattingState);
   };
 
   const isUserDuplicated = (user: UserDto) => {
-    return friendList.some((item) => item.id === user.id);
+    if (formValue.participants === undefined) return false;
+    return formValue.participants?.some((item) => item === user.id);
   };
 
   const handleRoomtype = (e: any) => {
@@ -71,12 +58,29 @@ export const CreateChattingRoomModal = () => {
     else if (e.target.id === 'Protected') roomtype = 'Prot';
     else roomtype = 'Priv';
     setFormValue((prev) => ({ ...prev, levelOfPublicity: roomtype }));
-    // setFormValue((prev) => ({ ...prev, levelOfPublicity: e.target.id }));
   };
 
   const handleOnChange = (e: any) => {
-    setFormValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    if (e.target.name === 'maxParticipants') {
+      if (e.target.value > 10) {
+        alert('최대 참여 인원은 10명입니다.');
+        return;
+      }
+      if (e.target.value < 1) {
+        alert('최소 참여 인원은 1명입니다.');
+        return;
+      }
+      setFormValue((prev) => ({
+        ...prev,
+        [e.target.name]: parseInt(e.target.value, 10),
+      }));
+    } else {
+      setFormValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    }
   };
+
+  const excludeMeFriendList = (data: any) =>
+    data.filter((item: UserDto) => item.id !== user.id);
 
   const userSearch = async () => {
     console.log(memberRef.current);
@@ -86,8 +90,11 @@ export const CreateChattingRoomModal = () => {
     );
 
     if (res.data !== undefined) {
-      const searchList = excludeMeFriendList(res.data);
-      if (searchList.length === 0) return;
+      const searchList: UserDto[] = excludeMeFriendList(res.data);
+      if (searchList.length === 0) {
+        setUserList([]);
+        return;
+      }
       setUserList(searchList);
     }
   };
@@ -96,14 +103,17 @@ export const CreateChattingRoomModal = () => {
     memberRef.current = e.target.value;
   };
 
-  const excludeMeFriendList = (data: any) =>
-    data.filter((item: UserDto) => item.id !== user.id);
-
   const handleSubmit = () => {
     console.log(formValue);
 
-    formValue.maxParticipants = Number(formValue.maxParticipants);
-
+    if (formValue.chatName === '') {
+      alert('채팅방 이름을 입력해주세요.');
+      return;
+    }
+    if (formValue.maxParticipants === 0) {
+      alert('최대 참여 인원을 입력해주세요.');
+      return;
+    }
     ChatSocket.emit('create-room', formValue, (res: ChatRoomDTO) => {
       setChatRoomList((prev) => [...prev, res]);
     });
@@ -157,21 +167,12 @@ export const CreateChattingRoomModal = () => {
               <input
                 name="maxParticipants"
                 type="number"
-                min="1"
-                max="1000"
+                min={2}
+                max={10}
+                placeholder="You can invite up to 10 people"
                 className="px-5 align-middle justify-center rounded-[50px] shadow-lg w-[100%] h-[3rem] font-light"
                 onChange={(e) => handleOnChange(e)}
-              ></input>
-              {/* 이거 위치 */}
-              {formValue.levelOfPublicity === 'Pub' ? (
-                <p className=" text-[#5D777B] text-2xl absolute right-[15%] bottom-[75px] font-light">
-                  / 1000
-                </p>
-              ) : (
-                <p className=" text-[#5D777B] text-2xl absolute right-[15%] bottom-6 font-light">
-                  / 1000
-                </p>
-              )}
+              />
             </div>
           ) : (
             <></>
@@ -180,7 +181,6 @@ export const CreateChattingRoomModal = () => {
             <div className="px-[8%] text-[#5D777B] text-2xl relative ">
               <h1 className="pb-3 font-light tracking-tight"> Member</h1>
               <input
-                ref={focusRef}
                 id="member"
                 name="member"
                 type="text"
@@ -197,25 +197,6 @@ export const CreateChattingRoomModal = () => {
                   }
                 }}
               ></input>
-              {userList?.length != 0 && memberFocus && (
-                <div
-                  id="search-user-list"
-                  ref={focusRef}
-                  className="flex flex-col w-[22vw] h-[45vh] shadow-xl px-12 py-16 bg-[#F8F8F8] rounded-[30px] mx-auto items-center justify-center relative z-10 mt-8"
-                >
-                  <div className="overflow-y-auto w-full h-full inset-0 px-4">
-                    {/* 일단 친구목록 뜨게 해뒀는데 (전체유저 검색..? 얘기 나눴던 것 같은데 가물) 
-                    여기서 플러스버튼 누르면 members 배열에 추가되는 식으로 해서 전달해야 할 것 같아여 */}
-                    {userList.map((item) => (
-                      <SearchUserList
-                        key={item.id}
-                        props={item}
-                        isDuplicated={isUserDuplicated(item)}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           ) : (
             <></>
@@ -256,6 +237,40 @@ export const CreateChattingRoomModal = () => {
           X
         </button>
       </div>
+      {userList?.length != 0 && memberFocus && (
+        <div
+          id="search-user-list"
+          className="flex absolute flex-col top-[46vh] left-[68vw] w-[17vw] h-[30vh] shadow-xl px-12 pb-10 pt-5 bg-[#F8F8F8] rounded-[30px] mx-auto items-center justify-center  z-10"
+        >
+          <span className="flex justify-center w-full items-center font-bold text-3xl text-borderBlue">
+            search members
+          </span>
+          <div className="overflow-y-auto w-full h-full inset-0 px-4">
+            {userList.map((item) => (
+              <ChatSearchUserList
+                key={item.id}
+                props={item}
+                isDuplicated={isUserDuplicated(item)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+      {chatMembers.length != 0 && memberFocus && (
+        <div
+          id="member-list"
+          className="flex absolute flex-col top-[11vh] left-[68vw] w-[17vw] h-[30vh] shadow-xl px-12 pb-10 pt-5 bg-[#F8F8F8] rounded-[30px] mx-auto items-center justify-center z-10"
+        >
+          <span className="flex justify-center w-full items-center font-bold text-3xl text-borderBlue">
+            invited members
+          </span>
+          <div className="overflow-y-auto w-full h-full inset-0 px-4">
+            {chatMembers.map((item) => (
+              <ChatMembersModal key={item.id} props={item} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
