@@ -31,6 +31,7 @@ export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
   };
 
   const handleJoinChatRoomError = (data: any) => {
+    console.log(data);
     alert('비밀번호가 틀렸습니다.');
     inputPasswordRef.current = '';
   };

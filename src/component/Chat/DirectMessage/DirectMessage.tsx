@@ -38,14 +38,12 @@ export const DirectMessage = () => {
   }, [dm]);
 
   const handelDmResponse = (data: ResponseDirectMessageDTO) => {
-    console.log(data);
     setDm((prev) => [...prev, data]);
   };
 
   const fetchMessageHandler = (
     data: ResponseDirectMessageDTO | ResponseDirectMessageDTO[]
   ) => {
-    console.log(data);
     setDm((prev) =>
       Array.isArray(data) ? [...prev, ...data] : [...prev, data]
     );
@@ -66,7 +64,6 @@ export const DirectMessage = () => {
       message: input,
     };
 
-    console.log(newDm);
     ChatSocket.emit('direct-message', newDm);
     setInput('');
   };

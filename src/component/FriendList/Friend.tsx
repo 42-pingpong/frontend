@@ -5,8 +5,9 @@ import {
   clickedYState,
   friendProfileModalState,
 } from '../../atom/modal';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
+import { userInfo } from '../../atom/user';
 
 export const Friend = ({ props }: { props: UserDto }) => {
   const setX = useSetRecoilState(clickedXState);
@@ -14,9 +15,11 @@ export const Friend = ({ props }: { props: UserDto }) => {
   const setClicked = useSetRecoilState(friendProfileModalState);
   const setFriendProfile = useSetRecoilState(clickedFriendProfileState);
   const navigation = useNavigate();
+  const user = useRecoilValue(userInfo);
 
   const handleDirectMessage = () => {
     //socket emit
+    if (props.id === user.id) return;
     navigation(`/direct-message/${props.id}`);
   };
 
