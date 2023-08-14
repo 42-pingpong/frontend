@@ -1,8 +1,5 @@
 import { useRecoilState } from 'recoil';
-import {
-  chattingProfileOnRightClickModalState,
-  friendProfileModalState,
-} from '../../../atom/modal';
+import { chattingProfileOnRightClickModalState } from '../../../atom/modal';
 import { UserDto } from '../../../interfaces/User.dto';
 import { useNavigate } from 'react-router-dom';
 import { FuncButton } from './FuncButton';

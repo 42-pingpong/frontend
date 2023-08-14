@@ -24,6 +24,7 @@ export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
   }, []);
 
   const handleJoinChatRoom = (data: ChatRoomInfoDTO) => {
+    // 얘도 고쳐라
     setCurRoomInfo(data);
     setPassword(false);
     navigation(`/chat/${data.groupChatId}`);
