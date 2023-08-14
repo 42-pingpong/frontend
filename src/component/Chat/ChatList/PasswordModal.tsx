@@ -19,19 +19,18 @@ export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
   const [curRoomInfo, setCurRoomInfo] = useRecoilState(currentChatInfoState);
 
   useEffect(() => {
+    console.log('password modal');
     ChatSocket.on('join-room', handleJoinChatRoom);
     ChatSocket.on('error', handleJoinChatRoomError);
   }, []);
 
   const handleJoinChatRoom = (data: ChatRoomInfoDTO) => {
-    // 얘도 고쳐라
     setCurRoomInfo(data);
     setPassword(false);
     navigation(`/chat/${data.groupChatId}`);
   };
 
   const handleJoinChatRoomError = (data: any) => {
-    console.log(data);
     alert('비밀번호가 틀렸습니다.');
     inputPasswordRef.current = '';
   };
@@ -60,7 +59,6 @@ export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
       userId: user.id,
       password: inputPasswordRef.current,
     };
-    console.log(requestJoinChatRoom);
     ChatSocket.emit('join-room', requestJoinChatRoom);
   };
 
