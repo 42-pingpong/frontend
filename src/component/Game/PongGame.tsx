@@ -19,7 +19,8 @@ import {
   roomIdState,
   newMatching,
   playerNumberState,
-  gameEndState,
+  resetState,
+  joinState,
 } from '../../atom/game';
 import { GameSocket } from '../../sockets/GameSocket';
 import { userInfo } from '../../atom/user';
@@ -59,9 +60,15 @@ export const PongGame = ({ props }: { props: number }) => {
   const user = useRecoilValue(userInfo);
   const roomId = useRecoilValue(roomIdState);
 
-  const [gameEnd, setGameEnd] = useRecoilState(gameEndState);
+  const [reset, setReset] = useRecoilState(resetState);
+  const [join, setJoin] = useRecoilState(joinState);
+  const [isLeft, setIsLeft] = useState(false);
+
+  console.log('ready strat end reset', ready, start, end, reset);
 
   useEffect(() => {
+    setJoin(true);
+
     GameSocket.on('ready', (start: boolean) => {
       setReady(start);
     });
@@ -94,6 +101,27 @@ export const PongGame = ({ props }: { props: number }) => {
       setDisplayY(() => y);
     });
 
+    // 남아있는 사람만 여기 들어와짐
+    // 동점일 때 나가면 누가 이겼는지 알 수 없어서 나간 사람이 졌다고 하려면 뭔가 수작이 필요
+    // 나가면 스코어 emit이 안 되는데 그렇게 되면 roomId에 한 게임 담겨있는 건 unkwown 한테 이겼음 같은 느낌으로 ,,,
+    // 하면 ?? 나간 사람한테는 졌다고 기록 안 돼서 생각이 필요할 듯
+    GameSocket.on('end-room-out', (winner: boolean) => {
+      setEnd(true);
+      setStart(false);
+      setIsLeft(true);
+      // props === 1
+      //   ? GameSocket.emit('end', {
+      //       userId: user.id,
+      //       gameId: roomId,
+      //       score: player1Score,
+      //     })
+      //   : GameSocket.emit('end', {
+      //       userId: user.id,
+      //       gameId: roomId,
+      //       score: player2Score,
+      //     });
+    });
+
     return () => {
       GameSocket.off('ready');
       GameSocket.off('start');
@@ -101,9 +129,9 @@ export const PongGame = ({ props }: { props: number }) => {
       GameSocket.off('ballX');
       GameSocket.off('ballY');
       GameSocket.off('score');
-      console.log('game end', gameEnd);
-      setGameEnd(!gameEnd);
-      // GameSocket.emit('room-out');
+      GameSocket.off('end-room-out');
+
+      setReset(!reset);
     };
   }, []);
 
@@ -179,7 +207,6 @@ export const PongGame = ({ props }: { props: number }) => {
   }, [start]);
 
   useEffect(() => {
-    console.log(props, ballX, ballY);
     if (props === 1) {
       setBallX((prevX) => prevX + ballSpeedX);
       setBallY((prevY) => prevY + ballSpeedY);
@@ -237,12 +264,13 @@ export const PongGame = ({ props }: { props: number }) => {
   };
 
   const End = () => {
+    console.log(isLeft === true);
     const winner = player2Score > player1Score ? player2Name : player1Name;
 
     return (
       <div className="justify-center flex mt-[300px]">
         <span className="text-gray-500 text-bold text-[100px]">
-          {winner} win !!
+          {isLeft === true ? user.nickName : winner} win !!
         </span>
       </div>
     );

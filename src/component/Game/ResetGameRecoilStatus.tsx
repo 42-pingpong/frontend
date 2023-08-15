@@ -1,4 +1,4 @@
-import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import {
   ballSpeedXState,
   ballSpeedYState,
@@ -7,7 +7,8 @@ import {
   displayXState,
   displayYState,
   endState,
-  gameEndState,
+  resetState,
+  joinState,
   newMatching,
   player1NameState,
   player1PaddleState,
@@ -21,13 +22,15 @@ import {
   startState,
 } from '../../atom/game';
 import { useEffect } from 'react';
+import { GameSocket } from '../../sockets/GameSocket';
+import { userInfo } from '../../atom/user';
 
 export const ResetGameRecoilStatus = () => {
   const func1 = useResetRecoilState(newMatching);
   const func2 = useResetRecoilState(ballXState);
   const func3 = useResetRecoilState(ballYState);
-  const func4 = useResetRecoilState(ballSpeedXState);
-  const func5 = useResetRecoilState(ballSpeedYState);
+  // const func4 = useResetRecoilState(ballSpeedXState);
+  // const func5 = useResetRecoilState(ballSpeedYState);
   const func6 = useResetRecoilState(player1ScoreState);
   const func7 = useResetRecoilState(player2ScoreState);
   const func8 = useResetRecoilState(player1PaddleState);
@@ -41,19 +44,50 @@ export const ResetGameRecoilStatus = () => {
   const func19 = useResetRecoilState(roomIdState);
   const func20 = useResetRecoilState(player1NameState);
   const func21 = useResetRecoilState(player2NameState);
-  const func22 = useResetRecoilState(gameEndState);
+  const func22 = useResetRecoilState(resetState);
+  const func23 = useResetRecoilState(joinState);
 
-  const start = useRecoilValue(startState);
   const end = useRecoilValue(endState);
-  const ready = useRecoilValue(readyState);
-  const gameEnd = useRecoilValue(gameEndState);
+  const [reset, setReset] = useRecoilState(resetState);
+  const join = useRecoilValue(joinState);
+
+  const user = useRecoilValue(userInfo);
+  const roomId = useRecoilValue(roomIdState);
+  const player1Score = useRecoilValue(player1ScoreState);
+  const player2Score = useRecoilValue(player2ScoreState);
+  const playerNumber = useRecoilValue(playerNumberState);
+
+  useEffect(() => {
+    // 방에 들어갔었는데 끝을 안 보고 나옴
+    // 1. 레디도안함
+    // 2. 레디는 함
+    // 3. 게임 시작함
+
+    if (join === true && end === false) {
+      console.log('reset');
+      GameSocket.emit('room-out', () => {
+        setReset(!reset);
+      });
+      playerNumber === 1
+        ? GameSocket.emit('end', {
+            userId: user.id,
+            gameId: roomId,
+            score: -42,
+          })
+        : GameSocket.emit('end', {
+            userId: user.id,
+            gameId: roomId,
+            score: -42,
+          });
+    }
+  }, []);
 
   useEffect(() => {
     func1();
     func2();
     func3();
-    func4();
-    func5();
+    // func4();
+    // func5();
     func6();
     func7();
     func8();
@@ -68,13 +102,8 @@ export const ResetGameRecoilStatus = () => {
     func20();
     func21();
     func22();
-    console.log('reset recoil status');
-    console.log('start', start);
-    console.log('end', end);
-    console.log('ready', ready);
-  }, [gameEnd]);
-
-  console.log('gameEnd', gameEnd);
+    func23();
+  }, [reset]);
 
   return null;
 };

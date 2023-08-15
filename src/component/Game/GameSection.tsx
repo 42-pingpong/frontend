@@ -10,7 +10,7 @@ import {
   displayXState,
   displayYState,
   endState,
-  gameEndState,
+  resetState,
   newMatching,
   player1NameState,
   player1PaddleState,
@@ -27,7 +27,7 @@ import { useEffect } from 'react';
 import { ResetGameRecoilStatus } from './ResetGameRecoilStatus';
 
 export const GameSection = () => {
-  const gameEnd = useRecoilValue(gameEndState);
+  const reset = useRecoilValue(resetState);
   const playerNum = useRecoilValue(playerNumberState);
 
   return (
@@ -46,7 +46,7 @@ export const GameSection = () => {
           <PongGame props={playerNum} />
         </div>
       </div>
-      {/* {gameEnd && <ResetGameRecoilStatus />} */}
+      {/* {reset && <ResetGameRecoilStatus />} */}
     </div>
   );
 };

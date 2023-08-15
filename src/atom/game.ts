@@ -7,12 +7,12 @@ export const newMatching = atom({
 
 export const ballXState = atom({
   key: 'ballX',
-  default: 400, // Initial ball X position
+  default: 700, // Initial ball X position
 });
 
 export const ballYState = atom({
   key: 'ballY',
-  default: 200, // Initial ball Y position
+  default: 400, // Initial ball Y position
 });
 
 export const ballSpeedXState = atom({
@@ -90,7 +90,12 @@ export const roomIdState = atom({
   default: 0,
 });
 
-export const gameEndState = atom({
-  key: 'gameEnd',
+export const resetState = atom({
+  key: 'reset',
+  default: false,
+});
+
+export const joinState = atom({
+  key: 'join',
   default: false,
 });
