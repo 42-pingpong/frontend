@@ -89,3 +89,8 @@ export const roomIdState = atom({
   key: 'roomId',
   default: 0,
 });
+
+export const gameEndState = atom({
+  key: 'gameEnd',
+  default: false,
+});

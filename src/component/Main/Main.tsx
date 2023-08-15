@@ -20,6 +20,8 @@ import { FriendList } from '../FriendList/FriendList';
 import { FriendProfileModal } from '../FriendList/FriendProfileModal';
 import { NotificationModal } from '../Header/NotificationModal';
 import { PasswordModal } from '../Chat/ChatList/PasswordModal';
+import { endState, gameEndState } from '../../atom/game';
+import { ResetGameRecoilStatus } from '../Game/ResetGameRecoilStatus';
 
 export const Main = () => {
   const isProfileModalOpen = useRecoilValue(profileModalState);
@@ -32,6 +34,7 @@ export const Main = () => {
   const clickedY = useRecoilValue(clickedYState);
   const clickedFriendProfile = useRecoilValue(clickedFriendProfileState);
   const clickedRoomId = useRecoilValue(clickedRoomIdState);
+  const gameEnd = useRecoilValue(gameEndState);
 
   return (
     <div className="flex p-32 items-center justify-center h-screen">
@@ -58,6 +61,7 @@ export const Main = () => {
         />
       )}
       {isPasswordModalOpen && <PasswordModal groupChatId={clickedRoomId} />}
+      {gameEnd && <ResetGameRecoilStatus />}
     </div>
   );
 };

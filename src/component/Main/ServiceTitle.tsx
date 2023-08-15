@@ -25,7 +25,6 @@ export const ServiceTitle = (props: ServiceTitleProps) => {
     setRoomId(roomName);
     setMatching(false);
     navigation(`/game/${roomName}`);
-    ResetGameRecoilStatus();
   };
 
   useEffect(() => {

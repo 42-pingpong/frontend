@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import {
   ballXState,
   ballYState,
@@ -17,6 +17,9 @@ import {
   displayYState,
   readyState,
   roomIdState,
+  newMatching,
+  playerNumberState,
+  gameEndState,
 } from '../../atom/game';
 import { GameSocket } from '../../sockets/GameSocket';
 import { userInfo } from '../../atom/user';
@@ -55,6 +58,8 @@ export const PongGame = ({ props }: { props: number }) => {
 
   const user = useRecoilValue(userInfo);
   const roomId = useRecoilValue(roomIdState);
+
+  const [gameEnd, setGameEnd] = useRecoilState(gameEndState);
 
   useEffect(() => {
     GameSocket.on('ready', (start: boolean) => {
@@ -96,6 +101,8 @@ export const PongGame = ({ props }: { props: number }) => {
       GameSocket.off('ballX');
       GameSocket.off('ballY');
       GameSocket.off('score');
+      console.log('game end', gameEnd);
+      setGameEnd(!gameEnd);
       // GameSocket.emit('room-out');
     };
   }, []);

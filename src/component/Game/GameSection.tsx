@@ -1,19 +1,37 @@
-import React, { useState, useEffect } from 'react';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { Matchpoint } from './Matchpoint';
 import { PongGame } from './PongGame';
-import { useRecoilValue } from 'recoil';
-import { endState, playerNumberState, roomIdState } from '../../atom/game';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
+import {
+  ballSpeedXState,
+  ballSpeedYState,
+  ballXState,
+  ballYState,
+  displayXState,
+  displayYState,
+  endState,
+  gameEndState,
+  newMatching,
+  player1NameState,
+  player1PaddleState,
+  player1ScoreState,
+  player2NameState,
+  player2PaddleState,
+  player2ScoreState,
+  playerNumberState,
+  readyState,
+  roomIdState,
+  startState,
+} from '../../atom/game';
+import { useEffect } from 'react';
 import { ResetGameRecoilStatus } from './ResetGameRecoilStatus';
 
 export const GameSection = () => {
-  const end = useRecoilValue(endState);
-
+  const gameEnd = useRecoilValue(gameEndState);
   const playerNum = useRecoilValue(playerNumberState);
 
   return (
     <div id="game-section" className="flex flex-col h-full">
-      {/* <ResetGameRecoilStatus />; */}
       <div className="flex">
         <ServiceTitle title="Pong" nonAddButton={true} />
       </div>
@@ -28,6 +46,7 @@ export const GameSection = () => {
           <PongGame props={playerNum} />
         </div>
       </div>
+      {/* {gameEnd && <ResetGameRecoilStatus />} */}
     </div>
   );
 };

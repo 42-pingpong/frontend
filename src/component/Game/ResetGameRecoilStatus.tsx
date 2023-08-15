@@ -7,6 +7,7 @@ import {
   displayXState,
   displayYState,
   endState,
+  gameEndState,
   newMatching,
   player1NameState,
   player1PaddleState,
@@ -14,10 +15,12 @@ import {
   player2NameState,
   player2PaddleState,
   player2ScoreState,
+  playerNumberState,
   readyState,
   roomIdState,
   startState,
 } from '../../atom/game';
+import { useEffect } from 'react';
 
 export const ResetGameRecoilStatus = () => {
   const func1 = useResetRecoilState(newMatching);
@@ -34,21 +37,44 @@ export const ResetGameRecoilStatus = () => {
   const func15 = useResetRecoilState(displayXState);
   const func16 = useResetRecoilState(displayYState);
   const func17 = useResetRecoilState(readyState);
+  const func18 = useResetRecoilState(playerNumberState);
+  const func19 = useResetRecoilState(roomIdState);
+  const func20 = useResetRecoilState(player1NameState);
+  const func21 = useResetRecoilState(player2NameState);
+  const func22 = useResetRecoilState(gameEndState);
 
-  func1();
-  func2();
-  func3();
-  func4();
-  func5();
-  func6();
-  func7();
-  func8();
-  func9();
-  func10();
-  func11();
-  func15();
-  func16();
-  func17();
+  const start = useRecoilValue(startState);
+  const end = useRecoilValue(endState);
+  const ready = useRecoilValue(readyState);
+  const gameEnd = useRecoilValue(gameEndState);
+
+  useEffect(() => {
+    func1();
+    func2();
+    func3();
+    func4();
+    func5();
+    func6();
+    func7();
+    func8();
+    func9();
+    func10();
+    func11();
+    func15();
+    func16();
+    func17();
+    func18();
+    func19();
+    func20();
+    func21();
+    func22();
+    console.log('reset recoil status');
+    console.log('start', start);
+    console.log('end', end);
+    console.log('ready', ready);
+  }, [gameEnd]);
+
+  console.log('gameEnd', gameEnd);
 
   return null;
 };
