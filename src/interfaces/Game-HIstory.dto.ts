@@ -10,5 +10,5 @@ export interface GameHistoryDto {
   gameId: number;
   createDate: string;
   gameMap: string;
-  gameScore: GameInfo[];
+  gameScores: GameInfo[];
 }

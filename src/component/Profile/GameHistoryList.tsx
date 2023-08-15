@@ -5,12 +5,8 @@ import { useRecoilValue } from 'recoil';
 
 export const GameHistoryList = ({ props }: { props: GameHistoryDto }) => {
   const user = useRecoilValue(userInfo);
-  const myInfo = props.gameScore.find((item) => item.user.id === user.id);
-  const otherInfo = props.gameScore.find((item) => item.user.id !== user.id);
-
-  console.log(props);
-  console.log('myinfo', myInfo);
-  console.log('otherinfo', otherInfo);
+  const myInfo = props.gameScores.find((item) => item.user.id === user.id);
+  const otherInfo = props.gameScores.find((item) => item.user.id !== user.id);
 
   if (!myInfo || !otherInfo) {
     throw new Error('myInfo or otherInfo is undefined');
