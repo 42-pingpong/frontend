@@ -5,43 +5,43 @@ export const newMatching = atom({
   default: false,
 });
 
-export const ballX = atom({
+export const ballXState = atom({
   key: 'ballX',
-  default: 400, // Initial ball X position
+  default: 700, // Initial ball X position
 });
 
-export const ballY = atom({
+export const ballYState = atom({
   key: 'ballY',
-  default: 200, // Initial ball Y position
+  default: 400, // Initial ball Y position
 });
 
-export const ballSpeedX = atom({
+export const ballSpeedXState = atom({
   key: 'ballSpeedX',
-  default: 4, // Initial ball speed in the X direction
+  default: 8, // Initial ball speed in the X direction
 });
 
-export const ballSpeedY = atom({
+export const ballSpeedYState = atom({
   key: 'ballSpeedY',
-  default: 4, // Initial ball speed in the Y direction
+  default: 8, // Initial ball speed in the Y direction
 });
 
-export const myScore = atom({
-  key: 'myScore',
+export const player1ScoreState = atom({
+  key: 'player1Score',
   default: 0,
 });
 
-export const otherScore = atom({
-  key: 'otherScore',
+export const player2ScoreState = atom({
+  key: 'player2Score',
   default: 0,
 });
 
-export const myPaddle = atom({
-  key: 'myPaddle',
+export const player1PaddleState = atom({
+  key: 'player1Paddle',
   default: 295,
 });
 
-export const otherPaddle = atom({
-  key: 'otherPaddle',
+export const player2PaddleState = atom({
+  key: 'player2Paddle',
   default: 295,
 });
 
@@ -50,12 +50,12 @@ export const startState = atom({
   default: false,
 });
 
-export const end = atom({
+export const endState = atom({
   key: 'end',
   default: false,
 });
 
-export const playerNumber = atom({
+export const playerNumberState = atom({
   key: 'playerNumber',
   default: 0,
 });
@@ -68,4 +68,34 @@ export const player1NameState = atom({
 export const player2NameState = atom({
   key: 'player2Name',
   default: '',
+});
+
+export const displayXState = atom({
+  key: 'displayX',
+  default: 700,
+});
+
+export const displayYState = atom({
+  key: 'displayY',
+  default: 400,
+});
+
+export const readyState = atom({
+  key: 'ready',
+  default: false,
+});
+
+export const roomIdState = atom({
+  key: 'roomId',
+  default: 0,
+});
+
+export const resetState = atom({
+  key: 'reset',
+  default: false,
+});
+
+export const joinState = atom({
+  key: 'join',
+  default: false,
 });

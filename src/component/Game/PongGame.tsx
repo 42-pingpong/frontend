@@ -1,20 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import React, { useState, useEffect } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
-  ballX,
-  ballY,
-  ballSpeedX,
-  ballSpeedY,
-  otherScore,
-  myScore,
-  myPaddle,
-  otherPaddle,
-  end,
+  ballXState,
+  ballYState,
+  ballSpeedXState,
+  ballSpeedYState,
+  player1ScoreState,
+  player2ScoreState,
+  player2PaddleState,
+  player1PaddleState,
+  endState,
   player1NameState,
   player2NameState,
   startState,
+  displayXState,
+  displayYState,
+  readyState,
+  roomIdState,
+  resetState,
+  joinState,
 } from '../../atom/game';
 import { GameSocket } from '../../sockets/GameSocket';
+import { userInfo } from '../../atom/user';
 
 export const PongGame = ({ props }: { props: number }) => {
   const paddleHeight = 120;
@@ -23,160 +30,149 @@ export const PongGame = ({ props }: { props: number }) => {
 
   const containerWidth = 1400;
   const containerHeight = 830;
+  const WINSCORE = 0;
 
-  const [player2PaddleState, setPlayer2PaddleState] = useRecoilState(myPaddle);
-  const [player1PaddleState, setPlayer1PaddleState] =
-    useRecoilState(otherPaddle);
+  const [player1Paddle, setPlayer1Paddle] = useRecoilState(player1PaddleState);
+  const [player2Paddle, setPlayer2Paddle] = useRecoilState(player2PaddleState);
 
-  //   루프는 걍 돌리는 애만 해도 될 것 같아서 걍 state 썼어염
   const [loop, setLoop] = useState(false);
 
-  const [ballXState, setBallXState] = useRecoilState(ballX);
-  // const [ballXState, setBallXState] = useRecoilState(ballX);
-  const [ballYState, setBallYState] = useRecoilState(ballY);
-  const [ballSpeedXState, setBallSpeedXState] = useRecoilState(ballSpeedX);
-  const [ballSpeedYState, setBallSpeedYState] = useRecoilState(ballSpeedY);
+  const [ballX, setBallX] = useRecoilState(ballXState);
+  const [ballY, setBallY] = useRecoilState(ballYState);
+  const [ballSpeedX, setBallSpeedX] = useRecoilState(ballSpeedXState);
+  const [ballSpeedY, setBallSpeedY] = useRecoilState(ballSpeedYState);
 
-  const [player2ScoreState, setMyScoreState] = useRecoilState(myScore);
-  const [player1ScoreState, setOtherScoreState] = useRecoilState(otherScore);
+  const player1Score = useRecoilValue(player1ScoreState);
+  const player2Score = useRecoilValue(player2ScoreState);
 
   const [start, setStart] = useRecoilState(startState);
-  const [endState, setEndState] = useRecoilState(end);
+  const [end, setEnd] = useRecoilState(endState);
 
   const player1Name = useRecoilValue(player1NameState);
   const player2Name = useRecoilValue(player2NameState);
 
+  const [displayX, setDisplayX] = useRecoilState(displayXState);
+  const [displayY, setDisplayY] = useRecoilState(displayYState);
+  const [ready, setReady] = useRecoilState(readyState);
+
+  const user = useRecoilValue(userInfo);
+  const roomId = useRecoilValue(roomIdState);
+
+  const [reset, setReset] = useRecoilState(resetState);
+  const setJoin = useSetRecoilState(joinState);
+  const [isLeft, setIsLeft] = useState(false);
+
   useEffect(() => {
+    setJoin(true);
+
     GameSocket.on('ready', (start: boolean) => {
+      setReady(start);
+    });
+
+    GameSocket.on('start', (start: boolean) => {
       setStart(start);
     });
 
     GameSocket.on('move', (e: string) => {
-      console.log('front', e);
-
       if (e === 'w') {
-        setPlayer1PaddleState((prev) => Math.max(prev - 30, 0));
+        setPlayer1Paddle((prev) => Math.max(prev - 30, 0));
       } else if (e === 's') {
-        setPlayer1PaddleState((prev) => Math.max(prev + 30, 0));
+        setPlayer1Paddle((prev) =>
+          Math.min(prev + 30, containerHeight - paddleHeight)
+        );
       } else if (e === 'ArrowUp') {
-        setPlayer2PaddleState((prevY) => Math.max(prevY - 30, 0));
+        setPlayer2Paddle((prev) => Math.max(prev - 30, 0));
       } else if (e === 'ArrowDown') {
-        setPlayer2PaddleState((prevY) => Math.max(prevY + 30, 0));
+        setPlayer2Paddle((prev) =>
+          Math.min(prev + 30, containerHeight - paddleHeight)
+        );
       }
     });
 
-    GameSocket.on('ballX', (x: number[]) => {
-      console.log('emit ballX ', x[0], x[1]);
-      console.log('on ballX ', x);
-      if (x[1] === undefined) {
-        setBallXState(x[0]);
-      } else setBallXState((prev) => prev + x[1]);
-
-      // setBallXState(x);
+    GameSocket.on('ballX', (x: number) => {
+      setDisplayX(() => x);
     });
-    GameSocket.on('ballY', (y: number[]) => {
-      console.log('emit ballY ', y, y[1]);
-      if (y[1] === undefined) {
-        setBallYState(y[0]);
-      } else setBallYState((prev) => prev + y[1]);
+
+    GameSocket.on('ballY', (y: number) => {
+      setDisplayY(() => y);
     });
-    // GameSocket.on('w-move', () => {
-    //   setPlayer1PaddleState((prevY) => Math.max(prevY - 30, 0));
-    // });
 
-    // GameSocket.on('s-move', () => {
-    //   setPlayer1PaddleState((prevY) => Math.max(prevY + 30, 0));
-    // });
-
-    // GameSocket.on('up-move', () => {
-    //   setPlayer2PaddleState((prevY) =>
-    //     Math.min(prevY - 30, containerHeight - paddleHeight)
-    //   );
-    // });
-
-    // GameSocket.on('down-move', () => {
-    //   setPlayer2PaddleState((prevY) =>
-    //     Math.min(prevY + 30, containerHeight - paddleHeight)
-    //   );
-    // });
+    GameSocket.on('end-room-out', (winner: boolean) => {
+      setEnd(true);
+      setStart(false);
+      setIsLeft(true);
+    });
 
     return () => {
+      GameSocket.off('ready');
       GameSocket.off('start');
-      // GameSocket.off('play');
-      // GameSocket.off('w-move');
-      // GameSocket.off('s-move');
-      // GameSocket.off('up-move');
-      // GameSocket.off('down-move');
       GameSocket.off('move');
-      GameSocket.off('ballX-set');
-      GameSocket.off('ballY-set');
+      GameSocket.off('ballX');
+      GameSocket.off('ballY');
+      GameSocket.off('score');
+      GameSocket.off('end-room-out');
+      setReset(!reset);
     };
   }, []);
 
-  /** 키 이벤트 (테스트 하려고 ws 키 넣었는데 게임 연결하면 paddle2(위아래 화살표) 만 해도 될 것 같음) */
   const handleKeyDown = (e: KeyboardEvent) => {
     e.preventDefault();
     if (props === 1) {
       if (e.key === 'w') {
         GameSocket.emit('move', 'w');
-        // setPlayer2PaddleState((prevY) => Math.max(prevY - 30, 0));
       } else if (e.key === 's') {
         GameSocket.emit('move', 's');
-        // setPlayer2PaddleState((prevY) =>
-        //   Math.min(prevY + 30, containerHeight - paddleHeight)
-        // );
       }
     } else {
       if (e.key === 'ArrowUp') {
         GameSocket.emit('move', 'ArrowUp');
-        // setPlayer1PaddleState((prevY) => Math.max(prevY - 30, 0));
       } else if (e.key === 'ArrowDown') {
         GameSocket.emit('move', 'ArrowDown');
-        // setPlayer1PaddleState((prevY) =>
-        //   Math.min(prevY + 30, containerHeight - paddleHeight)
-        // );
       }
     }
   };
 
   const handleBallCollisions = () => {
+    if (props === 2) return;
     if (
-      ballXState <= paddleWidth &&
-      ballYState + ballSize >= player2PaddleState &&
-      ballYState <= player2PaddleState + paddleHeight
+      ballX <= paddleWidth &&
+      ballY + ballSize >= player1Paddle &&
+      ballY <= player1Paddle + paddleHeight
     ) {
-      setBallSpeedXState((prevSpeedX) => -prevSpeedX);
+      setBallSpeedX((prevSpeedX) => -prevSpeedX);
     } else if (
-      ballXState + ballSize >= containerWidth - paddleWidth &&
-      ballYState + ballSize >= player1PaddleState &&
-      ballYState <= player1PaddleState + paddleHeight
+      ballX + ballSize >= containerWidth - paddleWidth &&
+      ballY + ballSize >= player2Paddle &&
+      ballY <= player2Paddle + paddleHeight
     ) {
-      setBallSpeedXState((prevSpeedX) => -prevSpeedX);
+      setBallSpeedX((prevSpeedX) => -prevSpeedX);
     }
   };
 
   const handleBallOutOfBound = () => {
-    if (ballXState <= 0 || ballXState >= containerWidth - ballSize) {
+    if (props === 2) return;
+    if (ballX < 0 || ballX > containerWidth - ballSize) {
       const correctedX = containerWidth / 2;
-      ballXState === 0
-        ? setMyScoreState((prev) => prev + 1)
-        : setOtherScoreState((prev) => prev + 1);
-      GameSocket.emit('ballX-set', correctedX);
-      // setBallXState(correctedX);
-      setBallSpeedXState((prevSpeedX) => -prevSpeedX);
+
+      ballX <= 0
+        ? GameSocket.emit('player2Score-set', player2Score + 1)
+        : GameSocket.emit('player1Score-set', player1Score + 1);
+
+      setBallX(correctedX);
+      if (props === 1) GameSocket.emit('ballX-set', correctedX);
+      setBallSpeedX((prevSpeedX) => -prevSpeedX);
     }
 
-    if (ballYState < 0 || ballYState > containerHeight - ballSize) {
-      const correctedY = ballYState < 0 ? 0 : containerHeight - ballSize;
+    if (ballY < 0 || ballY > containerHeight - ballSize) {
+      const correctedY = ballY < 0 ? 0 : containerHeight - ballSize;
 
-      GameSocket.emit('ballY-set', correctedY);
-
-      setBallSpeedYState((prevSpeedY) => -prevSpeedY);
+      setBallY(correctedY);
+      if (props === 1) GameSocket.emit('ballY-set', correctedY);
+      setBallSpeedY((prevSpeedY) => -prevSpeedY);
     }
   };
 
   useEffect(() => {
-    console.log('start', start);
     if (start === true) {
       window.addEventListener('keydown', handleKeyDown);
       const interval = setInterval(() => {
@@ -191,118 +187,118 @@ export const PongGame = ({ props }: { props: number }) => {
   }, [start]);
 
   useEffect(() => {
-    console.log(ballXState, ballSpeedXState, ballYState, ballSpeedYState);
-    GameSocket.emit('ballX-set', ballXState, ballSpeedXState);
-    // setBallXState((prevX) => prevX + ballSpeedXState);
-    GameSocket.emit('ballY-set', ballYState, ballSpeedYState);
-    // setBallYState((prevY) => prevY + ballSpeedYState);
+    if (props === 1) {
+      setBallX((prevX) => prevX + ballSpeedX);
+      setBallY((prevY) => prevY + ballSpeedY);
+      GameSocket.emit('ballX-set', ballX);
+      GameSocket.emit('ballY-set', ballY);
+    }
     setLoop(false);
-    if (player2ScoreState > 5 || player1ScoreState > 5) {
+    if (player2Score > WINSCORE || player1Score > WINSCORE) {
       setStart(false);
-      setEndState(true);
+      setEnd(true);
     }
   }, [loop]);
 
   useEffect(() => {
+    if (end === true) {
+      props === 1
+        ? GameSocket.emit('end', {
+            userId: user.id,
+            gameId: roomId,
+            score: player1Score,
+          })
+        : GameSocket.emit('end', {
+            userId: user.id,
+            gameId: roomId,
+            score: player2Score,
+          });
+    }
+  }, [end]);
+
+  useEffect(() => {
     handleBallOutOfBound();
     handleBallCollisions();
-  }, [ballXState, ballYState]);
+  }, [ballX, ballY]);
 
-  const Start = () => {
-    if (start === false && endState === false) {
-      return (
-        <div className="justify-center flex mt-[200px]">
+  const Ready = () => {
+    return (
+      <div className="justify-center flex mt-[200px]">
+        {ready === false ? (
           <span
             className="text-gray-500 text-bold text-[200px]"
             onClick={() => GameSocket.emit('ready')}
           >
-            START
+            Ready
           </span>
-        </div>
-      );
-    }
-    return null;
+        ) : (
+          <span
+            className="text-[#97D2DD] text-bold text-[200px]"
+            onClick={() => GameSocket.emit('ready')}
+          >
+            Ready
+          </span>
+        )}
+      </div>
+    );
   };
 
   const End = () => {
-    const winner =
-      player2ScoreState > player1ScoreState ? player2Name : player1Name;
+    const winner = player2Score > player1Score ? player2Name : player1Name;
 
-    if (endState === true) {
-      return (
-        <div className="justify-center flex mt-[200px]">
-          <span className="text-gray-500 text-bold text-[200px]">
-            {winner} win !!
-          </span>
-        </div>
-      );
-    }
-    return null;
+    return (
+      <div className="justify-center flex mt-[300px]">
+        <span className="text-gray-500 text-bold text-[100px]">
+          {isLeft === true ? user.nickName : winner} win !!
+        </span>
+      </div>
+    );
   };
 
-  if (start === false && endState === false) {
+  if (start === false && end === false) {
     return (
       <div className="pong-game-container">
         <div className="pong-game">
-          <Start />
+          <Ready />
           <div
             className="absolute w-[25px] h-[140px] bg-[#97D2DD] rounded-[10px]"
-            style={{ top: player2PaddleState }}
+            style={{ top: player1Paddle }}
           ></div>
           <div
             className="absolute w-[25px] h-[140px] bg-[#97D2DD] rounded-[10px]"
             style={{
-              top: player1PaddleState,
+              top: player2Paddle,
               left: containerWidth - paddleWidth,
             }}
           ></div>
           <div
             className="absolute w-[30px] h-[30px] bg-[#727DE3] rounded-[50%]"
-            style={{ top: ballYState, left: ballXState }}
+            style={{ top: displayY, left: displayX }}
           ></div>
         </div>
       </div>
     );
   }
 
-  return endState === true ? (
+  return (
     <div className="pong-game-container">
       <div className="pong-game">
-        <End />
+        {end === true ? <End /> : null}
+
         <div
           className="absolute w-[25px] h-[140px] bg-[#97D2DD] rounded-[10px]"
-          style={{ top: player2PaddleState }}
+          style={{ top: player1Paddle }}
         ></div>
         <div
           className="absolute w-[25px] h-[140px] bg-[#97D2DD] rounded-[10px]"
           style={{
-            top: player1PaddleState,
+            top: player2Paddle,
             left: containerWidth - paddleWidth,
           }}
         ></div>
         <div
           className="absolute w-[30px] h-[30px] bg-[#727DE3] rounded-[50%]"
-          style={{ top: ballYState, left: ballXState }}
-        ></div>
-      </div>
-    </div>
-  ) : (
-    <div className="pong-game-container">
-      <div className="pong-game">
-        <div
-          className="absolute w-[25px] h-[140px] bg-[#97D2DD] rounded-[10px]"
-          style={{ top: player2PaddleState }}
-        ></div>
-        <div
-          className="absolute w-[25px] h-[140px] bg-[#97D2DD] rounded-[10px]"
-          style={{
-            top: player1PaddleState,
-            left: containerWidth - paddleWidth,
-          }}
-        ></div>
-        <div
-          className="absolute w-[30px] h-[30px] bg-[#727DE3] rounded-[50%]"
-          style={{ top: ballYState, left: ballXState }}
+          style={{ top: displayY, left: displayX }}
         ></div>
       </div>
     </div>

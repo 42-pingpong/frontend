@@ -20,7 +20,7 @@ function App() {
             <Route path="/token" element={<TokenSave />} />
             <Route path="/chat/:id" element={<Chat />} />
             <Route path="/direct-message/:id" element={<DirectMessage />} />
-            <Route path="/game/:p1/:p2" element={<Game />} />
+            <Route path="/game/:id" element={<Game />} />
             <Route path="/profile/:nickName?" element={<Profile />} />
           </Routes>
         </BrowserRouter>
