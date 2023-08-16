@@ -7,6 +7,7 @@ import { Chat } from './component/Chat/Chat';
 import { Game } from './component/Game/Game';
 import { TokenSave } from './component/Main/TokenSave';
 import { Profile } from './component/Profile/Profile';
+import { DirectMessage } from './component/Chat/DirectMessage/DirectMessage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/" element={<Main />} />
             <Route path="/token" element={<TokenSave />} />
             <Route path="/chat/:id" element={<Chat />} />
+            <Route path="/direct-message/:id" element={<DirectMessage />} />
             <Route path="/game/:id" element={<Game />} />
             <Route path="/profile/:nickName?" element={<Profile />} />
           </Routes>
@@ -26,4 +28,5 @@ function App() {
     </>
   );
 }
+
 export default App;
