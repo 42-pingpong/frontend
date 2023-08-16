@@ -52,8 +52,8 @@ export const ChatUserRightClickModal = (props: Props) => {
           className={`relative flex flex-col w-[11rem] h-[7rem] z-10 bg-white rounded-3xl shadow-lg items-center justify-center py-2`}
           style={{ left: `${props.x + 20}px`, top: `${props.y - 20}px` }}
         >
-          <FuncButton name={'Block'} />
-          <FuncButton name={'Go PingPong'} />
+          <FuncButton name={'Block'} target={props.user} />
+          <FuncButton name={'Go PingPong'} target={props.user} />
         </div>
         <button
           id="modal-close-button"
@@ -76,11 +76,11 @@ export const ChatUserRightClickModal = (props: Props) => {
           className={`relative flex flex-col w-[11rem] h-[15rem] z-10 bg-white rounded-3xl shadow-lg items-center justify-center py-2`}
           style={{ left: `${props.x + 20}px`, top: `${props.y - 20}px` }}
         >
-          <FuncButton name={'Kick'} />
-          <FuncButton name={'Ban'} />
-          <FuncButton name={'Mute'} />
-          <FuncButton name={'Block'} />
-          <FuncButton name={'Go PingPong'} />
+          <FuncButton name={'Kick'} target={props.user} />
+          <FuncButton name={'Ban'} target={props.user} />
+          <FuncButton name={'Mute'} target={props.user} />
+          <FuncButton name={'Block'} target={props.user} />
+          <FuncButton name={'Go PingPong'} target={props.user} />
         </div>
         <button
           id="modal-close-button"

@@ -1,22 +1,25 @@
 import { ChatList } from './ChatList/ChatList';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { ChattingBubble } from './ChattingBubble';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { ChatSocket } from '../../sockets/ChatSocket';
 import {
   ChatRoomInfoDTO,
   RequestGroupChatDTO,
   ResponseGroupChatDTO,
+  ResponseKickDto,
   fetchRequestGroupChatDTO,
 } from '../../interfaces/Chatting-Format.dto';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { userInfo } from '../../atom/user';
-import { chatRoomState } from '../../atom/chat';
+import { chatRoomState, currentChatInfoState } from '../../atom/chat';
 
 export const ChatSection = () => {
+  const navigate = useNavigate();
   const [input, setInput] = useState('');
   const [chat, setChat] = useState<ResponseGroupChatDTO[]>([]);
+  const roomInfoReset = useResetRecoilState(currentChatInfoState);
   const user = useRecoilValue(userInfo);
   const chatRoomList = useRecoilValue(chatRoomState);
   const param = useParams().id;
@@ -26,6 +29,7 @@ export const ChatSection = () => {
   useEffect(() => {
     ChatSocket.on('fetch-group-message', fetchMessageHandler);
     ChatSocket.on('group-message', sendMessageHandler);
+    ChatSocket.on('kick-user', handleKickUser);
     ChatSocket.emit('fetch-group-message', requestFetchLog);
 
     return () => {
@@ -39,6 +43,23 @@ export const ChatSection = () => {
       scrollBottomRef.current.scrollTop = scrollBottomRef.current.scrollHeight;
     }
   }, [chat]);
+
+  const handleKickUser = (data: ResponseKickDto) => {
+    console.log(data);
+    if (data.userId === user.id) {
+      const newChat: RequestGroupChatDTO = {
+        receivedGroupChatId: id,
+        senderId: user.id,
+        message: '나는 kick 되었습니다.. 내는 간다',
+      };
+
+      ChatSocket.emit('group-message', newChat);
+      ChatSocket.emit('leave-room', id);
+      roomInfoReset();
+      navigate('/');
+      alert(`${id}번 방에서 쫒겨났습니다..`);
+    }
+  };
 
   const requestFetchLog: fetchRequestGroupChatDTO = {
     groupChatId: id,

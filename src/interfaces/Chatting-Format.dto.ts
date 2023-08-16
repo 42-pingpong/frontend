@@ -51,6 +51,17 @@ export interface fetchRequestGroupChatDTO {
   userId: number;
 }
 
+export interface RequestKickDto {
+  groupChatId: number;
+  kickUserId: number;
+  requestUserId: number;
+}
+
+export interface ResponseKickDto {
+  groupChatId: number;
+  userId: number;
+}
+
 /*
  * DirectChatting
  */
