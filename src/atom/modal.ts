@@ -27,6 +27,11 @@ export const addUserModalState = atom<boolean>({
   default: false,
 });
 
+export const muteModalState = atom<boolean>({
+  key: 'muteModalState',
+  default: false,
+});
+
 export const friendProfileModalState = atom<boolean>({
   key: 'friendProfileModalState',
   default: false,

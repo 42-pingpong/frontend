@@ -2,13 +2,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   RequestBanDto,
+  RequestBlockDto,
   RequestKickDto,
   senderDTO,
 } from '../../../interfaces/Chatting-Format.dto';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { currentChatInfoState } from '../../../atom/chat';
 import { userInfo } from '../../../atom/user';
 import { ChatSocket } from '../../../sockets/ChatSocket';
+import { muteModalState } from '../../../atom/modal';
 
 export const FuncButton = ({
   name,
@@ -20,6 +22,7 @@ export const FuncButton = ({
   const navigate = useNavigate();
   const roomInfo = useRecoilValue(currentChatInfoState);
   const user = useRecoilValue(userInfo);
+  const setMuteModal = useSetRecoilState(muteModalState);
 
   const handelModalFuc = () => {
     switch (name) {
@@ -41,7 +44,11 @@ export const FuncButton = ({
         break;
       }
       case 'Block': {
-        // socket.emit('block-user', { id: id, target: target });
+        const reqData: RequestBlockDto = {
+          userId: user.id,
+          blockedUserId: target.id,
+        };
+        ChatSocket.emit('block-user', reqData);
         break;
       }
       case 'Ban': {
@@ -62,10 +69,7 @@ export const FuncButton = ({
         break;
       }
       case 'Mute':
-        //socket.emit('mute', { id: id, target: target });
-        break;
-      case 'Profile':
-        // navigate('/profile/:${userNickName}'); -> props로 받아와야됨
+        setMuteModal(true);
         break;
       case 'Go PingPong': {
         break;

@@ -32,6 +32,7 @@ export const ChatSection = () => {
     ChatSocket.on('group-message', sendMessageHandler);
     ChatSocket.on('kick-user', handleKick);
     ChatSocket.on('ban-user', handleBan);
+    ChatSocket.on('block-user', handleBlock);
     if (chat.length === 0)
       ChatSocket.emit('fetch-group-message', requestFetchLog);
 
@@ -74,6 +75,10 @@ export const ChatSection = () => {
       }));
       //ban user render logic
     }
+  };
+
+  const handleBlock = (data: ResponseFuncDto) => {
+    console.log('조졌네');
   };
 
   const requestFetchLog: fetchRequestGroupChatDTO = {

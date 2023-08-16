@@ -1,14 +1,36 @@
 import React, { useEffect } from 'react';
 import { ChatSection } from './ChatSection';
 import { UserSection } from './User/UserSection';
-import { useRecoilValue } from 'recoil';
-import { profileModalState, notificationModalState } from '../../atom/modal';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  profileModalState,
+  notificationModalState,
+  muteModalState,
+} from '../../atom/modal';
 import { NotificationModal } from '../Header/NotificationModal';
 import { ProfileModal } from '../Header/ProfileModal';
+import { currentChatInfoState, roleState } from '../../atom/chat';
+import { userInfo } from '../../atom/user';
+import { MuteTimeModal } from './inChatModal/MuteTimeModal';
 
 export const Chat = () => {
   const isProfileModalOpen = useRecoilValue(profileModalState);
   const isNotificationModalOpen = useRecoilValue(notificationModalState);
+  const isMuteModalOpen = useRecoilValue(muteModalState);
+  const [role, setRole] = useRecoilState(roleState);
+  const roomInfo = useRecoilValue(currentChatInfoState);
+  const user = useRecoilValue(userInfo);
+
+  useEffect(() => {
+    console.log(roomInfo);
+    setRole(
+      roomInfo.ownerId === user.id
+        ? 'owner'
+        : roomInfo.admin.find((item: any) => item.id === user.id)
+        ? 'admin'
+        : 'user'
+    );
+  }, [roomInfo]);
 
   return (
     <div className="h-screen bg-slate-100 p-20 justify-center flex">
@@ -22,6 +44,8 @@ export const Chat = () => {
       </div>
       {isProfileModalOpen && <ProfileModal />}
       {isNotificationModalOpen && <NotificationModal />}
+      {isMuteModalOpen && <MuteTimeModal />}
+      {}
     </div>
   );
 };

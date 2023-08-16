@@ -27,7 +27,9 @@ export const ChatList = ({ props }: { props: ChatRoomDTO }) => {
   }, []);
 
   const handleJoinChatRoom = (data: ChatRoomInfoDTO) => {
+    console.log('on');
     setRoomInfo(data);
+    navigation(`/chat/${props.groupChatId}`);
   };
 
   const handleChatEnter = () => {
@@ -36,7 +38,7 @@ export const ChatList = ({ props }: { props: ChatRoomDTO }) => {
         groupChatId: props.groupChatId,
         userId: user.id,
       };
-      navigation(`/chat/${props.groupChatId}`);
+      console.log('emit');
       ChatSocket.emit('join-room', requestJoinChatRoom);
     } else {
       setPassword(true), setRoomId(`${props.groupChatId}`);
