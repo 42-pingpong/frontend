@@ -1,10 +1,14 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   chattingProfileOnRightClickModalState,
+  clickedUserState,
   clickedXState,
   clickedYState,
 } from '../../atom/modal';
-import { ResponseGroupChatDTO } from '../../interfaces/Chatting-Format.dto';
+import {
+  ResponseGroupChatDTO,
+  senderDTO,
+} from '../../interfaces/Chatting-Format.dto';
 import { ChatUserRightClickModal } from './inChatModal/ChatUserRightClickModal';
 import { useNavigate } from 'react-router-dom';
 import { userInfo } from '../../atom/user';
@@ -19,6 +23,7 @@ export const ChattingBubble = ({ props }: { props: ResponseGroupChatDTO }) => {
   );
   const [x, setX] = useRecoilState(clickedXState);
   const [y, setY] = useRecoilState(clickedYState);
+  const [clickedUser, setClickedUser] = useRecoilState(clickedUserState);
 
   const onLeftClickHandler = () => {
     if (sender === 'me') navigate('/profile');
@@ -31,6 +36,7 @@ export const ChattingBubble = ({ props }: { props: ResponseGroupChatDTO }) => {
     e.preventDefault();
     setX(e.clientX);
     setY(e.clientY);
+    setClickedUser(props.messageInfo.sender);
     setProfileRightClickModal(!profileRightClickModal);
   };
 
@@ -52,7 +58,9 @@ export const ChattingBubble = ({ props }: { props: ResponseGroupChatDTO }) => {
           {props.messageInfo.message}
         </span>
       </div>
-      {profileRightClickModal && <ChatUserRightClickModal x={x} y={y} />}
+      {profileRightClickModal && (
+        <ChatUserRightClickModal x={x} y={y} user={clickedUser} />
+      )}
     </div>
   ) : (
     <div className="flex">

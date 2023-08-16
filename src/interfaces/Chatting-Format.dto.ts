@@ -82,7 +82,7 @@ interface MessageInfoDTO {
   sender: senderDTO;
 }
 
-interface senderDTO {
+export interface senderDTO {
   id: number;
   nickName: string;
   profile: string;
