@@ -1,14 +1,44 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  RequestKickDto,
+  senderDTO,
+} from '../../../interfaces/Chatting-Format.dto';
+import { useRecoilValue } from 'recoil';
+import { currentChatInfoState } from '../../../atom/chat';
+import { userInfo } from '../../../atom/user';
+import { ChatSocket } from '../../../sockets/ChatSocket';
 
-export const FuncButton = ({ name }: { name: string }) => {
+export const FuncButton = ({
+  name,
+  target,
+}: {
+  name: string;
+  target: senderDTO;
+}) => {
   const navigate = useNavigate();
+  const roomInfo = useRecoilValue(currentChatInfoState);
+  const user = useRecoilValue(userInfo);
 
   const handelModalFuc = () => {
     switch (name) {
-      case 'Kick':
-        //socket.emit('kick', { id: id, target: target });
+      case 'Kick': {
+        if (roomInfo.ownerId === target.id) {
+          alert('방장은 추방할 수 없습니다.');
+          return;
+        }
+        if (roomInfo.admin.find((item) => item.id === target.id)) {
+          alert('관리자는 추방할 수 없습니다.');
+          return;
+        }
+        const reqData: RequestKickDto = {
+          groupChatId: roomInfo.groupChatId,
+          kickUserId: target.id,
+          requestUserId: user.id,
+        };
+        ChatSocket.emit('kick-user', reqData);
         break;
+      }
       case 'Ban':
         //socket.emit('ban', { id: id, target: target });
         break;

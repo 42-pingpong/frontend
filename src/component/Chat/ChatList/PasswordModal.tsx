@@ -1,12 +1,39 @@
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { passwordModalState } from '../../../atom/modal';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ChatSocket } from '../../../sockets/ChatSocket';
+import {
+  ChatRoomInfoDTO,
+  JoinGroupChatDTO,
+} from '../../../interfaces/Chatting-Format.dto';
+import { userInfo } from '../../../atom/user';
+import { Chat } from '../Chat';
+import { currentChatInfoState } from '../../../atom/chat';
 
 export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
   const [password, setPassword] = useRecoilState(passwordModalState);
   const inputPasswordRef = useRef('');
   const navigation = useNavigate();
+  const user = useRecoilValue(userInfo);
+  const [curRoomInfo, setCurRoomInfo] = useRecoilState(currentChatInfoState);
+
+  useEffect(() => {
+    console.log('password modal');
+    ChatSocket.on('join-room', handleJoinChatRoom);
+    ChatSocket.on('error', handleJoinChatRoomError);
+  }, []);
+
+  const handleJoinChatRoom = (data: ChatRoomInfoDTO) => {
+    setCurRoomInfo(data);
+    setPassword(false);
+    navigation(`/chat/${data.groupChatId}`);
+  };
+
+  const handleJoinChatRoomError = (data: any) => {
+    alert('비밀번호가 틀렸습니다.');
+    inputPasswordRef.current = '';
+  };
 
   const closeModal = (e: any) => {
     const modalContent = document.getElementById('password-content');
@@ -26,14 +53,15 @@ export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
     inputPasswordRef.current = e.target.value;
   };
 
-  const handlePassword = () => {
-    const res = inputPasswordRef.current === '111';
-
-    if (res === true) {
-      navigation(`/chat/${groupChatId}`);
-      setPassword(false);
-    }
+  const handlePassword = (e: any) => {
+    const requestJoinChatRoom: JoinGroupChatDTO = {
+      groupChatId: parseInt(groupChatId, 10),
+      userId: user.id,
+      password: inputPasswordRef.current,
+    };
+    ChatSocket.emit('join-room', requestJoinChatRoom);
   };
+
   return (
     <div className="background bg-[rgba(0,0,0,0.2)]" onClick={closeModal}>
       <div
@@ -41,7 +69,7 @@ export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
         className="w-[22vw] h-[22vh] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[20vh]"
       >
         <p className="py-[7%] px-[8%] font-sans not-italic font-[320]  text-[35px] leading-[41px] tracking-tighter text-[#5D777B]">
-          Proteced Room
+          Protected Room
         </p>
 
         <div className="relative h-[45%] ">

@@ -27,7 +27,7 @@ export const ResponseFriend = ({ props }: { props: UserDto }) => {
       </div>
       <div className="flex-grow flex-col flex w-14 h-full items-end">
         <div
-          className="h-6 w-14 rounded-full bg-white items-center justify-center flex shadow-md"
+          className="h-6 w-16 rounded-full bg-white items-center justify-center flex shadow-md"
           onClick={handleDeleteAlarm}
         >
           <span className="text-sm text-gray-700">알람 삭제</span>

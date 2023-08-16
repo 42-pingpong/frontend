@@ -14,17 +14,6 @@ export const FriendList = () => {
   const [friendList, setFriendList] = useRecoilState(friendListState);
 
   useEffect(() => {
-    const handleChangeFriendStatus = (data: UserDto) => {
-      console.log('change-status');
-      console.log(data);
-
-      setFriendList((prevList) =>
-        prevList.map((item) =>
-          item.id === data.id ? { ...item, status: data.status } : item
-        )
-      );
-    };
-
     StatusSocket.on('change-status', handleChangeFriendStatus);
 
     return () => {
@@ -42,6 +31,17 @@ export const FriendList = () => {
       fetchFriendListAndSetState();
     }
   }, [isLogin]);
+
+  const handleChangeFriendStatus = (data: UserDto) => {
+    console.log('change-status');
+    console.log(data);
+
+    setFriendList((prevList) =>
+      prevList.map((item) =>
+        item.id === data.id ? { ...item, status: data.status } : item
+      )
+    );
+  };
 
   return (
     <div className="flex h-full flex-col">

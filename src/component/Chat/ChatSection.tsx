@@ -1,41 +1,41 @@
 import { ChatList } from './ChatList/ChatList';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { ChattingBubble } from './ChattingBubble';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { ChatSocket } from '../../sockets/ChatSocket';
-import { ChatDTO } from '../../interfaces/Chatting-Format.dto';
-import { useRecoilValue } from 'recoil';
+import {
+  ChatRoomInfoDTO,
+  RequestGroupChatDTO,
+  ResponseGroupChatDTO,
+  ResponseKickDto,
+  fetchRequestGroupChatDTO,
+} from '../../interfaces/Chatting-Format.dto';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { userInfo } from '../../atom/user';
-import { chatRoomState } from '../../atom/chat';
+import { chatRoomState, currentChatInfoState } from '../../atom/chat';
 
 export const ChatSection = () => {
+  const navigate = useNavigate();
   const [input, setInput] = useState('');
-  const [chat, setChat] = useState<ChatDTO[]>([]);
-  const userInfoState = useRecoilValue(userInfo);
+  const [chat, setChat] = useState<ResponseGroupChatDTO[]>([]);
+  const roomInfoReset = useResetRecoilState(currentChatInfoState);
+  const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
+  const user = useRecoilValue(userInfo);
   const chatRoomList = useRecoilValue(chatRoomState);
-  const id = useParams();
+  const param = useParams().id;
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
+  const id = param === undefined ? 0 : parseInt(param, 10);
 
   useEffect(() => {
-    const massageHandler = (data: ChatDTO) => {
-      console.log('chat-message-on');
-      console.log('data', data);
-      setChat((prev) => [...prev, data]);
-    };
-
-    ChatSocket.on('chat-message', massageHandler);
-    // ChatSocket.on('group-chat-info', (data: ChatRoomDTO) => {
-    //   if (data === null || data === undefined || data.log === undefined) return;
-    //   console.log('log', data.log);
-    //   setChat(data.log);
-    // });
+    ChatSocket.on('fetch-group-message', fetchMessageHandler);
+    ChatSocket.on('group-message', sendMessageHandler);
+    ChatSocket.on('kick-user', handleKickUser);
+    ChatSocket.emit('fetch-group-message', requestFetchLog);
 
     return () => {
-      ChatSocket.off('chat-message', massageHandler);
-      ChatSocket.off('group-chat-info');
-      console.log('leave');
-      ChatSocket.emit('leave-room', id.id);
+      ChatSocket.off('group-message', sendMessageHandler);
+      ChatSocket.off('fetch-group-message', fetchMessageHandler);
     };
   }, []);
 
@@ -43,57 +43,83 @@ export const ChatSection = () => {
     if (scrollBottomRef.current) {
       scrollBottomRef.current.scrollTop = scrollBottomRef.current.scrollHeight;
     }
-    console.log(scrollBottomRef.current);
   }, [chat]);
+
+  const handleKickUser = (data: ResponseKickDto) => {
+    if (data.userId === user.id) {
+      const newChat: RequestGroupChatDTO = {
+        receivedGroupChatId: id,
+        senderId: user.id,
+        message: '나는 kick 되었습니다.. 내는 간다',
+      };
+
+      ChatSocket.emit('group-message', newChat);
+      ChatSocket.emit('leave-room', id);
+      roomInfoReset();
+      navigate('/');
+      alert(`${id}번 방에서 쫒겨났습니다..`);
+    } else {
+      setRoomInfo((prev) => ({
+        ...prev,
+        joinedUser: roomInfo.joinedUser.filter(
+          (item) => item.id !== data.userId
+        ),
+      }));
+    }
+  };
+
+  const requestFetchLog: fetchRequestGroupChatDTO = {
+    groupChatId: id,
+    userId: user.id,
+  };
+
+  const sendMessageHandler = (data: ResponseGroupChatDTO) => {
+    setChat((prev) => [...prev, data]);
+  };
+
+  const fetchMessageHandler = (
+    data: ResponseGroupChatDTO | ResponseGroupChatDTO[]
+  ) => {
+    setChat((prev) =>
+      Array.isArray(data) ? [...prev, ...data] : [...prev, data]
+    );
+  };
 
   const handleSendMessage = () => {
     if (input === '') return;
-
-    const newChat: ChatDTO = {
-      roomId: String(id.id),
-      nickName: userInfoState.nickName,
-      text: input,
+    if (id === undefined) return;
+    const newChat: RequestGroupChatDTO = {
+      receivedGroupChatId: id,
+      senderId: user.id,
+      message: input,
     };
 
-    ChatSocket.emit('chat-message', newChat, (chat: ChatDTO) => {
-      console.log('chat-messase-emit');
-      console.log('newChat: ', newChat);
-      setChat((prev) => {
-        return [...prev, newChat];
-      });
-    });
+    ChatSocket.emit('group-message', newChat);
     setInput('');
   };
 
-  const chatRoom = chatRoomList.find(
-    (room) => room.groupChatId === Number(id.id)
-  );
+  const chatRoom = chatRoomList.find((room) => room.groupChatId === Number(id));
 
   return (
     <div id="chat-section" className="flex flex-col h-full">
       <div className="flex">
         <ServiceTitle title="Chat" nonAddButton={true} />
       </div>
-      <div className="flex relative h-full flex-col rounded-3xl shadow-2xl flex-grow pt-14 items-center">
+      <div className="flex relative h-full flex-col rounded-3xl shadow-2xl flex-grow pt-14 items-center bg-slate-50">
         {chatRoom && (
-          <div className="absolute top-[-3rem] left-1/2 transform -translate-x-1/2 rounded-3xl mx-auto w-[500px] z-10">
+          <div className="absolute top-[-4rem] left-1/2 transform -translate-x-1/2 rounded-3xl mx-auto w-[500px] z-10">
             <ChatList props={chatRoom} />
           </div>
         )}
-        <div className="flex w-full h-[85%] md:h-[800px] justify-between items-center px-14 z-10 overflow-y-auto">
+        <div className="flex w-full mt-[2%] h-[80%] md:h-[800px] justify-between items-center px-14 z-10 overflow-y-auto">
           <div
             className="flex flex-col w-full h-full px-2 overflow-y-auto"
             ref={scrollBottomRef}
           >
             {chat.map((item) => (
-              <ChattingBubble
-                key={item.id}
-                props={item}
-                nickName={userInfoState.nickName}
-              />
+              <ChattingBubble key={item.messageInfo.messageId} props={item} />
             ))}
           </div>
-          {/* <div ref={scrollBottomRef} /> */}
         </div>
         <div className="flex flex-row justify-between w-full px-16 items-center mt-5 h-[6rem]">
           <input
