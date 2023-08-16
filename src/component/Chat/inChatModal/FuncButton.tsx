@@ -31,6 +31,10 @@ export const FuncButton = ({
         ChatSocket.emit('kick-user', reqData);
         break;
       }
+      case 'Block': {
+        // socket.emit('block-user', { id: id, target: target });
+        break;
+      }
       case 'Ban':
         //socket.emit('ban', { id: id, target: target });
         break;
