@@ -1,5 +1,6 @@
 import { atom } from 'recoil';
 import { UserDto } from '../interfaces/User.dto';
+import { senderDTO } from '../interfaces/Chatting-Format.dto';
 
 export const profileModalState = atom<boolean>({
   key: 'profileModalState',
@@ -53,6 +54,15 @@ export const clickedFriendProfileState = atom<UserDto>({
     fullName: '',
     selfIntroduction: '',
     status: '',
+  },
+});
+
+export const clickedUserState = atom<senderDTO>({
+  key: 'clickedUser',
+  default: {
+    id: -1,
+    nickName: '',
+    profile: '',
   },
 });
 

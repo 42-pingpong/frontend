@@ -2,7 +2,7 @@ import { ServiceTitle } from '../../Main/ServiceTitle';
 import { StatusIcon } from '../../FriendList/StatusIcon';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Friend } from '../../FriendList/Friend';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { ChatSocket } from '../../../sockets/ChatSocket';
 import { currentChatInfoState } from '../../../atom/chat';
 import { useEffect, useState } from 'react';
@@ -20,6 +20,7 @@ export const UserSection = () => {
   const navigation = useNavigate();
   const id = useParams().id;
   const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
+  const roomInfoReset = useResetRecoilState(currentChatInfoState);
   const [owner, setOwner] = useState<UserDto>();
   const [admin, setAdmin] = useState<UserDto[]>();
   const [joinedUser, setJoinedUser] = useState<UserDto[]>([]);
@@ -72,6 +73,7 @@ export const UserSection = () => {
   const handleLeaveGroupChatRoom = () => {
     console.log('leave');
     ChatSocket.emit('leave-room', id);
+    roomInfoReset();
     navigation('/');
   };
 
@@ -86,16 +88,16 @@ export const UserSection = () => {
           <StatusIcon props={{ status: 'offline', color: 'bg-red-400' }} />
           <StatusIcon props={{ status: 'ingame', color: 'bg-blue-400' }} />
         </div>
-        <div className="flex flex-col w-full h-full mt-3 mb-10">
-          <span>owner</span>
+        <div className="flex flex-col w-full h-[22%] mt-3 mb-2">
+          <span className="font-semibold text-borderBlue text-lg">owner</span>
           {owner && <Friend props={owner} />}
         </div>
-        <div className="flex flex-col w-full h-full overflow-y-auto mt-3 mb-10">
-          <span>admin</span>
+        <span className="font-semibold text-gray-500 text-lg">admin</span>
+        <div className="flex flex-col w-full h-[30%] flex-grow overflow-y-auto mt-3 mb-2">
           {admin && admin.map((item) => <Friend key={item.id} props={item} />)}
         </div>
-        <div className="flex flex-col w-full h-full overflow-y-auto mt-3 mb-10">
-          <span>user</span>
+        <span className="font-semibold text-gray-500 text-lg">user</span>
+        <div className="flex flex-col w-full h-[30%] flex-grow overflow-y-auto mt-3 mb-2">
           {joinedUser &&
             joinedUser.map((item) => <Friend key={item.id} props={item} />)}
         </div>
@@ -107,6 +109,7 @@ export const UserSection = () => {
           ></img>
         </div>
       </div>
+
       {isFirendProfileModalOpen && (
         <FriendProfileModal
           user={clickedFriendProfile}
