@@ -10,10 +10,8 @@ export const GameHistory = () => {
   const [ret, setRet] = useState<{ data: GameHistoryDto[] }>({ data: [] });
 
   const user = useRecoilValue(userInfo);
-  console.log('hi');
 
   useEffect(() => {
-    console.log('??');
     const fetchData = async () => {
       try {
         const res = await axiosInstance.get(`/game/history/${user.id}`);

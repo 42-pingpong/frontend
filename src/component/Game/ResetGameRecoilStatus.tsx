@@ -1,7 +1,5 @@
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import {
-  ballSpeedXState,
-  ballSpeedYState,
   ballXState,
   ballYState,
   displayXState,
@@ -29,8 +27,6 @@ export const ResetGameRecoilStatus = () => {
   const func1 = useResetRecoilState(newMatching);
   const func2 = useResetRecoilState(ballXState);
   const func3 = useResetRecoilState(ballYState);
-  // const func4 = useResetRecoilState(ballSpeedXState);
-  // const func5 = useResetRecoilState(ballSpeedYState);
   const func6 = useResetRecoilState(player1ScoreState);
   const func7 = useResetRecoilState(player2ScoreState);
   const func8 = useResetRecoilState(player1PaddleState);
@@ -53,18 +49,11 @@ export const ResetGameRecoilStatus = () => {
 
   const user = useRecoilValue(userInfo);
   const roomId = useRecoilValue(roomIdState);
-  const player1Score = useRecoilValue(player1ScoreState);
-  const player2Score = useRecoilValue(player2ScoreState);
   const playerNumber = useRecoilValue(playerNumberState);
 
   useEffect(() => {
-    // 방에 들어갔었는데 끝을 안 보고 나옴
-    // 1. 레디도안함
-    // 2. 레디는 함
-    // 3. 게임 시작함
 
     if (join === true && end === false) {
-      console.log('reset');
       playerNumber === 1
         ? GameSocket.emit('end', {
             userId: user.id,
@@ -82,12 +71,9 @@ export const ResetGameRecoilStatus = () => {
   }, []);
 
   useEffect(() => {
-    console.log('reset gogogogogo');
     func1();
     func2();
     func3();
-    // func4();
-    // func5();
     func6();
     func7();
     func8();

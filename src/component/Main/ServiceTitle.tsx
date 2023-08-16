@@ -5,7 +5,6 @@ import { addUserModalState, chattingModalState } from '../../atom/modal';
 import { userInfo } from '../../atom/user';
 import { useNavigate } from 'react-router-dom';
 import { GameSocket } from '../../sockets/GameSocket';
-import { ResetGameRecoilStatus } from '../Game/ResetGameRecoilStatus';
 
 interface ServiceTitleProps {
   title: string;

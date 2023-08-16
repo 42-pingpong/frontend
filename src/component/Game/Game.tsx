@@ -11,7 +11,6 @@ export const Game = () => {
         >
           <GameSection />
         </div>
-
         <div className="game:col-span-1">
           <div
             id="chat-section"

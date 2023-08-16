@@ -1,33 +1,13 @@
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { Matchpoint } from './Matchpoint';
 import { PongGame } from './PongGame';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import {
-  ballSpeedXState,
-  ballSpeedYState,
-  ballXState,
-  ballYState,
-  displayXState,
-  displayYState,
-  endState,
   resetState,
-  newMatching,
-  player1NameState,
-  player1PaddleState,
-  player1ScoreState,
-  player2NameState,
-  player2PaddleState,
-  player2ScoreState,
   playerNumberState,
-  readyState,
-  roomIdState,
-  startState,
 } from '../../atom/game';
-import { useEffect } from 'react';
-import { ResetGameRecoilStatus } from './ResetGameRecoilStatus';
 
 export const GameSection = () => {
-  const reset = useRecoilValue(resetState);
   const playerNum = useRecoilValue(playerNumberState);
 
   return (
@@ -46,7 +26,6 @@ export const GameSection = () => {
           <PongGame props={playerNum} />
         </div>
       </div>
-      {/* {reset && <ResetGameRecoilStatus />} */}
     </div>
   );
 };
