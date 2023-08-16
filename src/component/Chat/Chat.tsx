@@ -9,6 +9,7 @@ import { ProfileModal } from '../Header/ProfileModal';
 export const Chat = () => {
   const isProfileModalOpen = useRecoilValue(profileModalState);
   const isNotificationModalOpen = useRecoilValue(notificationModalState);
+
   return (
     <div className="h-screen bg-slate-100 p-20 justify-center flex">
       <div className="pt-[2%] grid grid-cols-3 grid-rows-6 gap-20 w-full h-[80vh] max-w-[1800px]">

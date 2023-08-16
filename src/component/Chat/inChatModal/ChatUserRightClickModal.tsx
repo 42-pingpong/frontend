@@ -1,7 +1,5 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { chattingProfileOnRightClickModalState } from '../../../atom/modal';
-import { UserDto } from '../../../interfaces/User.dto';
-import { useNavigate } from 'react-router-dom';
 import { FuncButton } from './FuncButton';
 import { currentChatInfoState } from '../../../atom/chat';
 import { userInfo } from '../../../atom/user';

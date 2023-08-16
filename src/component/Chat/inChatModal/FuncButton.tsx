@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  RequestBanDto,
   RequestKickDto,
   senderDTO,
 } from '../../../interfaces/Chatting-Format.dto';
@@ -43,18 +44,32 @@ export const FuncButton = ({
         // socket.emit('block-user', { id: id, target: target });
         break;
       }
-      case 'Ban':
-        //socket.emit('ban', { id: id, target: target });
+      case 'Ban': {
+        if (roomInfo.ownerId === target.id) {
+          alert('방장은 추방할 수 없습니다.');
+          return;
+        }
+        if (roomInfo.admin.find((item) => item.id === target.id)) {
+          alert('관리자는 추방할 수 없습니다.');
+          return;
+        }
+        const reqData: RequestBanDto = {
+          groupChatId: roomInfo.groupChatId,
+          bannedId: target.id,
+          userId: user.id,
+        };
+        ChatSocket.emit('ban-user', reqData);
         break;
+      }
       case 'Mute':
         //socket.emit('mute', { id: id, target: target });
         break;
       case 'Profile':
         // navigate('/profile/:${userNickName}'); -> props로 받아와야됨
         break;
-      case 'Go PingPong':
-        //socket.emit('goPingPong', { id: id, target: target }); // 근데 status socket으로 보내..?
+      case 'Go PingPong': {
         break;
+      }
       default:
         break;
     }

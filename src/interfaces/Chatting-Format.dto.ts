@@ -60,7 +60,7 @@ export interface RequestKickDto {
   requestUserId: number;
 }
 
-export interface ResponseKickDto {
+export interface ResponseFuncDto {
   groupChatId: number;
   userId: number;
 }
@@ -68,6 +68,12 @@ export interface ResponseKickDto {
 export interface RequestBlockDto {
   userId: number;
   blockedUserId: number;
+}
+
+export interface RequestBanDto {
+  groupChatId: number;
+  userId: number;
+  bannedId: number;
 }
 
 /*

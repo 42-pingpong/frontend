@@ -8,7 +8,7 @@ import {
   ChatRoomInfoDTO,
   RequestGroupChatDTO,
   ResponseGroupChatDTO,
-  ResponseKickDto,
+  ResponseFuncDto,
   fetchRequestGroupChatDTO,
 } from '../../interfaces/Chatting-Format.dto';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
@@ -30,8 +30,10 @@ export const ChatSection = () => {
   useEffect(() => {
     ChatSocket.on('fetch-group-message', fetchMessageHandler);
     ChatSocket.on('group-message', sendMessageHandler);
-    ChatSocket.on('kick-user', handleKickUser);
-    ChatSocket.emit('fetch-group-message', requestFetchLog);
+    ChatSocket.on('kick-user', handleKick);
+    ChatSocket.on('ban-user', handleBan);
+    if (chat.length === 0)
+      ChatSocket.emit('fetch-group-message', requestFetchLog);
 
     return () => {
       ChatSocket.off('group-message', sendMessageHandler);
@@ -45,26 +47,32 @@ export const ChatSection = () => {
     }
   }, [chat]);
 
-  const handleKickUser = (data: ResponseKickDto) => {
+  const handleKick = (data: ResponseFuncDto) => {
     if (data.userId === user.id) {
-      const newChat: RequestGroupChatDTO = {
-        receivedGroupChatId: id,
-        senderId: user.id,
-        message: '나는 kick 되었습니다.. 내는 간다',
-      };
-
-      ChatSocket.emit('group-message', newChat);
       ChatSocket.emit('leave-room', id);
       roomInfoReset();
       navigate('/');
-      alert(`${id}번 방에서 쫒겨났습니다..`);
+      alert(`${id}번 방에서 쫒겨났습니다.`);
     } else {
       setRoomInfo((prev) => ({
         ...prev,
-        joinedUser: roomInfo.joinedUser.filter(
-          (item) => item.id !== data.userId
-        ),
+        joinedUser: prev.joinedUser.filter((item) => item.id !== data.userId),
       }));
+    }
+  };
+
+  const handleBan = (data: ResponseFuncDto) => {
+    if (data.userId === user.id) {
+      ChatSocket.emit('leave-room', id);
+      roomInfoReset();
+      navigate('/');
+      alert(`${id}번 방에서 밴 당했습니다.`);
+    } else {
+      setRoomInfo((prev) => ({
+        ...prev,
+        joinedUser: prev.joinedUser.filter((item) => item.id !== data.userId),
+      }));
+      //ban user render logic
     }
   };
 

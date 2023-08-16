@@ -77,6 +77,10 @@ export const UserSection = () => {
     navigation('/');
   };
 
+  const handleManageChatRoom = () => {
+    console.log('whsskglaemfek');
+  };
+
   return (
     <div id="friends-section" className="flex-col flex h-full">
       <div className="flex">
@@ -101,12 +105,21 @@ export const UserSection = () => {
           {joinedUser &&
             joinedUser.map((item) => <Friend key={item.id} props={item} />)}
         </div>
-        <div className="relative">
-          <img
-            src={require('../../../public/quit.png')}
-            className=" mx-auto float-right mb-12 mr-3 w-9 h-7"
-            onClick={handleLeaveGroupChatRoom}
-          ></img>
+        <div>
+          <div className="opacity-20">
+            <img
+              src={require('../../../public/system.png')}
+              className="mx-auto float-left mb-12 ml-3 w-8 h-8"
+              onClick={handleManageChatRoom}
+            ></img>
+          </div>
+          <div className="">
+            <img
+              src={require('../../../public/quit.png')}
+              className=" mx-auto float-right mb-12 mr-3 w-9 h-7"
+              onClick={handleLeaveGroupChatRoom}
+            ></img>
+          </div>
         </div>
       </div>
 

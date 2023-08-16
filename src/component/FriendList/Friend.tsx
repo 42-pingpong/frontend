@@ -8,6 +8,7 @@ import {
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { userInfo } from '../../atom/user';
+import { useEffect } from 'react';
 
 export const Friend = ({ props }: { props: UserDto }) => {
   const setX = useSetRecoilState(clickedXState);
