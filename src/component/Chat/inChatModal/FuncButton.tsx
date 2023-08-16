@@ -23,6 +23,14 @@ export const FuncButton = ({
   const handelModalFuc = () => {
     switch (name) {
       case 'Kick': {
+        if (roomInfo.ownerId === target.id) {
+          alert('방장은 추방할 수 없습니다.');
+          return;
+        }
+        if (roomInfo.admin.find((item) => item.id === target.id)) {
+          alert('관리자는 추방할 수 없습니다.');
+          return;
+        }
         const reqData: RequestKickDto = {
           groupChatId: roomInfo.groupChatId,
           kickUserId: target.id,
