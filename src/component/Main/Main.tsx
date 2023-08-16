@@ -20,6 +20,7 @@ import { FriendList } from '../FriendList/FriendList';
 import { FriendProfileModal } from '../FriendList/FriendProfileModal';
 import { NotificationModal } from '../Header/NotificationModal';
 import { PasswordModal } from '../Chat/ChatList/PasswordModal';
+import { ResetGameRecoilStatus } from '../Game/ResetGameRecoilStatus';
 
 export const Main = () => {
   const isProfileModalOpen = useRecoilValue(profileModalState);
@@ -58,6 +59,7 @@ export const Main = () => {
         />
       )}
       {isPasswordModalOpen && <PasswordModal groupChatId={clickedRoomId} />}
+      {<ResetGameRecoilStatus />}
     </div>
   );
 };

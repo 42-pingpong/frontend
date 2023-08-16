@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { newMatching, playerNumber } from '../../atom/game';
+import { newMatching, playerNumberState, roomIdState } from '../../atom/game';
 import { addUserModalState, chattingModalState } from '../../atom/modal';
 import { loginState, userInfo } from '../../atom/user';
 import { useNavigate } from 'react-router-dom';
@@ -15,26 +15,26 @@ export const ServiceTitle = (props: ServiceTitleProps) => {
   const [matching, setMatching] = useRecoilState(newMatching);
   const [chatstate, setChatstate] = useRecoilState(chattingModalState);
   const [addUser, setAddUser] = useRecoilState(addUserModalState);
-  const [playerNum, setPlayerNum] = useRecoilState(playerNumber);
+  const [playerNum, setPlayerNum] = useRecoilState(playerNumberState);
   const user = useRecoilValue(userInfo);
   const navigation = useNavigate();
+  const [roomId, setRoomId] = useRecoilState(roomIdState);
   const login = useRecoilValue(loginState);
   const SERVER = process.env.REACT_APP_SERVER;
+  
+  const handleState = (roomName: number) => {
+    setRoomId(roomName);
+    setMatching(false);
+    navigation(`/game/${roomName}`);
+  };
 
   useEffect(() => {
-    GameSocket.on('join', (roomName: string) => {
-      console.log('join ', roomName);
-
-      setMatching(false);
-      navigation('/game/' + roomName);
-    });
+    GameSocket.on('join', (roomName: number) => handleState(roomName));
     GameSocket.on('player-number', (data: number) => {
       if (data === 1) {
         setPlayerNum(1);
-        // GameSocket.emit('player1-id', user.id);
       } else {
         setPlayerNum(2);
-        // GameSocket.emit('player2-id', user.id);
       }
     });
     return () => {
