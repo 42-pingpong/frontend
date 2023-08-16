@@ -23,7 +23,7 @@ export const Matchpoint = () => {
     GameSocket.on('user-name', (p1: string, p2: string) => {
       setPlayer1Name(p1);
       setPlayer2Name(p2);
-      console.log(p1, p2);
+      console.log('user-name', p1, p2);
     });
 
     GameSocket.on('player1Score', (score: number) => {

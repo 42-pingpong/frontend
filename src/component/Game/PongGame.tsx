@@ -130,7 +130,6 @@ export const PongGame = ({ props }: { props: number }) => {
       GameSocket.off('ballY');
       GameSocket.off('score');
       GameSocket.off('end-room-out');
-
       setReset(!reset);
     };
   }, []);

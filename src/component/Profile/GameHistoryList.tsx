@@ -9,7 +9,7 @@ export const GameHistoryList = ({ props }: { props: GameHistoryDto }) => {
   const otherInfo = props.gameScores.find((item) => item.user.id !== user.id);
 
   if (!myInfo || !otherInfo) {
-    throw new Error('myInfo or otherInfo is undefined');
+    return null;
   }
 
   return (

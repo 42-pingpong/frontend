@@ -65,9 +65,6 @@ export const ResetGameRecoilStatus = () => {
 
     if (join === true && end === false) {
       console.log('reset');
-      GameSocket.emit('room-out', () => {
-        setReset(!reset);
-      });
       playerNumber === 1
         ? GameSocket.emit('end', {
             userId: user.id,
@@ -79,10 +76,13 @@ export const ResetGameRecoilStatus = () => {
             gameId: roomId,
             score: -42,
           });
+      GameSocket.emit('room-out');
+      setReset(!reset);
     }
   }, []);
 
   useEffect(() => {
+    console.log('reset gogogogogo');
     func1();
     func2();
     func3();
