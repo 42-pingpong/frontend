@@ -20,6 +20,7 @@ export const ChatSection = () => {
   const [input, setInput] = useState('');
   const [chat, setChat] = useState<ResponseGroupChatDTO[]>([]);
   const roomInfoReset = useResetRecoilState(currentChatInfoState);
+  const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
   const user = useRecoilValue(userInfo);
   const chatRoomList = useRecoilValue(chatRoomState);
   const param = useParams().id;
@@ -45,7 +46,6 @@ export const ChatSection = () => {
   }, [chat]);
 
   const handleKickUser = (data: ResponseKickDto) => {
-    console.log(data);
     if (data.userId === user.id) {
       const newChat: RequestGroupChatDTO = {
         receivedGroupChatId: id,
@@ -58,6 +58,13 @@ export const ChatSection = () => {
       roomInfoReset();
       navigate('/');
       alert(`${id}번 방에서 쫒겨났습니다..`);
+    } else {
+      setRoomInfo((prev) => ({
+        ...prev,
+        joinedUser: roomInfo.joinedUser.filter(
+          (item) => item.id !== data.userId
+        ),
+      }));
     }
   };
 

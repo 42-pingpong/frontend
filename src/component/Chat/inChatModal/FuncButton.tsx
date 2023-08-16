@@ -28,7 +28,6 @@ export const FuncButton = ({
           kickUserId: target.id,
           requestUserId: user.id,
         };
-        console.log(reqData);
         ChatSocket.emit('kick-user', reqData);
         break;
       }
