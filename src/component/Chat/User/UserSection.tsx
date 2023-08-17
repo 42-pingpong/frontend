@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Friend } from '../../FriendList/Friend';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { ChatSocket } from '../../../sockets/ChatSocket';
-import { currentChatInfoState } from '../../../atom/chat';
+import { currentChatInfoState, roleState } from '../../../atom/chat';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { UserDto } from '../../../interfaces/User.dto';
 import axiosInstance from '../../../api/axios';
@@ -19,8 +19,9 @@ import { FriendProfileModal } from '../../FriendList/FriendProfileModal';
 export const UserSection = () => {
   const navigation = useNavigate();
   const id = useParams().id;
-  const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
   const roomInfoReset = useResetRecoilState(currentChatInfoState);
+  const role = useRecoilValue(roleState);
+  const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
   const [owner, setOwner] = useState<UserDto>();
   const [admin, setAdmin] = useState<UserDto[]>();
   const [joinedUser, setJoinedUser] = useState<UserDto[]>([]);
@@ -78,6 +79,7 @@ export const UserSection = () => {
   };
 
   const handleManageChatRoom = () => {
+    navigation('/chat-manage');
     console.log('whsskglaemfek');
   };
 
@@ -106,13 +108,15 @@ export const UserSection = () => {
             joinedUser.map((item) => <Friend key={item.id} props={item} />)}
         </div>
         <div>
-          <div className="opacity-20">
-            <img
-              src={require('../../../public/system.png')}
-              className="mx-auto float-left mb-12 ml-3 w-8 h-8"
-              onClick={handleManageChatRoom}
-            ></img>
-          </div>
+          {role !== 'user' && (
+            <div className="opacity-20">
+              <img
+                src={require('../../../public/system.png')}
+                className="mx-auto float-left mb-12 ml-3 w-8 h-8"
+                onClick={handleManageChatRoom}
+              ></img>
+            </div>
+          )}
           <div className="">
             <img
               src={require('../../../public/quit.png')}

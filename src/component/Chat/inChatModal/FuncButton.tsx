@@ -69,6 +69,7 @@ export const FuncButton = ({
         break;
       }
       case 'Mute':
+        console.log('mute');
         setMuteModal(true);
         break;
       case 'Go PingPong': {

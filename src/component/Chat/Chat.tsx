@@ -6,14 +6,12 @@ import { NotificationModal } from '../Header/NotificationModal';
 import { ProfileModal } from '../Header/ProfileModal';
 import { currentChatInfoState, roleState } from '../../atom/chat';
 import { userInfo } from '../../atom/user';
-import { MuteTimeModal } from './inChatModal/MuteTimeModal';
 import { ChatSocket } from '../../sockets/ChatSocket';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PasswordModal } from './ChatList/PasswordModal';
 import {
   profileModalState,
   notificationModalState,
-  muteModalState,
   passwordModalState,
 } from '../../atom/modal';
 import {
@@ -26,7 +24,7 @@ export const Chat = () => {
   const isNotificationModalOpen = useRecoilValue(notificationModalState);
   const isProfileModalOpen = useRecoilValue(profileModalState);
   const isPasswordModalOpen = useRecoilValue(passwordModalState);
-  const isMuteModalOpen = useRecoilValue(muteModalState);
+
   const user = useRecoilValue(userInfo);
   const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
   const setPassword = useSetRecoilState(passwordModalState);
@@ -47,13 +45,15 @@ export const Chat = () => {
       setPassword(true);
     }
     ChatSocket.on('join-room', handleJoinChatRoom);
+    ChatSocket.on('error', handleError);
 
     return () => {
       ChatSocket.off('join-room', handleJoinChatRoom);
+      ChatSocket.off('error', handleError);
     };
   }, [user]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setRole(
       roomInfo.ownerId === user.id
         ? 'owner'
@@ -66,6 +66,13 @@ export const Chat = () => {
   const requestJoinChatRoom: JoinGroupChatDTO = {
     groupChatId: parseInt(params.id as string, 10),
     userId: user.id,
+  };
+
+  const handleError = (data: any) => {
+    if (data.status === 403) {
+      alert('채팅방에 입장할 수 없습니다.');
+      navigate('/');
+    }
   };
 
   const handleJoinChatRoom = (data: ChatRoomInfoDTO) => {
@@ -90,7 +97,6 @@ export const Chat = () => {
         </div>
         {isProfileModalOpen && <ProfileModal />}
         {isNotificationModalOpen && <NotificationModal />}
-        {isMuteModalOpen && <MuteTimeModal />}
       </div>
     );
 };

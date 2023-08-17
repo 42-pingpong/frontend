@@ -5,7 +5,7 @@ export const Loading = () => {
     <div className="flex h-screen w-screen items-center justify-center">
       <img
         src={require('../public/loading.gif')}
-        className="w-20% aspect-square"
+        className="w-[10%] aspect-square"
         alt="loading"
       />
     </div>

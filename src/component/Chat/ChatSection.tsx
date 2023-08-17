@@ -10,10 +10,12 @@ import {
   ResponseGroupChatDTO,
   ResponseFuncDto,
   fetchRequestGroupChatDTO,
+  ResponseMuteDto,
 } from '../../interfaces/Chatting-Format.dto';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { userInfo } from '../../atom/user';
 import { chatRoomState, currentChatInfoState } from '../../atom/chat';
+import { Chat } from './Chat';
 
 export const ChatSection = () => {
   const navigate = useNavigate();
@@ -25,6 +27,7 @@ export const ChatSection = () => {
   const param = useParams().id;
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
   const id = param === undefined ? 0 : parseInt(param, 10);
+  const [mute, setMute] = useState<boolean>(false);
 
   useLayoutEffect(() => {
     ChatSocket.on('fetch-group-message', fetchMessageHandler);
@@ -32,12 +35,18 @@ export const ChatSection = () => {
     ChatSocket.on('kick-user', handleKick);
     ChatSocket.on('ban-user', handleBan);
     ChatSocket.on('block-user', handleBlock);
+    ChatSocket.on('mute-user', handleMute);
+
     if (chat.length === 0)
       ChatSocket.emit('fetch-group-message', requestFetchLog);
 
     return () => {
       ChatSocket.off('group-message', sendMessageHandler);
       ChatSocket.off('fetch-group-message', fetchMessageHandler);
+      ChatSocket.off('kick-user', handleKick);
+      ChatSocket.off('ban-user', handleBan);
+      ChatSocket.off('block-user', handleBlock);
+      ChatSocket.off('mute-user', handleMute);
     };
   }, [roomInfo]);
 
@@ -46,6 +55,22 @@ export const ChatSection = () => {
       scrollBottomRef.current.scrollTop = scrollBottomRef.current.scrollHeight;
     }
   }, [chat]);
+
+  useEffect(() => {
+    if (localStorage.getItem('mute')) {
+      const now = new Date();
+      const muteTime = localStorage.getItem('mute');
+      const timeDiff = parseInt(muteTime as string, 10) - now.getTime();
+
+      if (timeDiff > 0) {
+        setMute(true);
+        setTimeout(() => {
+          localStorage.removeItem('mute');
+          setMute(false);
+        }, timeDiff);
+      } else localStorage.removeItem('mute');
+    }
+  }, []);
 
   const handleKick = (data: ResponseFuncDto) => {
     if (data.userId === user.id) {
@@ -72,7 +97,20 @@ export const ChatSection = () => {
         ...prev,
         joinedUser: prev.joinedUser.filter((item) => item.id !== data.userId),
       }));
-      //ban user render logic
+    }
+  };
+
+  const handleMute = (data: ResponseMuteDto) => {
+    if (data.userId === user.id) {
+      alert(`${data.muteFor / 1000}초 동안 뮤트되었습니다.`);
+      const now = new Date();
+
+      localStorage.setItem('mute', data.muteFor + now.getTime() + '');
+      setMute(true);
+      setTimeout(() => {
+        localStorage.removeItem('mute');
+        setMute(false);
+      }, data.muteFor);
     }
   };
 
@@ -140,6 +178,7 @@ export const ChatSection = () => {
               if (e.key === 'Enter') handleSendMessage();
             }}
             value={input}
+            disabled={mute}
             autoFocus
           ></input>
           <div
