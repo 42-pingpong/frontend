@@ -26,7 +26,7 @@ export const Chat = () => {
   const isNotificationModalOpen = useRecoilValue(notificationModalState);
   const isProfileModalOpen = useRecoilValue(profileModalState);
   const isPasswordModalOpen = useRecoilValue(passwordModalState);
-  const isMuteModalOpen = useRecoilValue(muteModalState);
+
   const user = useRecoilValue(userInfo);
   const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
   const setPassword = useSetRecoilState(passwordModalState);
@@ -71,8 +71,10 @@ export const Chat = () => {
   };
 
   const handleError = (data: any) => {
-    alert('채팅방에 입장할 수 없습니다.');
-    navigate('/');
+    if (data.status === 403) {
+      alert('채팅방에 입장할 수 없습니다.');
+      navigate('/');
+    }
   };
 
   const handleJoinChatRoom = (data: ChatRoomInfoDTO) => {
@@ -97,7 +99,6 @@ export const Chat = () => {
         </div>
         {isProfileModalOpen && <ProfileModal />}
         {isNotificationModalOpen && <NotificationModal />}
-        {isMuteModalOpen && <MuteTimeModal />}
       </div>
     );
 };

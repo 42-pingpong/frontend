@@ -1,6 +1,7 @@
 import { useRecoilState } from 'recoil';
 import { muteModalState } from '../../../atom/modal';
 import { useState } from 'react';
+import { RequestMuteDto } from '../../../interfaces/Chatting-Format.dto';
 
 export const MuteTimeModal = () => {
   const [modal, setModal] = useRecoilState(muteModalState);
@@ -23,7 +24,9 @@ export const MuteTimeModal = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log(numberInput, timeUnit);
-    //emit mute
+    // const reqData: RequestMuteDto = {
+    //   groupChatId: 1,
+    // }
   };
 
   return (

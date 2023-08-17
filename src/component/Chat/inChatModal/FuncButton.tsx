@@ -11,6 +11,7 @@ import { currentChatInfoState } from '../../../atom/chat';
 import { userInfo } from '../../../atom/user';
 import { ChatSocket } from '../../../sockets/ChatSocket';
 import { muteModalState } from '../../../atom/modal';
+import { MuteTimeModal } from './MuteTimeModal';
 
 export const FuncButton = ({
   name,
@@ -23,6 +24,7 @@ export const FuncButton = ({
   const roomInfo = useRecoilValue(currentChatInfoState);
   const user = useRecoilValue(userInfo);
   const setMuteModal = useSetRecoilState(muteModalState);
+  const isMuteModalOpen = useRecoilValue(muteModalState);
 
   const handelModalFuc = () => {
     switch (name) {
@@ -84,6 +86,7 @@ export const FuncButton = ({
       onClick={handelModalFuc}
     >
       <span className="text-lg font-semibold text-white">{name}</span>
+      {isMuteModalOpen && <MuteTimeModal />}
     </div>
   );
 };

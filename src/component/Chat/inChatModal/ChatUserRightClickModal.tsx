@@ -15,6 +15,11 @@ export const ChatUserRightClickModal = (props: Props) => {
   const [modal, setModal] = useRecoilState(
     chattingProfileOnRightClickModalState
   );
+  const user = useRecoilValue(userInfo);
+  if (user.id === props.user.id) {
+    setModal(false);
+    return null;
+  }
 
   const role = useRecoilValue(roleState);
 
