@@ -27,6 +27,7 @@ export const ChatSection = () => {
   const param = useParams().id;
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
   const id = param === undefined ? 0 : parseInt(param, 10);
+  const [mute, setMute] = useState<boolean>(false);
 
   useLayoutEffect(() => {
     ChatSocket.on('fetch-group-message', fetchMessageHandler);
@@ -35,7 +36,6 @@ export const ChatSection = () => {
     ChatSocket.on('ban-user', handleBan);
     ChatSocket.on('block-user', handleBlock);
     ChatSocket.on('mute-user', handleMute);
-    });
 
     if (chat.length === 0)
       ChatSocket.emit('fetch-group-message', requestFetchLog);
@@ -55,6 +55,22 @@ export const ChatSection = () => {
       scrollBottomRef.current.scrollTop = scrollBottomRef.current.scrollHeight;
     }
   }, [chat]);
+
+  useEffect(() => {
+    if (localStorage.getItem('mute')) {
+      const now = new Date();
+      const muteTime = localStorage.getItem('mute');
+      const timeDiff = parseInt(muteTime as string, 10) - now.getTime();
+
+      if (timeDiff > 0) {
+        setMute(true);
+        setTimeout(() => {
+          localStorage.removeItem('mute');
+          setMute(false);
+        }, timeDiff);
+      } else localStorage.removeItem('mute');
+    }
+  }, []);
 
   const handleKick = (data: ResponseFuncDto) => {
     if (data.userId === user.id) {
@@ -81,16 +97,22 @@ export const ChatSection = () => {
         ...prev,
         joinedUser: prev.joinedUser.filter((item) => item.id !== data.userId),
       }));
-      //ban user render logic
     }
   };
 
   const handleMute = (data: ResponseMuteDto) => {
-    
-  }
+    if (data.userId === user.id) {
+      alert(`${data.muteFor / 1000}초 동안 뮤트되었습니다.`);
+      const now = new Date();
 
-  [Log] {groupChatId: 1, userId: 106930, chatSocketId: "lOwldAksF8C0ZqtDAABE", muteFor: 5000} (bundle.js, line 1885)
-
+      localStorage.setItem('mute', data.muteFor + now.getTime() + '');
+      setMute(true);
+      setTimeout(() => {
+        localStorage.removeItem('mute');
+        setMute(false);
+      }, data.muteFor);
+    }
+  };
 
   const handleBlock = (data: ResponseFuncDto) => {
     console.log('조졌네');
@@ -156,6 +178,7 @@ export const ChatSection = () => {
               if (e.key === 'Enter') handleSendMessage();
             }}
             value={input}
+            disabled={mute}
             autoFocus
           ></input>
           <div

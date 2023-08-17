@@ -59,6 +59,13 @@ export interface ResponseFuncDto {
   userId: number;
 }
 
+export interface ResponseMuteDto {
+  groupChatId: number;
+  userId: number;
+  chatSocketId: number;
+  muteFor: number;
+}
+
 export interface RequestKickDto {
   groupChatId: number;
   kickUserId: number;
