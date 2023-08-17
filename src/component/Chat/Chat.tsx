@@ -47,13 +47,15 @@ export const Chat = () => {
       setPassword(true);
     }
     ChatSocket.on('join-room', handleJoinChatRoom);
+    ChatSocket.on('error', handleError);
 
     return () => {
       ChatSocket.off('join-room', handleJoinChatRoom);
+      ChatSocket.off('error', handleError);
     };
   }, [user]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setRole(
       roomInfo.ownerId === user.id
         ? 'owner'
@@ -66,6 +68,11 @@ export const Chat = () => {
   const requestJoinChatRoom: JoinGroupChatDTO = {
     groupChatId: parseInt(params.id as string, 10),
     userId: user.id,
+  };
+
+  const handleError = (data: any) => {
+    alert('채팅방에 입장할 수 없습니다.');
+    navigate('/');
   };
 
   const handleJoinChatRoom = (data: ChatRoomInfoDTO) => {

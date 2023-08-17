@@ -38,6 +38,9 @@ export const ChatSection = () => {
     return () => {
       ChatSocket.off('group-message', sendMessageHandler);
       ChatSocket.off('fetch-group-message', fetchMessageHandler);
+      ChatSocket.off('kick-user', handleKick);
+      ChatSocket.off('ban-user', handleBan);
+      ChatSocket.off('block-user', handleBlock);
     };
   }, [roomInfo]);
 
