@@ -20,36 +20,23 @@ export const ChatUserRightClickModal = (props: Props) => {
     chattingProfileOnRightClickModalState
   );
   const user = useRecoilValue(userInfo);
+  const roomInfo = useRecoilValue(currentChatInfoState);
 
   if (user.id === props.user.id) {
     setModal(false);
     return null;
   }
+
   const closeModal = () => {
     setModal(!modal);
   };
 
   const handleContentClick = (e: any) => {
-    // 이벤트 버블링 중지
     e.stopPropagation();
   };
 
   const role = useRecoilValue(roleState);
   const isMuteModalOpen = useRecoilValue(muteModalState);
-
-  // const closeModal = (e: any) => {
-  //   const modalContent = document.getElementById('chat-profile-right-content');
-
-  //   console.log(modalContent);
-  //   if (
-  //     modalContent &&
-  //     (modalContent === e.target || modalContent.contains(e.target))
-  //   ) {
-  //     e.stopPropagation();
-  //   } else {
-  //     setModal(!modal);
-  //   }
-  // };
 
   if (props.y > 900) props.y -= 300;
 
@@ -89,6 +76,13 @@ export const ChatUserRightClickModal = (props: Props) => {
           <FuncButton name={'Block'} target={props.user} />
           <FuncButton name={'Go PingPong'} target={props.user} />
         </div>
+        {isMuteModalOpen && (
+          <MuteTimeModal
+            groupChatId={roomInfo.groupChatId}
+            userId={props.user.id}
+            requestUserId={user.id}
+          />
+        )}
       </div>
     );
 };

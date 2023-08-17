@@ -52,8 +52,7 @@ export const ChattingBubble = ({ props }: { props: ResponseGroupChatDTO }) => {
           className="flex rounded-full"
         />
       </div>
-
-      <div className="text-xl mb-[2.5%] px-5 py-2 rounded-[50px] shadow-md max-w-[50%] bg-[#D9D9D9] justify-center mx-[1.5%] relative">
+      <div className="text-xl mb-[2.5%] px-5 py-2 rounded-[50px] shadow-md max-w-[50%] bg-[#D9D9D9] justify-center mx-[1.5%] flex">
         <span className="mt-1 mx-1 inline-block">
           {props.messageInfo.message}
         </span>
@@ -64,7 +63,7 @@ export const ChattingBubble = ({ props }: { props: ResponseGroupChatDTO }) => {
     </div>
   ) : (
     <div className="flex">
-      <div className="text-xl mb-[2.5%] px-5 py-2 rounded-[50px] shadow-md max-w-[50%] bg-sky justify-center mx-[1.5%] ml-auto relative">
+      <div className="text-xl mb-[2.5%] px-5 py-2 rounded-[50px] shadow-md max-w-[50%] bg-sky justify-center mx-[1.5%] ml-auto flex">
         <span className="mt-1 mx-1 inline-block">
           {props.messageInfo.message}
         </span>

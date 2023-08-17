@@ -2,8 +2,15 @@ import { useRecoilState } from 'recoil';
 import { muteModalState } from '../../../atom/modal';
 import { useState } from 'react';
 import { RequestMuteDto } from '../../../interfaces/Chatting-Format.dto';
+import { ChatSocket } from '../../../sockets/ChatSocket';
 
-export const MuteTimeModal = () => {
+interface Props {
+  groupChatId: number;
+  userId: number;
+  requestUserId: number;
+}
+
+export const MuteTimeModal = (props: Props) => {
   const [modal, setModal] = useRecoilState(muteModalState);
   const [timeUnit, setTimeUnit] = useState('');
   const [numberInput, setNumberInput] = useState('');
@@ -23,16 +30,20 @@ export const MuteTimeModal = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(numberInput, timeUnit);
-    // const reqData: RequestMuteDto = {
-    //   groupChatId: 1,
-    // }
+    const reqData: RequestMuteDto = {
+      groupChatId: props.groupChatId,
+      userId: props.userId,
+      requestUserId: props.requestUserId,
+      time: parseInt(numberInput, 10),
+      unit: timeUnit,
+    };
+    ChatSocket.emit('mute-user', reqData);
   };
 
   return (
     <div
       aria-hidden={true}
-      className="flex bg-[rgba(0,0,0,0.1)] items-center justify-center z-20 fixed top-0 left-0 w-full h-full"
+      className="flex bg-[rgba(0,0,0,0.1)] items-center justify-center z-30 fixed top-0 left-0 w-full h-full"
       onClick={closeModal}
     >
       <div

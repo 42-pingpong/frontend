@@ -14,6 +14,7 @@ import {
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { userInfo } from '../../atom/user';
 import { chatRoomState, currentChatInfoState } from '../../atom/chat';
+import { Chat } from './Chat';
 
 export const ChatSection = () => {
   const navigate = useNavigate();
@@ -32,6 +33,10 @@ export const ChatSection = () => {
     ChatSocket.on('kick-user', handleKick);
     ChatSocket.on('ban-user', handleBan);
     ChatSocket.on('block-user', handleBlock);
+    ChatSocket.on('mute-user', (data) => {
+      console.log(data);
+    });
+
     if (chat.length === 0)
       ChatSocket.emit('fetch-group-message', requestFetchLog);
 
