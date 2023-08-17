@@ -58,7 +58,6 @@ export const Main = () => {
           y={clickedY}
         />
       )}
-      {isPasswordModalOpen && <PasswordModal groupChatId={clickedRoomId} />}
       {<ResetGameRecoilStatus />}
     </div>
   );

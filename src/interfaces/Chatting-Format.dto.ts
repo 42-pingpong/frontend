@@ -51,15 +51,29 @@ export interface fetchRequestGroupChatDTO {
   userId: number;
 }
 
+/***
+ * GroupChatting Function
+ */
 export interface RequestKickDto {
   groupChatId: number;
   kickUserId: number;
   requestUserId: number;
 }
 
-export interface ResponseKickDto {
+export interface ResponseFuncDto {
   groupChatId: number;
   userId: number;
+}
+
+export interface RequestBlockDto {
+  userId: number;
+  blockedUserId: number;
+}
+
+export interface RequestBanDto {
+  groupChatId: number;
+  userId: number;
+  bannedId: number;
 }
 
 /*

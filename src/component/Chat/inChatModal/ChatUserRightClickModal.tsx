@@ -1,9 +1,7 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { chattingProfileOnRightClickModalState } from '../../../atom/modal';
-import { UserDto } from '../../../interfaces/User.dto';
-import { useNavigate } from 'react-router-dom';
 import { FuncButton } from './FuncButton';
-import { currentChatInfoState } from '../../../atom/chat';
+import { currentChatInfoState, roleState } from '../../../atom/chat';
 import { userInfo } from '../../../atom/user';
 import { senderDTO } from '../../../interfaces/Chatting-Format.dto';
 
@@ -17,24 +15,13 @@ export const ChatUserRightClickModal = (props: Props) => {
   const [modal, setModal] = useRecoilState(
     chattingProfileOnRightClickModalState
   );
-  const roomInfo = useRecoilValue(currentChatInfoState);
-  const user = useRecoilValue(userInfo);
-  const role =
-    roomInfo.ownerId === user.id
-      ? 'owner'
-      : roomInfo.admin.find((item: any) => item.id === user.id)
-      ? 'admin'
-      : 'user';
+
+  const role = useRecoilValue(roleState);
+
   const closeModal = (e: any) => {
     const modalContent = document.getElementById('chat-profile-right-content');
-    const modalCloseButton = document.getElementById('modal-close-button');
 
-    if (
-      modalContent &&
-      modalContent.contains(e.target) &&
-      e.target !== modalCloseButton
-    )
-      e.stopPropagation();
+    if (modalContent && modalContent.contains(e.target)) e.stopPropagation();
     else setModal(!modal);
   };
 
@@ -55,13 +42,6 @@ export const ChatUserRightClickModal = (props: Props) => {
           <FuncButton name={'Block'} target={props.user} />
           <FuncButton name={'Go PingPong'} target={props.user} />
         </div>
-        <button
-          id="modal-close-button"
-          className="absolute top-3 right-7 p-0 text-gray-400 text-lg"
-          onClick={closeModal}
-        >
-          X
-        </button>
       </div>
     );
   else
@@ -82,13 +62,6 @@ export const ChatUserRightClickModal = (props: Props) => {
           <FuncButton name={'Block'} target={props.user} />
           <FuncButton name={'Go PingPong'} target={props.user} />
         </div>
-        <button
-          id="modal-close-button"
-          className="absolute top-3 right-7 p-0 text-gray-400 text-lg"
-          onClick={closeModal}
-        >
-          X
-        </button>
       </div>
     );
 };

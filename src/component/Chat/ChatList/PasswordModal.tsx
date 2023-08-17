@@ -1,33 +1,35 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { passwordModalState } from '../../../atom/modal';
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { ChatSocket } from '../../../sockets/ChatSocket';
 import {
   ChatRoomInfoDTO,
   JoinGroupChatDTO,
 } from '../../../interfaces/Chatting-Format.dto';
 import { userInfo } from '../../../atom/user';
-import { Chat } from '../Chat';
 import { currentChatInfoState } from '../../../atom/chat';
+import { useNavigate } from 'react-router-dom';
 
 export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
   const [password, setPassword] = useRecoilState(passwordModalState);
   const inputPasswordRef = useRef('');
-  const navigation = useNavigate();
   const user = useRecoilValue(userInfo);
-  const [curRoomInfo, setCurRoomInfo] = useRecoilState(currentChatInfoState);
+  const setCurRoomInfo = useSetRecoilState(currentChatInfoState);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('password modal');
     ChatSocket.on('join-room', handleJoinChatRoom);
     ChatSocket.on('error', handleJoinChatRoomError);
+
+    return () => {
+      ChatSocket.off('join-room', handleJoinChatRoom);
+      ChatSocket.off('error', handleJoinChatRoomError);
+    };
   }, []);
 
   const handleJoinChatRoom = (data: ChatRoomInfoDTO) => {
     setCurRoomInfo(data);
     setPassword(false);
-    navigation(`/chat/${data.groupChatId}`);
   };
 
   const handleJoinChatRoomError = (data: any) => {
@@ -37,16 +39,18 @@ export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
 
   const closeModal = (e: any) => {
     const modalContent = document.getElementById('password-content');
-    const modalListContent = document.getElementById('search-user-list');
     const modalCloseButton = document.getElementById('modal-close-button');
 
     if (
-      ((modalContent && modalContent.contains(e.target)) ||
-        (modalListContent && modalListContent.contains(e.target))) &&
+      modalContent &&
+      modalContent.contains(e.target) &&
       e.target !== modalCloseButton
     )
       e.stopPropagation();
-    else setPassword(!password);
+    else {
+      setPassword(!password);
+      navigate('/');
+    }
   };
 
   const handleInputChange = (e: any) => {
@@ -63,7 +67,7 @@ export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
   };
 
   return (
-    <div className="background bg-[rgba(0,0,0,0.2)]" onClick={closeModal}>
+    <div className="background bg-[rgba(0,0,0,0.2)]">
       <div
         id="password-content"
         className="w-[22vw] h-[22vh] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[20vh]"

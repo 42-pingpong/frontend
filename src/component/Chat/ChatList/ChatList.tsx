@@ -1,46 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { clickedRoomIdState, passwordModalState } from '../../../atom/modal';
-import { ChatSocket } from '../../../sockets/ChatSocket';
-import {
-  ChatRoomDTO,
-  ChatRoomInfoDTO,
-  JoinGroupChatDTO,
-} from '../../../interfaces/Chatting-Format.dto';
-import { userInfo } from '../../../atom/user';
-import { currentChatInfoState } from '../../../atom/chat';
+import { ChatRoomDTO } from '../../../interfaces/Chatting-Format.dto';
 
 export const ChatList = ({ props }: { props: ChatRoomDTO }) => {
   const navigation = useNavigate();
-  const setPassword = useSetRecoilState(passwordModalState);
-  const setRoomId = useSetRecoilState(clickedRoomIdState);
-  const user = useRecoilValue(userInfo);
-  const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
-
-  useEffect(() => {
-    ChatSocket.on('join-room', handleJoinChatRoom);
-
-    return () => {
-      ChatSocket.off('join-room', handleJoinChatRoom);
-    };
-  }, []);
-
-  const handleJoinChatRoom = (data: ChatRoomInfoDTO) => {
-    setRoomInfo(data);
-  };
 
   const handleChatEnter = () => {
-    if (props.levelOfPublicity !== 'Prot') {
-      const requestJoinChatRoom: JoinGroupChatDTO = {
-        groupChatId: props.groupChatId,
-        userId: user.id,
-      };
-      navigation(`/chat/${props.groupChatId}`);
-      ChatSocket.emit('join-room', requestJoinChatRoom);
-    } else {
-      setPassword(true), setRoomId(`${props.groupChatId}`);
-    }
+    navigation(`/chat/${props.groupChatId}/${props.levelOfPublicity}`);
   };
 
   return (

@@ -2,13 +2,13 @@ import { ChatList } from './ChatList/ChatList';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { ChattingBubble } from './ChattingBubble';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ChatSocket } from '../../sockets/ChatSocket';
 import {
   ChatRoomInfoDTO,
   RequestGroupChatDTO,
   ResponseGroupChatDTO,
-  ResponseKickDto,
+  ResponseFuncDto,
   fetchRequestGroupChatDTO,
 } from '../../interfaces/Chatting-Format.dto';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
@@ -22,22 +22,24 @@ export const ChatSection = () => {
   const roomInfoReset = useResetRecoilState(currentChatInfoState);
   const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
   const user = useRecoilValue(userInfo);
-  const chatRoomList = useRecoilValue(chatRoomState);
   const param = useParams().id;
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
   const id = param === undefined ? 0 : parseInt(param, 10);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     ChatSocket.on('fetch-group-message', fetchMessageHandler);
     ChatSocket.on('group-message', sendMessageHandler);
-    ChatSocket.on('kick-user', handleKickUser);
-    ChatSocket.emit('fetch-group-message', requestFetchLog);
+    ChatSocket.on('kick-user', handleKick);
+    ChatSocket.on('ban-user', handleBan);
+    ChatSocket.on('block-user', handleBlock);
+    if (chat.length === 0)
+      ChatSocket.emit('fetch-group-message', requestFetchLog);
 
     return () => {
       ChatSocket.off('group-message', sendMessageHandler);
       ChatSocket.off('fetch-group-message', fetchMessageHandler);
     };
-  }, []);
+  }, [roomInfo]);
 
   useEffect(() => {
     if (scrollBottomRef.current) {
@@ -45,27 +47,37 @@ export const ChatSection = () => {
     }
   }, [chat]);
 
-  const handleKickUser = (data: ResponseKickDto) => {
+  const handleKick = (data: ResponseFuncDto) => {
     if (data.userId === user.id) {
-      const newChat: RequestGroupChatDTO = {
-        receivedGroupChatId: id,
-        senderId: user.id,
-        message: '나는 kick 되었습니다.. 내는 간다',
-      };
-
-      ChatSocket.emit('group-message', newChat);
       ChatSocket.emit('leave-room', id);
       roomInfoReset();
+      alert(`${id}번 방에서 쫒겨났습니다.`);
       navigate('/');
-      alert(`${id}번 방에서 쫒겨났습니다..`);
     } else {
       setRoomInfo((prev) => ({
         ...prev,
-        joinedUser: roomInfo.joinedUser.filter(
-          (item) => item.id !== data.userId
-        ),
+        joinedUser: prev.joinedUser.filter((item) => item.id !== data.userId),
       }));
     }
+  };
+
+  const handleBan = (data: ResponseFuncDto) => {
+    if (data.userId === user.id) {
+      ChatSocket.emit('leave-room', id);
+      roomInfoReset();
+      alert(`${id}번 방에서 밴 당했습니다.`);
+      navigate('/');
+    } else {
+      setRoomInfo((prev) => ({
+        ...prev,
+        joinedUser: prev.joinedUser.filter((item) => item.id !== data.userId),
+      }));
+      //ban user render logic
+    }
+  };
+
+  const handleBlock = (data: ResponseFuncDto) => {
+    console.log('조졌네');
   };
 
   const requestFetchLog: fetchRequestGroupChatDTO = {
@@ -98,17 +110,15 @@ export const ChatSection = () => {
     setInput('');
   };
 
-  const chatRoom = chatRoomList.find((room) => room.groupChatId === Number(id));
-
   return (
     <div id="chat-section" className="flex flex-col h-full">
       <div className="flex">
         <ServiceTitle title="Chat" nonAddButton={true} />
       </div>
       <div className="flex relative h-full flex-col rounded-3xl shadow-2xl flex-grow pt-14 items-center bg-slate-50">
-        {chatRoom && (
+        {roomInfo && (
           <div className="absolute top-[-4rem] left-1/2 transform -translate-x-1/2 rounded-3xl mx-auto w-[500px] z-10">
-            <ChatList props={chatRoom} />
+            <ChatList props={roomInfo} />
           </div>
         )}
         <div className="flex w-full mt-[2%] h-[80%] md:h-[800px] justify-between items-center px-14 z-10 overflow-y-auto">

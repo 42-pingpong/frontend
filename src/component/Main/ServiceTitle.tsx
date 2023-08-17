@@ -21,7 +21,7 @@ export const ServiceTitle = (props: ServiceTitleProps) => {
   const [roomId, setRoomId] = useRecoilState(roomIdState);
   const login = useRecoilValue(loginState);
   const SERVER = process.env.REACT_APP_SERVER;
-  
+
   const handleState = (roomName: number) => {
     setRoomId(roomName);
     setMatching(false);

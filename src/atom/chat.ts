@@ -57,3 +57,8 @@ export const currentChatInfoState = atom<ChatRoomInfoDTO>({
     joinedUser: [],
   },
 });
+
+export const roleState = atom<string>({
+  key: 'roleState',
+  default: '',
+});
