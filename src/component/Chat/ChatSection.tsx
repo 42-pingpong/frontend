@@ -2,7 +2,7 @@ import { ChatList } from './ChatList/ChatList';
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { ChattingBubble } from './ChattingBubble';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ChatSocket } from '../../sockets/ChatSocket';
 import {
   ChatRoomInfoDTO,
@@ -22,12 +22,11 @@ export const ChatSection = () => {
   const roomInfoReset = useResetRecoilState(currentChatInfoState);
   const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
   const user = useRecoilValue(userInfo);
-  const chatRoomList = useRecoilValue(chatRoomState);
   const param = useParams().id;
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
   const id = param === undefined ? 0 : parseInt(param, 10);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     ChatSocket.on('fetch-group-message', fetchMessageHandler);
     ChatSocket.on('group-message', sendMessageHandler);
     ChatSocket.on('kick-user', handleKick);
@@ -40,7 +39,7 @@ export const ChatSection = () => {
       ChatSocket.off('group-message', sendMessageHandler);
       ChatSocket.off('fetch-group-message', fetchMessageHandler);
     };
-  }, []);
+  }, [roomInfo]);
 
   useEffect(() => {
     if (scrollBottomRef.current) {
@@ -52,8 +51,8 @@ export const ChatSection = () => {
     if (data.userId === user.id) {
       ChatSocket.emit('leave-room', id);
       roomInfoReset();
-      navigate('/');
       alert(`${id}번 방에서 쫒겨났습니다.`);
+      navigate('/');
     } else {
       setRoomInfo((prev) => ({
         ...prev,
@@ -66,8 +65,8 @@ export const ChatSection = () => {
     if (data.userId === user.id) {
       ChatSocket.emit('leave-room', id);
       roomInfoReset();
-      navigate('/');
       alert(`${id}번 방에서 밴 당했습니다.`);
+      navigate('/');
     } else {
       setRoomInfo((prev) => ({
         ...prev,
@@ -111,17 +110,15 @@ export const ChatSection = () => {
     setInput('');
   };
 
-  const chatRoom = chatRoomList.find((room) => room.groupChatId === Number(id));
-
   return (
     <div id="chat-section" className="flex flex-col h-full">
       <div className="flex">
         <ServiceTitle title="Chat" nonAddButton={true} />
       </div>
       <div className="flex relative h-full flex-col rounded-3xl shadow-2xl flex-grow pt-14 items-center bg-slate-50">
-        {chatRoom && (
+        {roomInfo && (
           <div className="absolute top-[-4rem] left-1/2 transform -translate-x-1/2 rounded-3xl mx-auto w-[500px] z-10">
-            <ChatList props={chatRoom} />
+            <ChatList props={roomInfo} />
           </div>
         )}
         <div className="flex w-full mt-[2%] h-[80%] md:h-[800px] justify-between items-center px-14 z-10 overflow-y-auto">

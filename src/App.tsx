@@ -18,7 +18,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Main />} />
             <Route path="/token" element={<TokenSave />} />
-            <Route path="/chat/:id" element={<Chat />} />
+            <Route path="/chat/:id/:levelOfPublicity?" element={<Chat />} />
             <Route path="/direct-message/:id" element={<DirectMessage />} />
             <Route path="/game/:id" element={<Game />} />
             <Route path="/profile/:nickName?" element={<Profile />} />

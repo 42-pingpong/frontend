@@ -5,7 +5,7 @@ import { Friend } from '../../FriendList/Friend';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { ChatSocket } from '../../../sockets/ChatSocket';
 import { currentChatInfoState } from '../../../atom/chat';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { UserDto } from '../../../interfaces/User.dto';
 import axiosInstance from '../../../api/axios';
 import {
@@ -29,7 +29,7 @@ export const UserSection = () => {
   const clickedFriendProfile = useRecoilValue(clickedFriendProfileState);
   const isFirendProfileModalOpen = useRecoilValue(friendProfileModalState);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetchOwner();
     fetchAdmins();
     fetchJoinedUser();
