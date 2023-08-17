@@ -6,14 +6,12 @@ import { NotificationModal } from '../Header/NotificationModal';
 import { ProfileModal } from '../Header/ProfileModal';
 import { currentChatInfoState, roleState } from '../../atom/chat';
 import { userInfo } from '../../atom/user';
-import { MuteTimeModal } from './inChatModal/MuteTimeModal';
 import { ChatSocket } from '../../sockets/ChatSocket';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PasswordModal } from './ChatList/PasswordModal';
 import {
   profileModalState,
   notificationModalState,
-  muteModalState,
   passwordModalState,
 } from '../../atom/modal';
 import {
