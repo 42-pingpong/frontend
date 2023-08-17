@@ -16,16 +16,14 @@ export const MuteTimeModal = (props: Props) => {
   const [numberInput, setNumberInput] = useState('');
 
   const closeModal = (e: any) => {
-    const modalContent = document.getElementById('mute-content');
+    setModal(!modal);
+  };
+
+  const handleContentClick = (e: any) => {
     const modalCloseButton = document.getElementById('modal-close-button');
 
-    if (
-      modalContent &&
-      modalContent.contains(e.target) &&
-      e.target !== modalCloseButton
-    )
-      e.stopPropagation();
-    else setModal(!modal);
+    if (e.target === modalCloseButton) setModal(!modal);
+    e.stopPropagation();
   };
 
   const handleSubmit = (e: any) => {
@@ -38,6 +36,7 @@ export const MuteTimeModal = (props: Props) => {
       unit: timeUnit,
     };
     ChatSocket.emit('mute-user', reqData);
+    setModal(!modal);
   };
 
   return (
@@ -49,6 +48,7 @@ export const MuteTimeModal = (props: Props) => {
       <div
         id="mute-content"
         className={`relative flex flex-col w-[20rem] h-[20rem] z-30 bg-white rounded-3xl shadow-lg items-center justify-center py-2`}
+        onClick={handleContentClick}
       >
         <span className="flexw-full h-20 items-center justify-center font-medium text-gray-500 text-lg">
           set mute time
@@ -63,7 +63,8 @@ export const MuteTimeModal = (props: Props) => {
               <input
                 type="number"
                 value={numberInput}
-                max={60}
+                max={100}
+                min={1}
                 onChange={(e) => setNumberInput(e.target.value)}
                 className="flex h-8 w-24 outline-none p-2 rounded-full text-center mt-2 bg-sky"
               />
@@ -76,9 +77,9 @@ export const MuteTimeModal = (props: Props) => {
                 className="flex h-8 w-24 outline-none rounded-full text-center mt-2  bg-sky"
               >
                 <option value="">단위 선택</option>
-                <option value="시">시</option>
-                <option value="분">분</option>
-                <option value="초">초</option>
+                <option value="h">시</option>
+                <option value="m">분</option>
+                <option value="s">초</option>
               </select>
             </label>
           </div>

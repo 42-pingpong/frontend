@@ -75,14 +75,14 @@ export const ChatUserRightClickModal = (props: Props) => {
           <FuncButton name={'Mute'} target={props.user} />
           <FuncButton name={'Block'} target={props.user} />
           <FuncButton name={'Go PingPong'} target={props.user} />
+          {isMuteModalOpen && (
+            <MuteTimeModal
+              groupChatId={roomInfo.groupChatId}
+              userId={props.user.id}
+              requestUserId={user.id}
+            />
+          )}
         </div>
-        {isMuteModalOpen && (
-          <MuteTimeModal
-            groupChatId={roomInfo.groupChatId}
-            userId={props.user.id}
-            requestUserId={user.id}
-          />
-        )}
       </div>
     );
 };

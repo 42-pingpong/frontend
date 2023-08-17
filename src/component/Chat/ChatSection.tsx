@@ -10,6 +10,7 @@ import {
   ResponseGroupChatDTO,
   ResponseFuncDto,
   fetchRequestGroupChatDTO,
+  ResponseMuteDto,
 } from '../../interfaces/Chatting-Format.dto';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { userInfo } from '../../atom/user';
@@ -33,8 +34,7 @@ export const ChatSection = () => {
     ChatSocket.on('kick-user', handleKick);
     ChatSocket.on('ban-user', handleBan);
     ChatSocket.on('block-user', handleBlock);
-    ChatSocket.on('mute-user', (data) => {
-      console.log(data);
+    ChatSocket.on('mute-user', handleMute);
     });
 
     if (chat.length === 0)
@@ -46,6 +46,7 @@ export const ChatSection = () => {
       ChatSocket.off('kick-user', handleKick);
       ChatSocket.off('ban-user', handleBan);
       ChatSocket.off('block-user', handleBlock);
+      ChatSocket.off('mute-user', handleMute);
     };
   }, [roomInfo]);
 
@@ -83,6 +84,13 @@ export const ChatSection = () => {
       //ban user render logic
     }
   };
+
+  const handleMute = (data: ResponseMuteDto) => {
+    
+  }
+
+  [Log] {groupChatId: 1, userId: 106930, chatSocketId: "lOwldAksF8C0ZqtDAABE", muteFor: 5000} (bundle.js, line 1885)
+
 
   const handleBlock = (data: ResponseFuncDto) => {
     console.log('조졌네');
