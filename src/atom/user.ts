@@ -1,12 +1,10 @@
 import { atom } from 'recoil';
 import { UserDto } from '../interfaces/User.dto';
-import { recoilPersist } from 'recoil-persist';
 
-const { persistAtom } = recoilPersist();
+//persist는 좀 더 고민해봐야겠다......
 export const loginState = atom<boolean>({
   key: 'loginState',
   default: false,
-  effects_UNSTABLE: [persistAtom],
 });
 
 export const userInfo = atom<UserDto>({
