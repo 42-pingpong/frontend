@@ -75,11 +75,9 @@ export const Chat = () => {
 
   if (isPasswordModalOpen) {
     return <PasswordModal groupChatId={params.id as string} />;
-  }
-  // else if (loading) {
-  //   return <Loading />;
-  // }
-  else
+  } else if (loading) {
+    return <Loading />;
+  } else
     return (
       <div className="h-screen bg-slate-100 p-20 justify-center flex">
         <div className="pt-[2%] grid grid-cols-3 grid-rows-6 gap-20 w-full h-[80vh] max-w-[1800px]">
