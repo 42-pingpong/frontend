@@ -5,19 +5,7 @@ import { GameSocket } from '../../../sockets/GameSocket';
 import { ResponseGoPingPongDto } from '../../../interfaces/Chatting-Format.dto';
 import { userInfo } from '../../../atom/user';
 import { useNavigate } from 'react-router-dom';
-
-interface playerInfoDto {
-  // groupChatId: number;
-  // userId: number;
-  // userNickName: string;
-  // targetUserId: number;
-  // targetUserNickName: string;
-  // isHost: boolean;
-  id: number;
-  is_host: boolean;
-  play_number: number;
-  enemy_id: number;
-}
+import { ChatSocket } from '../../../sockets/ChatSocket';
 
 export const GoPingPongModal = ({
   props,
@@ -58,22 +46,9 @@ export const GoPingPongModal = ({
     e.stopPropagation();
   };
 
-  const handleGoPingPong = () => {
-    let playerInfo: playerInfoDto;
-    isTarget
-      ? (playerInfo = {
-          id: user.id,
-          is_host: false,
-          play_number: 2,
-          enemy_id: props.userId,
-        })
-      : (playerInfo = {
-          id: user.id,
-          is_host: true,
-          play_number: 1,
-          enemy_id: props.targetUserId,
-        });
-    GameSocket.emit('go-pingpong', playerInfo);
+  const handleCloseModal = () => {
+    ChatSocket.emit('go-pingpong-accept', props.userId, props.targetUserId);
+    setModal(!modal);
   };
 
   return (
@@ -102,7 +77,7 @@ export const GoPingPongModal = ({
               type="submit"
               className="bg-progressBlue rounded-full h-10 w-20 font-semibold text-white shadow-sm mt-3"
               onClick={() => {
-                handleGoPingPong();
+                handleCloseModal();
               }}
             >
               넹

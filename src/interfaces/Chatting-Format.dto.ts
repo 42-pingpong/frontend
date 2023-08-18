@@ -107,6 +107,13 @@ export interface ResponseGoPingPongDto {
   targetUserNickName: string;
 }
 
+export interface playerInfoDto {
+  id: number;
+  is_host: boolean;
+  play_number: number;
+  enemy_id: number;
+}
+
 /*
  * DirectChatting
  */
