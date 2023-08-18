@@ -92,7 +92,7 @@ export const Chat = () => {
             <ChatSection />
           </div>
           <div className="col-span-1 row-span-6">
-            <UserSection />
+            <UserSection bottomIconVisible={true} />
           </div>
         </div>
         {isProfileModalOpen && <ProfileModal />}

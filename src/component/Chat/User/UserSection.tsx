@@ -16,7 +16,11 @@ import {
 } from '../../../atom/modal';
 import { FriendProfileModal } from '../../FriendList/FriendProfileModal';
 
-export const UserSection = () => {
+export const UserSection = ({
+  bottomIconVisible,
+}: {
+  bottomIconVisible: boolean;
+}) => {
   const navigation = useNavigate();
   const id = useParams().id;
   const roomInfoReset = useResetRecoilState(currentChatInfoState);
@@ -79,7 +83,7 @@ export const UserSection = () => {
   };
 
   const handleManageChatRoom = () => {
-    navigation('/chat-manage');
+    navigation(`/chat-manage/${roomInfo.groupChatId}`);
     console.log('whsskglaemfek');
   };
 
@@ -108,7 +112,7 @@ export const UserSection = () => {
             joinedUser.map((item) => <Friend key={item.id} props={item} />)}
         </div>
         <div>
-          {role !== 'user' && (
+          {role !== 'user' && bottomIconVisible && (
             <div className="opacity-20">
               <img
                 src={require('../../../public/system.png')}

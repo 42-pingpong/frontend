@@ -23,7 +23,7 @@ function App() {
             <Route path="/direct-message/:id" element={<DirectMessage />} />
             <Route path="/game/:id" element={<Game />} />
             <Route path="/profile/:nickName?" element={<Profile />} />
-            <Route path="/chat-manage" element={<ChatManage />} />
+            <Route path="/chat-manage/:roomId" element={<ChatManage />} />
           </Routes>
         </BrowserRouter>
       </RecoilRoot>
