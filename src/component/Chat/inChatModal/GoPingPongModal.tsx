@@ -25,7 +25,8 @@ export const GoPingPongModal = ({
     // });
 
     GameSocket.on('go-pingpong', (roomId: number) => {
-      navigation(`/game/${roomId}}`);
+      // navigation(`/game/${roomId}}`);
+      setModal(!modal);
     });
 
     return () => {

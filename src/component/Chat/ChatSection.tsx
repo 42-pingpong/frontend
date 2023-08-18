@@ -144,25 +144,25 @@ export const ChatSection = () => {
     if (data.userId === user.id) {
       {
         console.log('user');
-        setPingPong({
+        setPingPong(() => ({
           groupChatId: data.groupChatId,
           userId: data.userId,
           targetUserId: data.targetUserId,
           userNickName: data.userNickName,
           targetUserNickName: data.targetUserNickName,
-        });
+        }));
         console.log(pingPong);
         setisGoPingPongModalOpen(true);
       }
     } else if (data.targetUserId === user.id) {
       console.log('target');
-      setPingPong({
+      setPingPong(() => ({
         groupChatId: data.groupChatId,
         userId: data.userId,
         targetUserId: data.targetUserId,
         userNickName: data.userNickName,
         targetUserNickName: data.targetUserNickName,
-      });
+      }));
       console.log(pingPong);
       setisGoPingPongModalOpen(true);
     }
@@ -172,18 +172,18 @@ export const ChatSection = () => {
     console.log('accept dto', dto);
     console.log('accept ', dto.targetUserId);
     user.id === dto.targetUserId
-      ? setPlayerInfo({
+      ? setPlayerInfo(() => ({
           id: user.id,
           is_host: false,
           play_number: 2,
           enemy_id: dto.userId,
-        })
-      : setPlayerInfo({
+        }))
+      : setPlayerInfo(() => ({
           id: user.id,
           is_host: true,
           play_number: 1,
           enemy_id: dto.targetUserId,
-        });
+        }));
     console.log(playerInfo);
     GameSocket.emit('go-pingpong', playerInfo);
   };
