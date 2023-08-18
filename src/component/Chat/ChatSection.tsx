@@ -155,21 +155,19 @@ export const ChatSection = () => {
     }
   };
 
-  const handleGoPingPongAccept = () => {
-    console.log(pingPong.targetUserId);
-    user.id === pingPong.targetUserId
-      ? (console.log(pingPong),
-        setPlayerInfo({
+  const handleGoPingPongAccept = (dto: any) => {
+    user.id === dto.targetId
+      ? setPlayerInfo({
           id: user.id,
           is_host: false,
           play_number: 2,
-          enemy_id: pingPong.userId,
-        }))
+          enemy_id: dto.userId,
+        })
       : setPlayerInfo({
           id: user.id,
           is_host: true,
           play_number: 1,
-          enemy_id: pingPong.targetUserId,
+          enemy_id: dto.targetId,
         });
     console.log(playerInfo);
     GameSocket.emit('go-pingpong', playerInfo);
