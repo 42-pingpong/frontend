@@ -91,6 +91,22 @@ export interface RequestMuteDto {
   unit: string;
 }
 
+export interface RequestGoPingPongDto {
+  groupChatId: number;
+  userId: number;
+  userNickName: string;
+  targetUserId: number;
+  targetUserNickName: string;
+}
+
+export interface ResponseGoPingPongDto {
+  groupChatId: number;
+  userId: number;
+  userNickName: string;
+  targetUserId: number;
+  targetUserNickName: string;
+}
+
 /*
  * DirectChatting
  */

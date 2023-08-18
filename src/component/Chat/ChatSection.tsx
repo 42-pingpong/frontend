@@ -11,11 +11,21 @@ import {
   ResponseFuncDto,
   fetchRequestGroupChatDTO,
   ResponseMuteDto,
+  RequestGoPingPongDto,
+  ResponseGoPingPongDto,
 } from '../../interfaces/Chatting-Format.dto';
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import {
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from 'recoil';
 import { userInfo } from '../../atom/user';
 import { chatRoomState, currentChatInfoState } from '../../atom/chat';
 import { Chat } from './Chat';
+import { goPingPongDtoState, goPingPongModalState } from '../../atom/modal';
+import { GameSocket } from '../../sockets/GameSocket';
+import { GoPingPongModal } from './inChatModal/GoPingPongModal';
 
 export const ChatSection = () => {
   const navigate = useNavigate();
@@ -28,6 +38,9 @@ export const ChatSection = () => {
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
   const id = param === undefined ? 0 : parseInt(param, 10);
   const [mute, setMute] = useState<boolean>(false);
+  const [isGoPingPongModalOpen, setisGoPingPongModalOpen] =
+    useRecoilState(goPingPongModalState);
+  const [pingPong, setPingPong] = useRecoilState(goPingPongDtoState);
 
   useLayoutEffect(() => {
     ChatSocket.on('fetch-group-message', fetchMessageHandler);
@@ -36,6 +49,7 @@ export const ChatSection = () => {
     ChatSocket.on('ban-user', handleBan);
     ChatSocket.on('block-user', handleBlock);
     ChatSocket.on('mute-user', handleMute);
+    ChatSocket.on('go-pingpong', handleGoPingPong);
 
     if (chat.length === 0)
       ChatSocket.emit('fetch-group-message', requestFetchLog);
@@ -47,6 +61,7 @@ export const ChatSection = () => {
       ChatSocket.off('ban-user', handleBan);
       ChatSocket.off('block-user', handleBlock);
       ChatSocket.off('mute-user', handleMute);
+      ChatSocket.off('go-pingpong', handleGoPingPong);
     };
   }, [roomInfo]);
 
@@ -116,6 +131,21 @@ export const ChatSection = () => {
 
   const handleBlock = (data: ResponseFuncDto) => {
     console.log('조졌네');
+  };
+
+  const handleGoPingPong = (data: RequestGoPingPongDto) => {
+    console.log(data);
+    if (data.userId === user.id) {
+      {
+        console.log('user');
+        setPingPong(data);
+        setisGoPingPongModalOpen(true);
+      }
+    } else if (data.targetUserId === user.id) {
+      console.log('target');
+      setPingPong(data);
+      setisGoPingPongModalOpen(true);
+    }
   };
 
   const requestFetchLog: fetchRequestGroupChatDTO = {
@@ -189,6 +219,7 @@ export const ChatSection = () => {
               src={require('../../public/whitePlane.png')}
               className=" mx-auto mt-2.5 w-7 h-7"
             ></img>
+            {isGoPingPongModalOpen && <GoPingPongModal props={pingPong} />}
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   chattingProfileOnRightClickModalState,
+  goPingPongModalState,
   muteModalState,
 } from '../../../atom/modal';
 import { FuncButton } from './FuncButton';
