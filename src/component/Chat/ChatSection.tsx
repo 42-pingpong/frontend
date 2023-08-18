@@ -27,6 +27,7 @@ import { goPingPongDtoState, goPingPongModalState } from '../../atom/modal';
 import { GameSocket } from '../../sockets/GameSocket';
 import { GoPingPongModal } from './inChatModal/GoPingPongModal';
 import { playerInfoDto } from '../../interfaces/Chatting-Format.dto';
+import { playerInfoState } from '../../atom/modal';
 
 export const ChatSection = () => {
   const navigate = useNavigate();
@@ -41,7 +42,8 @@ export const ChatSection = () => {
   const [mute, setMute] = useState<boolean>(false);
   const [isGoPingPongModalOpen, setisGoPingPongModalOpen] =
     useRecoilState(goPingPongModalState);
-  const [pingPong, setPingPong] = useRecoilState(goPingPongDtoState);
+  const [pingPong, setPingPong] = useRecoilState(goPingPongDtoState); // groupChatId, userId, targetUserId
+  const [playerInfo, setPlayerInfo] = useRecoilState(playerInfoState);
 
   useLayoutEffect(() => {
     ChatSocket.on('fetch-group-message', fetchMessageHandler);
@@ -142,30 +144,34 @@ export const ChatSection = () => {
       {
         console.log('user');
         setPingPong(data);
+        console.log(pingPong);
         setisGoPingPongModalOpen(true);
       }
     } else if (data.targetUserId === user.id) {
       console.log('target');
       setPingPong(data);
+      console.log(pingPong);
       setisGoPingPongModalOpen(true);
     }
   };
 
   const handleGoPingPongAccept = () => {
-    let playerInfo: playerInfoDto;
+    console.log(pingPong.targetUserId);
     user.id === pingPong.targetUserId
-      ? (playerInfo = {
+      ? (console.log(pingPong),
+        setPlayerInfo({
           id: user.id,
           is_host: false,
           play_number: 2,
           enemy_id: pingPong.userId,
-        })
-      : (playerInfo = {
+        }))
+      : setPlayerInfo({
           id: user.id,
           is_host: true,
           play_number: 1,
           enemy_id: pingPong.targetUserId,
         });
+    console.log(playerInfo);
     GameSocket.emit('go-pingpong', playerInfo);
   };
 

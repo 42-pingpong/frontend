@@ -17,16 +17,14 @@ export const GoPingPongModal = ({
   const user = useRecoilValue(userInfo);
   const navigation = useNavigate();
 
-  console.log('in go pingpong', props);
-
   useEffect(() => {
     if (props.targetUserId === user.id) setIsTarget(true);
 
-    GameSocket.on('go-pingpong', (data) => {
-      console.log;
-    });
+    // GameSocket.on('go-pingpong', (data) => {
+    //   console.log;
+    // });
 
-    GameSocket.on('go-pingpong-accept', (roomId: number) => {
+    GameSocket.on('go-pingpong', (roomId: number) => {
       navigation(`/game/${roomId}}`);
     });
 
