@@ -47,7 +47,11 @@ export const GoPingPongModal = ({
   };
 
   const handleCloseModal = () => {
-    ChatSocket.emit('go-pingpong-accept', props.userId, props.targetUserId);
+    ChatSocket.emit('go-pingpong-accept', {
+      groupChatId: props.groupChatId,
+      userId: props.userId,
+      targetUserId: props.targetUserId,
+    });
     setModal(!modal);
   };
 
