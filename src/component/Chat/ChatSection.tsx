@@ -13,6 +13,7 @@ import {
   ResponseMuteDto,
   RequestGoPingPongDto,
   ResponseGoPingPongDto,
+  goPingPongDto,
 } from '../../interfaces/Chatting-Format.dto';
 import {
   useRecoilState,
@@ -143,20 +144,34 @@ export const ChatSection = () => {
     if (data.userId === user.id) {
       {
         console.log('user');
-        setPingPong(data);
+        setPingPong({
+          groupChatId: data.groupChatId,
+          userId: data.userId,
+          targetUserId: data.targetUserId,
+          userNickName: data.userNickName,
+          targetUserNickName: data.targetUserNickName,
+        });
         console.log(pingPong);
         setisGoPingPongModalOpen(true);
       }
     } else if (data.targetUserId === user.id) {
       console.log('target');
-      setPingPong(data);
+      setPingPong({
+        groupChatId: data.groupChatId,
+        userId: data.userId,
+        targetUserId: data.targetUserId,
+        userNickName: data.userNickName,
+        targetUserNickName: data.targetUserNickName,
+      });
       console.log(pingPong);
       setisGoPingPongModalOpen(true);
     }
   };
 
-  const handleGoPingPongAccept = (dto: any) => {
-    user.id === dto.targetId
+  const handleGoPingPongAccept = (dto: goPingPongDto) => {
+    console.log('accept dto', dto);
+    console.log('accept ', dto.targetUserId);
+    user.id === dto.targetUserId
       ? setPlayerInfo({
           id: user.id,
           is_host: false,
@@ -167,7 +182,7 @@ export const ChatSection = () => {
           id: user.id,
           is_host: true,
           play_number: 1,
-          enemy_id: dto.targetId,
+          enemy_id: dto.targetUserId,
         });
     console.log(playerInfo);
     GameSocket.emit('go-pingpong', playerInfo);

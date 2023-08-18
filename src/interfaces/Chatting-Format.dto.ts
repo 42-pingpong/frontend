@@ -107,6 +107,12 @@ export interface ResponseGoPingPongDto {
   targetUserNickName: string;
 }
 
+export interface goPingPongDto {
+  groupChatId: number;
+  userId: number;
+  targetUserId: number;
+}
+
 export interface playerInfoDto {
   id: number;
   is_host: boolean;
