@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BanList } from './BanList';
-import { MuteList } from './MuteList';
+import { BanMuteList } from './BanMuteList';
 import { UserSection } from '../User/UserSection';
 import { useRecoilValue } from 'recoil';
 import { roleState } from '../../../atom/chat';
@@ -13,9 +12,9 @@ import { RoomInfo } from './RoomInfo';
 export const ChatManage = () => {
   const roomId = useParams().roomId;
   const role = useRecoilValue(roleState);
-  const [banList, setBanList] = useState<senderDTO>([]);
+  const [banList, setBanList] = useState<senderDTO[]>([]);
   const user = useRecoilValue(userInfo);
-  const [muteList, setMuteList] = useState([]);
+  const [muteList, setMuteList] = useState<senderDTO[]>([]);
 
   const fetchBanList = async () => {
     const res = await axiosInstance.get(
@@ -37,15 +36,23 @@ export const ChatManage = () => {
       <div className="w-full h-[20vh] bg-red-200 justify-center">
         <RoomInfo />
       </div>
-      <div className="grid w-full h-full grid-cols-3 gap-10 bg-red-100">
+      <div className="grid w-full h-full grid-cols-1 xl:grid-cols-3 gap-10 bg-red-100">
         <div className="flex w-full justify-center bg-slate-300">
           <UserSection bottomIconVisible={false} />
         </div>
-        <div className="grid w-full justify-center bg-slate-300">
-          <BanList list={banList} />
+        <div className="flex w-full justify-center bg-slate-300">
+          <BanMuteList
+            list={banList}
+            listName={'Ban'}
+            roomId={roomId as string}
+          />
         </div>
-        <div className="grid w-full justify-center bg-slate-300">
-          <MuteList list={muteList} />
+        <div className="flex w-full justify-center bg-slate-300">
+          <BanMuteList
+            list={banList}
+            listName={'Mute'}
+            roomId={roomId as string}
+          />
         </div>
       </div>
     </div>

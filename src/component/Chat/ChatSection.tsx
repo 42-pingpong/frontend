@@ -14,7 +14,7 @@ import {
 } from '../../interfaces/Chatting-Format.dto';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { userInfo } from '../../atom/user';
-import { chatRoomState, currentChatInfoState } from '../../atom/chat';
+import { currentChatInfoState } from '../../atom/chat';
 import { Chat } from './Chat';
 
 export const ChatSection = () => {

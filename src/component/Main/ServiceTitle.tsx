@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { newMatching, playerNumberState, roomIdState } from '../../atom/game';
 import { addUserModalState, chattingModalState } from '../../atom/modal';
@@ -11,7 +11,7 @@ interface ServiceTitleProps {
   nonAddButton?: boolean;
 }
 
-export const ServiceTitle = (props: ServiceTitleProps) => {
+export const ServiceTitle = memo((props: ServiceTitleProps) => {
   const [matching, setMatching] = useRecoilState(newMatching);
   const [chatstate, setChatstate] = useRecoilState(chattingModalState);
   const [addUser, setAddUser] = useRecoilState(addUserModalState);
@@ -75,4 +75,4 @@ export const ServiceTitle = (props: ServiceTitleProps) => {
       )}
     </div>
   );
-};
+});

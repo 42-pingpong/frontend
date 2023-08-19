@@ -8,9 +8,9 @@ import {
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { userInfo } from '../../atom/user';
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 
-export const Friend = ({ props }: { props: UserDto }) => {
+export const Friend = memo(function Friend({ props }: { props: UserDto }) {
   const setX = useSetRecoilState(clickedXState);
   const setY = useSetRecoilState(clickedYState);
   const setClicked = useSetRecoilState(friendProfileModalState);
@@ -27,7 +27,7 @@ export const Friend = ({ props }: { props: UserDto }) => {
   return (
     <div className="flex w-full h-20 bg-sky rounded-full my-3 shadow-md shadow-gray-300 items-center p-4 justify-between">
       <div
-        className="w-14 h-14 rounded-full border-2"
+        className="flex w-14 h-14 rounded-full border-2"
         // onclick으로 좌표랑 클릭된 애 누군지 recoil로 넘김
         onClick={(e) => {
           setX(e.clientX);
@@ -36,7 +36,7 @@ export const Friend = ({ props }: { props: UserDto }) => {
           setClicked(true);
         }}
       >
-        <img src={require('../../public/soo.png')} />
+        <img src={props.profile} className="flex rounded-full" />
       </div>
       <div className="flex w-1/2">
         <span className="text-gray-500 text-xl">{props.nickName}</span>
@@ -59,4 +59,4 @@ export const Friend = ({ props }: { props: UserDto }) => {
       ></div>
     </div>
   );
-};
+});

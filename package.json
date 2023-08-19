@@ -20,6 +20,7 @@
     "react-scripts": "5.0.1",
     "recoil": "^0.7.7",
     "recoil-persist": "^5.1.0",
+    "recoilize": "^3.2.0",
     "socket.io-client": "^4.7.1",
     "tailwindcss": "^3.3.3",
     "web-vitals": "^2.1.4"
@@ -49,6 +50,7 @@
     ]
   },
   "devDependencies": {
+    "@types/recoilize": "^0.8.0",
     "@types/socket.io-client": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "eslint": "^8.46.0",

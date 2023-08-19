@@ -34,6 +34,7 @@ export const Chat = () => {
   const [loading, setLoading] = useState(true);
 
   useLayoutEffect(() => {
+    console.log('Chat.tsx useLayoutEffect');
     if (params.id === undefined || params.levelOfPublicity === undefined) {
       alert('잘못된 접근입니다.');
       navigate('/');
