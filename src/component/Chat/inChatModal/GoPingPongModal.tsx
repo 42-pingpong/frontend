@@ -1,5 +1,5 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { goPingPongModalState } from '../../../atom/modal';
+import { goPingPongDtoState, goPingPongModalState } from '../../../atom/modal';
 import { useEffect, useState } from 'react';
 import { GameSocket } from '../../../sockets/GameSocket';
 import { ResponseGoPingPongDto } from '../../../interfaces/Chatting-Format.dto';
@@ -7,22 +7,15 @@ import { userInfo } from '../../../atom/user';
 import { useNavigate } from 'react-router-dom';
 import { ChatSocket } from '../../../sockets/ChatSocket';
 
-export const GoPingPongModal = ({
-  props,
-}: {
-  props: ResponseGoPingPongDto;
-}) => {
+export const GoPingPongModal = () => {
   const [modal, setModal] = useRecoilState(goPingPongModalState);
   const [isTarget, setIsTarget] = useState(false);
   const user = useRecoilValue(userInfo);
+  const pingPong = useRecoilValue(goPingPongDtoState); // groupChatId, userId, targetUserId
   const navigation = useNavigate();
 
   useEffect(() => {
-    if (props.targetUserId === user.id) setIsTarget(true);
-
-    // GameSocket.on('go-pingpong', (data) => {
-    //   console.log;
-    // });
+    if (pingPong.targetUserId === user.id) setIsTarget(true);
 
     GameSocket.on('go-pingpong', (roomId: number) => {
       // navigation(`/game/${roomId}}`);
@@ -45,12 +38,17 @@ export const GoPingPongModal = ({
     e.stopPropagation();
   };
 
-  const handleCloseModal = () => {
-    ChatSocket.emit('go-pingpong-accept', {
-      groupChatId: props.groupChatId,
-      userId: props.userId,
-      targetUserId: props.targetUserId,
-    });
+  const submitPingPongResponse = (response: string) => {
+    if (response === 'Y') {
+      console.log('go-pingpong-accept', pingPong);
+      ChatSocket.emit('go-pingpong-accept', {
+        groupChatId: pingPong.groupChatId,
+        userId: pingPong.userId,
+        targetUserId: pingPong.targetUserId,
+      });
+    } else {
+      ChatSocket.emit('go-pingpong-reject', {});
+    }
     setModal(!modal);
   };
 
@@ -66,11 +64,11 @@ export const GoPingPongModal = ({
       >
         {isTarget ? (
           <p className="px-10 break-keep flexw-full h-20 items-center justify-center font-medium text-gray-500 text-lg">
-            {props.userNickName} 님과 게임을 하시겠습니까?
+            {pingPong.userNickName} 님과 게임을 하시겠습니까?
           </p>
         ) : (
           <span className="flexw-full h-20 items-center justify-center font-medium text-gray-500 text-lg">
-            {props.targetUserNickName} 님의 응답 대기중
+            {pingPong.targetUserNickName} 님의 응답 대기중
           </span>
         )}
         <div className="flex w-[18rem] justify-between p-2"></div>
@@ -80,7 +78,7 @@ export const GoPingPongModal = ({
               type="submit"
               className="bg-progressBlue rounded-full h-10 w-20 font-semibold text-white shadow-sm mt-3"
               onClick={() => {
-                handleCloseModal();
+                submitPingPongResponse('Y');
               }}
             >
               넹
@@ -88,6 +86,9 @@ export const GoPingPongModal = ({
             <button
               type="submit"
               className="bg-progressBlue rounded-full h-10 w-20 font-semibold text-white shadow-sm mt-3"
+              onClick={() => {
+                submitPingPongResponse('N');
+              }}
             >
               시러여
             </button>{' '}

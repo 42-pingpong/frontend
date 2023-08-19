@@ -139,11 +139,9 @@ export const ChatSection = () => {
     console.log('조졌네');
   };
 
-  const handleGoPingPong = (data: RequestGoPingPongDto) => {
-    console.log(data);
+  const handleGoPingPong = async (data: ResponseGoPingPongDto) => {
     if (data.userId === user.id) {
       {
-        console.log('user');
         setPingPong(() => ({
           groupChatId: data.groupChatId,
           userId: data.userId,
@@ -151,7 +149,6 @@ export const ChatSection = () => {
           userNickName: data.userNickName,
           targetUserNickName: data.targetUserNickName,
         }));
-        console.log(pingPong);
         setisGoPingPongModalOpen(true);
       }
     } else if (data.targetUserId === user.id) {
@@ -163,7 +160,6 @@ export const ChatSection = () => {
         userNickName: data.userNickName,
         targetUserNickName: data.targetUserNickName,
       }));
-      console.log(pingPong);
       setisGoPingPongModalOpen(true);
     }
   };
@@ -171,21 +167,10 @@ export const ChatSection = () => {
   const handleGoPingPongAccept = (dto: goPingPongDto) => {
     console.log('accept dto', dto);
     console.log('accept ', dto.targetUserId);
-    user.id === dto.targetUserId
-      ? setPlayerInfo(() => ({
-          id: user.id,
-          is_host: false,
-          play_number: 2,
-          enemy_id: dto.userId,
-        }))
-      : setPlayerInfo(() => ({
-          id: user.id,
-          is_host: true,
-          play_number: 1,
-          enemy_id: dto.targetUserId,
-        }));
-    console.log(playerInfo);
-    GameSocket.emit('go-pingpong', playerInfo);
+
+    user.id === dto.userId
+      ? GameSocket.emit('go-pingpong', dto, true, 1)
+      : GameSocket.emit('go-pingpong', dto, false, 2);
   };
 
   const requestFetchLog: fetchRequestGroupChatDTO = {
@@ -259,7 +244,7 @@ export const ChatSection = () => {
               src={require('../../public/whitePlane.png')}
               className=" mx-auto mt-2.5 w-7 h-7"
             ></img>
-            {isGoPingPongModalOpen && <GoPingPongModal props={pingPong} />}
+            {isGoPingPongModalOpen && <GoPingPongModal />}
           </div>
         </div>
       </div>
