@@ -5,13 +5,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ChatSocket } from '../../sockets/ChatSocket';
 import {
-  ChatRoomInfoDTO,
   RequestGroupChatDTO,
   ResponseGroupChatDTO,
   ResponseFuncDto,
   fetchRequestGroupChatDTO,
   ResponseMuteDto,
-  RequestGoPingPongDto,
   ResponseGoPingPongDto,
   goPingPongDto,
 } from '../../interfaces/Chatting-Format.dto';
@@ -22,13 +20,15 @@ import {
   useSetRecoilState,
 } from 'recoil';
 import { userInfo } from '../../atom/user';
-import { chatRoomState, currentChatInfoState } from '../../atom/chat';
-import { Chat } from './Chat';
-import { goPingPongDtoState, goPingPongModalState } from '../../atom/modal';
+import { currentChatInfoState } from '../../atom/chat';
+import {
+  chattingProfileOnRightClickModalState,
+  goPingPongDtoState,
+  goPingPongModalState,
+  goPingPongRejectState,
+} from '../../atom/modal';
 import { GameSocket } from '../../sockets/GameSocket';
 import { GoPingPongModal } from './inChatModal/GoPingPongModal';
-import { playerInfoDto } from '../../interfaces/Chatting-Format.dto';
-import { playerInfoState } from '../../atom/modal';
 
 export const ChatSection = () => {
   const navigate = useNavigate();
@@ -41,10 +41,13 @@ export const ChatSection = () => {
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
   const id = param === undefined ? 0 : parseInt(param, 10);
   const [mute, setMute] = useState<boolean>(false);
-  const [isGoPingPongModalOpen, setisGoPingPongModalOpen] =
+  const [isGoPingPongModalOpen, setIsGoPingPongModalOpen] =
     useRecoilState(goPingPongModalState);
-  const [pingPong, setPingPong] = useRecoilState(goPingPongDtoState); // groupChatId, userId, targetUserId
-  const [playerInfo, setPlayerInfo] = useRecoilState(playerInfoState);
+  const setPingPong = useSetRecoilState(goPingPongDtoState); // groupChatId, userId, targetUserId
+  const setRightClickModal = useSetRecoilState(
+    chattingProfileOnRightClickModalState
+  );
+  const setGoPingPongReject = useSetRecoilState(goPingPongRejectState);
 
   useLayoutEffect(() => {
     ChatSocket.on('fetch-group-message', fetchMessageHandler);
@@ -55,6 +58,7 @@ export const ChatSection = () => {
     ChatSocket.on('mute-user', handleMute);
     ChatSocket.on('go-pingpong', handleGoPingPong);
     ChatSocket.on('go-pingpong-accept', handleGoPingPongAccept);
+    ChatSocket.on('go-pingpong-reject', handleGoPingPongReject);
 
     if (chat.length === 0)
       ChatSocket.emit('fetch-group-message', requestFetchLog);
@@ -68,6 +72,7 @@ export const ChatSection = () => {
       ChatSocket.off('mute-user', handleMute);
       ChatSocket.off('go-pingpong', handleGoPingPong);
       ChatSocket.off('go-pingpong-accept', handleGoPingPongAccept);
+      ChatSocket.off('go-pingpong-rejcet', handleGoPingPongReject);
     };
   }, [roomInfo]);
 
@@ -140,6 +145,7 @@ export const ChatSection = () => {
   };
 
   const handleGoPingPong = async (data: ResponseGoPingPongDto) => {
+    if (data.userId !== user.id && data.targetUserId !== user.id) return;
     if (data.userId === user.id) {
       {
         setPingPong(() => ({
@@ -149,7 +155,7 @@ export const ChatSection = () => {
           userNickName: data.userNickName,
           targetUserNickName: data.targetUserNickName,
         }));
-        setisGoPingPongModalOpen(true);
+        setIsGoPingPongModalOpen(true);
       }
     } else if (data.targetUserId === user.id) {
       console.log('target');
@@ -160,17 +166,38 @@ export const ChatSection = () => {
         userNickName: data.userNickName,
         targetUserNickName: data.targetUserNickName,
       }));
-      setisGoPingPongModalOpen(true);
+      setIsGoPingPongModalOpen(true);
     }
   };
 
-  const handleGoPingPongAccept = (dto: goPingPongDto) => {
-    console.log('accept dto', dto);
-    console.log('accept ', dto.targetUserId);
+  const handleGoPingPongAccept = (data: goPingPongDto) => {
+    if (data.userId !== user.id && data.targetUserId !== user.id) return;
+    user.id === data.userId
+      ? GameSocket.emit('go-pingpong', data, true, 1)
+      : GameSocket.emit('go-pingpong', data, false, 2);
+    setIsGoPingPongModalOpen(false);
+    setTimeout(() => {
+      100;
+    });
+    setRightClickModal(false);
+  };
 
-    user.id === dto.userId
-      ? GameSocket.emit('go-pingpong', dto, true, 1)
-      : GameSocket.emit('go-pingpong', dto, false, 2);
+  const handleGoPingPongReject = (response: any) => {
+    console.log(
+      'reject',
+      response[0].userId,
+      response[0].targetUserId,
+      user.id
+    );
+    if (response[0].userId !== user.id && response[0].targetUserId !== user.id)
+      return;
+    if (response[1] === 'N') {
+      user.id === response[0].targetUserId
+        ? setGoPingPongReject('거절했습니다')
+        : setGoPingPongReject('거절당했습니다');
+    } else if (user.id === response[0].targetUserId)
+      setGoPingPongReject('취소했습니다');
+    setRightClickModal(false);
   };
 
   const requestFetchLog: fetchRequestGroupChatDTO = {

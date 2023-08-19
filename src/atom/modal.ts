@@ -51,14 +51,9 @@ export const goPingPongDtoState = atom<ResponseGoPingPongDto>({
   },
 });
 
-export const playerInfoState = atom({
-  key: 'playerInfoDtoState',
-  default: {
-    id: -1,
-    is_host: false,
-    play_number: -1,
-    enemy_id: -1,
-  },
+export const goPingPongRejectState = atom<string>({
+  key: 'goPingPongRejectState',
+  default: '',
 });
 
 export const friendProfileModalState = atom<boolean>({

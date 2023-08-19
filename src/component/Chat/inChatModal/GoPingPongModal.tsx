@@ -1,8 +1,11 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { goPingPongDtoState, goPingPongModalState } from '../../../atom/modal';
+import {
+  goPingPongDtoState,
+  goPingPongModalState,
+  goPingPongRejectState,
+} from '../../../atom/modal';
 import { useEffect, useState } from 'react';
 import { GameSocket } from '../../../sockets/GameSocket';
-import { ResponseGoPingPongDto } from '../../../interfaces/Chatting-Format.dto';
 import { userInfo } from '../../../atom/user';
 import { useNavigate } from 'react-router-dom';
 import { ChatSocket } from '../../../sockets/ChatSocket';
@@ -13,17 +16,21 @@ export const GoPingPongModal = () => {
   const user = useRecoilValue(userInfo);
   const pingPong = useRecoilValue(goPingPongDtoState); // groupChatId, userId, targetUserId
   const navigation = useNavigate();
+  const [goPingPongReject, setGoPingPongReject] = useRecoilState(
+    goPingPongRejectState
+  );
 
   useEffect(() => {
     if (pingPong.targetUserId === user.id) setIsTarget(true);
 
     GameSocket.on('go-pingpong', (roomId: number) => {
-      // navigation(`/game/${roomId}}`);
+      navigation(`/game/${roomId}}`);
       setModal(!modal);
     });
 
     return () => {
       GameSocket.off('go-pingpong');
+      setGoPingPongReject('');
     };
   }, []);
 
@@ -46,11 +53,41 @@ export const GoPingPongModal = () => {
         userId: pingPong.userId,
         targetUserId: pingPong.targetUserId,
       });
+      setModal(!modal);
     } else {
-      ChatSocket.emit('go-pingpong-reject', {});
+      ChatSocket.emit('go-pingpong-reject', pingPong, response);
     }
-    setModal(!modal);
   };
+
+  // 거절당했을 때 따로 렌더링
+  if (goPingPongReject) {
+    return (
+      <div
+        aria-hidden={true}
+        className="flex bg-[rgba(0,0,0,0.1)] items-center justify-center z-30 fixed top-0 left-0 w-full h-full"
+      >
+        <div
+          id="go-pingpong-content"
+          className={`relative flex flex-col w-[20rem] h-[20rem] z-30 bg-white rounded-3xl shadow-lg items-center justify-center py-2`}
+          onClick={handleContentClick}
+        >
+          <p className="px-10 break-keep flexw-full h-20 items-center justify-center font-medium text-gray-500 text-lg">
+            {goPingPongReject}
+          </p>
+
+          <div className="flex w-[18rem] justify-between p-2"></div>
+
+          <button
+            id="modal-close-button"
+            className="absolute top-3 right-3 p-0 text-gray-400 text-lg"
+            onClick={closeModal}
+          >
+            X
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -94,13 +131,15 @@ export const GoPingPongModal = () => {
             </button>{' '}
           </div>
         ) : null}
-        <button
-          id="modal-close-button"
-          className="absolute top-3 right-3 p-0 text-gray-400 text-lg"
-          onClick={closeModal}
-        >
-          X
-        </button>
+        {isTarget ? null : (
+          <button
+            id="modal-close-button"
+            className="absolute top-3 right-3 p-0 text-gray-400 text-lg"
+            onClick={() => submitPingPongResponse('X')}
+          >
+            X
+          </button>
+        )}
       </div>
     </div>
   );
