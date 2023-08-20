@@ -103,6 +103,11 @@ export interface RequestUnmuteDto {
   requestUserId: number;
 }
 
+export interface ResponseUnBanDto {
+  groupChatId: number;
+  userId: number;
+}
+
 /*
  * DirectChatting
  */

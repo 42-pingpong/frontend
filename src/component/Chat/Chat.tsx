@@ -34,7 +34,6 @@ export const Chat = () => {
   const [loading, setLoading] = useState(true);
 
   useLayoutEffect(() => {
-    console.log('Chat.tsx useLayoutEffect');
     if (params.id === undefined || params.levelOfPublicity === undefined) {
       alert('잘못된 접근입니다.');
       navigate('/');
@@ -70,10 +69,8 @@ export const Chat = () => {
   };
 
   const handleError = (data: any) => {
-    if (data.status === 403) {
-      alert('채팅방에 입장할 수 없습니다.');
-      navigate('/');
-    }
+    alert('채팅방에 입장할 수 없습니다.');
+    navigate('/');
   };
 
   const handleJoinChatRoom = (data: ChatRoomInfoDTO) => {

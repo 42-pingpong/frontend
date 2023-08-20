@@ -22,7 +22,7 @@ export const UserSection = ({
   }, [roomInfo]);
 
   const fetchOwner = async () => {
-    const res = await axiosInstance.get(`/user/public/${roomInfo.ownerId}`);
+    const res = await axiosInstance.get(`/user/public/${roomInfo.owner.id}`);
     setOwner(res.data);
   };
 
