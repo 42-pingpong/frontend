@@ -13,7 +13,7 @@ export const BanMuteList = ({
   roomId: string;
 }) => {
   return (
-    <div className="flex-col flex h-full">
+    <div className="flex-col flex w-full h-full px-10">
       <div className="flex">
         <ServiceTitle title={`${listName} User`} nonAddButton={true} />
       </div>
@@ -27,6 +27,11 @@ export const BanMuteList = ({
               roomId={parseInt(roomId, 10)}
             />
           ))}
+        {list.length == 0 && (
+          <div className="flex justify-center items-center h-full w-full text-2xl text-slate-400">
+            No {listName} User
+          </div>
+        )}
       </div>
     </div>
   );

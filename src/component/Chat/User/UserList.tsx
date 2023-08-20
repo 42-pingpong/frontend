@@ -49,7 +49,7 @@ export const UserList = ({
   };
 
   return (
-    <div id="friends-section" className="flex-col flex h-full">
+    <div id="friends-section" className="flex-col flex h-full w-full px-10">
       <div className="flex">
         <ServiceTitle title="User" nonAddButton={true} />
       </div>
