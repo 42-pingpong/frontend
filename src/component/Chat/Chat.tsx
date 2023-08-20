@@ -69,8 +69,10 @@ export const Chat = () => {
   };
 
   const handleError = (data: any) => {
-    alert('채팅방에 입장할 수 없습니다.');
-    navigate('/');
+    if (data === 'Request failed with status code 403') {
+      alert('채팅방에 입장할 수 없습니다.');
+      navigate('/');
+    }
   };
 
   const handleJoinChatRoom = (data: ChatRoomInfoDTO) => {

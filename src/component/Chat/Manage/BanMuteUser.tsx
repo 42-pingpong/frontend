@@ -9,7 +9,7 @@ export const BanMuteUser = ({
   listName,
   roomId,
 }: {
-  target: senderDTO;
+  target: any;
   listName: string;
   roomId: number;
 }) => {
@@ -24,11 +24,13 @@ export const BanMuteUser = ({
       };
       ChatSocket.emit('unban-user', ReqUnBan);
     } else {
+      console.log(target);
       const ReqUnMute = {
         groupChatId: roomId,
         userId: user.id,
-        requestUserId: target.id,
+        requestUserId: target.mutedUser.id,
       };
+      console.log(ReqUnMute);
       ChatSocket.emit('unmute-user', ReqUnMute);
     }
   };
