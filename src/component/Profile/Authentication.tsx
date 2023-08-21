@@ -19,7 +19,9 @@ export const Authentication = () => {
   };
 
   const handleSendMail = () => {
+    // user email 가져와서 보내기
     axiosInstance.post('/mail/send', {});
+    setOk(true);
   };
 
   const handleAuthenticationSubmit = (input: string) => {
