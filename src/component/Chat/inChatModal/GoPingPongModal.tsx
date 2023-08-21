@@ -71,7 +71,7 @@ export const GoPingPongModal = () => {
           className={`relative flex flex-col w-[20rem] h-[20rem] z-30 bg-white rounded-3xl shadow-lg items-center justify-center py-2`}
           onClick={handleContentClick}
         >
-          <p className="px-10 break-keep flexw-full h-20 items-center justify-center font-medium text-gray-500 text-lg">
+          <p className="px-10 break-keep flex w-full h-20 items-center justify-center font-medium text-gray-500 text-lg">
             {goPingPongReject}
           </p>
 

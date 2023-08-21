@@ -104,3 +104,8 @@ export const clickedRoomIdState = atom({
   key: 'clickedRoomNumber',
   default: '',
 });
+
+export const authenticationModalState = atom<boolean>({
+  key: 'authenticationModalState',
+  default: false,
+});
