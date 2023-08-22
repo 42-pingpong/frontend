@@ -6,6 +6,7 @@ import axiosInstance from '../../api/axios';
 
 export interface SendMailDto {
   nickName: string;
+  userId: number;
   mailAddress: string;
 }
 
@@ -20,6 +21,8 @@ export const AuthenticationModal = () => {
 
   const closeModal = () => {
     setModal(false);
+    setOk(false);
+    setRetry(false);
   };
 
   const handleOnChange = (e: any) => {
@@ -49,15 +52,7 @@ export const AuthenticationModal = () => {
     // 그러면 ,,, 유저인포에 인증받았는지도 추가해야할듯??
     const res = await axiosInstance.get(`/mail/code/${user[0].id}`);
 
-    // if ('1' === input) {
-    //   setAuthentication(true);
-    //   setModal(false);
-    // } else {
-    //   setRetry(true);
-    // }
-
-    console.log(res.data);
-    if (res.data === input) {
+    if (res.data.toString() === input) {
       setAuthentication(true);
       setModal(false);
     } else {
