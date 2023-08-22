@@ -26,7 +26,7 @@ export const AuthenticationModal = () => {
     setInput(e.target.value);
   };
 
-  const handleSendMail = () => {
+  const handleSendMail = async () => {
     // user email 가져와서 보내기
     if (!user[0].email) return;
     const data = {
@@ -35,9 +35,10 @@ export const AuthenticationModal = () => {
       mailAddress: user[0].email,
     };
     console.log(data);
-    axiosInstance.post('/mail/send', data).then((res) => {
-      console.log(res.data);
-    });
+    await axiosInstance
+      .post('/mail/send', data)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
     console.log('hi');
     setOk(true);
   };
@@ -46,13 +47,17 @@ export const AuthenticationModal = () => {
     console.log(input);
     // back db에서 꺼내와서 비교하면 될듯여
     // 그러면 ,,, 유저인포에 인증받았는지도 추가해야할듯??
-    // const res = await axiosInstance.get(
-    //   `mail/authentication?${user[0].nickName}`
-    // );
+    const res = await axiosInstance.get(`/mail/code/${user[0].id}`);
 
-    // if (res.data === input) setAuthentication(true);
+    // if ('1' === input) {
+    //   setAuthentication(true);
+    //   setModal(false);
+    // } else {
+    //   setRetry(true);
+    // }
 
-    if ('1' === input) {
+    console.log(res.data);
+    if (res.data === input) {
       setAuthentication(true);
       setModal(false);
     } else {
