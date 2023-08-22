@@ -18,6 +18,7 @@ export const AuthenticationModal = () => {
   const [authentication, setAuthentication] =
     useRecoilState(authenticationState);
   const [retry, setRetry] = useState(false);
+  const [validationCode, setValidationCode] = useState('');
 
   const closeModal = () => {
     setModal(false);
@@ -51,8 +52,11 @@ export const AuthenticationModal = () => {
     // back db에서 꺼내와서 비교하면 될듯여
     // 그러면 ,,, 유저인포에 인증받았는지도 추가해야할듯??
     const res = await axiosInstance.get(`/mail/code/${user[0].id}`);
+    if (validationCode === '') setValidationCode(res.data.toString());
 
-    if (res.data.toString() === input) {
+    console.log(validationCode, input);
+
+    if (validationCode === input) {
       setAuthentication(true);
       setModal(false);
     } else {
