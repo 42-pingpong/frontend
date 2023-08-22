@@ -1,12 +1,12 @@
 import { ServiceTitle } from '../Main/ServiceTitle';
-import { userInfo } from '../../atom/user';
+import { authenticationState, userInfo } from '../../atom/user';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { isAthenticatedState, profileEditState } from '../../atom/profile';
+import { profileEditState } from '../../atom/profile';
 import { UserDto } from '../../interfaces/User.dto';
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../api/axios';
 import { authenticationModalState } from '../../atom/modal';
-import { Authentication } from './Authentication';
+import { AuthenticationModal } from './Authentication';
 
 export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
   const me = useRecoilValue(userInfo);
@@ -21,7 +21,7 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
     profile: '',
   });
   const setProfileEdit = useSetRecoilState(profileEditState);
-  const isAuthenticated = useRecoilValue(isAthenticatedState);
+  const isAuthenticated = useRecoilValue(authenticationState);
   const [authenticationModal, setAuthenticationModal] = useRecoilState(
     authenticationModalState
   );
@@ -71,7 +71,7 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
                 </button>
               </div>
             )}
-            {authenticationModal && <Authentication />}
+            {authenticationModal && <AuthenticationModal />}
           </div>
         </div>
         <div className="flex flex-grow flex-col mt-5 px-3">

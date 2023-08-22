@@ -1,14 +1,22 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { authenticationModalState } from '../../atom/modal';
 import { useState } from 'react';
-import { userInfo } from '../../atom/user';
+import { authenticationState, userInfo } from '../../atom/user';
 import axiosInstance from '../../api/axios';
 
-export const Authentication = () => {
+export interface SendMailDto {
+  nickName: string;
+  mailAddress: string;
+}
+
+export const AuthenticationModal = () => {
   const [modal, setModal] = useRecoilState(authenticationModalState);
   const [input, setInput] = useState('');
   const [ok, setOk] = useState(false);
   const user = useRecoilState(userInfo);
+  const [authentication, setAuthentication] =
+    useRecoilState(authenticationState);
+  const [retry, setRetry] = useState(false);
 
   const closeModal = () => {
     setModal(false);
@@ -20,15 +28,36 @@ export const Authentication = () => {
 
   const handleSendMail = () => {
     // user email 가져와서 보내기
-    axiosInstance.post('/mail/send', {});
+    if (!user[0].email) return;
+    const data = {
+      nickName: user[0].nickName,
+      userId: user[0].id,
+      mailAddress: user[0].email,
+    };
+    console.log(data);
+    axiosInstance.post('/mail/send', data).then((res) => {
+      console.log(res.data);
+    });
+    console.log('hi');
     setOk(true);
   };
 
-  const handleAuthenticationSubmit = (input: string) => {
+  const handleAuthenticationSubmit = async (input: string) => {
     console.log(input);
     // back db에서 꺼내와서 비교하면 될듯여
     // 그러면 ,,, 유저인포에 인증받았는지도 추가해야할듯??
+    // const res = await axiosInstance.get(
+    //   `mail/authentication?${user[0].nickName}`
+    // );
 
+    // if (res.data === input) setAuthentication(true);
+
+    if ('1' === input) {
+      setAuthentication(true);
+      setModal(false);
+    } else {
+      setRetry(true);
+    }
     /**
      * 1. input과 db에 저장된 인증코드를 비교한다.
      * 2. 일치하면 유저인포에 인증받았다고 추가한다.
@@ -47,9 +76,9 @@ export const Authentication = () => {
         className={`relative flex flex-col w-[30rem] h-[20rem] z-30 bg-[#F8F8F8] rounded-3xl shadow-lg items-center justify-center py-2`}
       >
         {!ok ? (
-          <span className="text-2xl flow items-center grid justify-center mx-10 break-keep relative flex">
+          <span className="text-2xl flow items-center grid justify-center mx-10 break-keep relative text-gray-500">
             서비스 이용을 위해 메일로 2차 인증을 진행하시겠습니까?
-            <div className="flex mt-10">
+            <div className="flex mt-[15%]">
               <button
                 className="w-[30%] text-white flex h-10 justify-center items-center bg-progressBlue mx-auto rounded-full shadow-xl"
                 onClick={handleSendMail}
@@ -65,8 +94,13 @@ export const Authentication = () => {
             </div>
           </span>
         ) : (
-          <span className="text-2xl flow items-center grid justify-center mx-10 break-keep relative flex">
+          <span className="text-2xl flow items-center grid justify-center mx-10 break-keep relative text-gray-500">
             메일로 전송된 2차 인증 코드를 입력해주세요.
+            {!authentication && retry && (
+              <span className="mt-2 text-lg break-kepp mx-auto text-red-400">
+                입력값을 확인하세요.
+              </span>
+            )}
             <input
               type="text"
               className="mt-5 px-5 align-middle justify-center rounded-[50px] shadow-lg w-full h-[3rem] font-light"
