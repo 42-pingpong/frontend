@@ -76,18 +76,18 @@ export const RequestFriend = ({
         </div>
         {props.requestType !== 'C' ? (
           <div className="flex grow-0 justify-between w-32 h-6 items-center">
-            <div
+            <button
               className="h-6 w-14 rounded-full bg-white items-center justify-center flex shadow-md"
               onClick={handleAcceptRequest}
             >
               <span className="text-sm text-gray-700">수락</span>
-            </div>
-            <div
+            </button>
+            <button
               className="h-6 w-14 rounded-full bg-white items-center justify-center flex shadow-md"
               onClick={handleRejectRequest}
             >
               <span className="text-sm text-gray-700">거절</span>
-            </div>
+            </button>
           </div>
         ) : null}
       </div>
