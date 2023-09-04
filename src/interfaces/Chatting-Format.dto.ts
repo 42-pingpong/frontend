@@ -118,6 +118,23 @@ export interface playerInfoDto {
   is_host: boolean;
   play_number: number;
   enemy_id: number;
+
+export interface RequestUnbanDto {
+  groupChatId: number;
+  userId: number;
+  bannedId: number;
+}
+
+export interface RequestUnmuteDto {
+  groupChatId: number;
+  userId: number;
+  requestUserId: number;
+}
+
+export interface ResponseUnBanDto {
+  groupChatId: number;
+  userId: number;
+
 }
 
 /*

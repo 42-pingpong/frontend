@@ -59,9 +59,12 @@ export const ProfileModal = () => {
             </div>
           </div>
         </div>
-        <div className="profile-button-container" onClick={navigateToProfile}>
+        <button
+          className="profile-button-container"
+          onClick={navigateToProfile}
+        >
           <span className="profile-button-text"> Profile </span>
-        </div>
+        </button>
         <Logout />
         <div className="close-button">
           <button id="modal-close-button" onClick={closeModal}>

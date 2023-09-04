@@ -29,6 +29,7 @@ import {
 } from '../../atom/modal';
 import { GameSocket } from '../../sockets/GameSocket';
 import { GoPingPongModal } from './inChatModal/GoPingPongModal';
+import { Chat } from './Chat';
 
 export const ChatSection = () => {
   const navigate = useNavigate();

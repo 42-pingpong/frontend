@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChatRoomDTO } from '../../../interfaces/Chatting-Format.dto';
 
-export const ChatList = ({ props }: { props: ChatRoomDTO }) => {
+export const ChatList = memo(function ChatList({
+  props,
+}: {
+  props: ChatRoomDTO;
+}) {
   const navigation = useNavigate();
 
   const handleChatEnter = () => {
@@ -40,4 +44,4 @@ export const ChatList = ({ props }: { props: ChatRoomDTO }) => {
       </div>
     </div>
   );
-};
+});
