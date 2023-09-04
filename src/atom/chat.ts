@@ -46,7 +46,6 @@ export const currentChatInfoState = atom<ChatRoomInfoDTO>({
     curParticipants: 0,
     maxParticipants: 0,
     groupChatId: 0,
-    password: '',
     owner: {
       id: 0,
       nickName: '',

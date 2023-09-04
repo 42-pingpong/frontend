@@ -91,6 +91,23 @@ export interface RequestMuteDto {
   unit: string;
 }
 
+export interface RequestUnbanDto {
+  groupChatId: number;
+  userId: number;
+  bannedId: number;
+}
+
+export interface RequestUnmuteDto {
+  groupChatId: number;
+  userId: number;
+  requestUserId: number;
+}
+
+export interface ResponseUnBanDto {
+  groupChatId: number;
+  userId: number;
+}
+
 /*
  * DirectChatting
  */

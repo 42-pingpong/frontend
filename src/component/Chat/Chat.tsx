@@ -69,7 +69,7 @@ export const Chat = () => {
   };
 
   const handleError = (data: any) => {
-    if (data.status === 403) {
+    if (data === 'Request failed with status code 403') {
       alert('채팅방에 입장할 수 없습니다.');
       navigate('/');
     }
@@ -92,7 +92,7 @@ export const Chat = () => {
             <ChatSection />
           </div>
           <div className="col-span-1 row-span-6">
-            <UserSection />
+            <UserSection bottomIconVisible={true} />
           </div>
         </div>
         {isProfileModalOpen && <ProfileModal />}
