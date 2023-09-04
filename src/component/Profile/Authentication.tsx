@@ -13,7 +13,7 @@ export interface SendMailDto {
 export const AuthenticationModal = () => {
   const [modal, setModal] = useRecoilState(authenticationModalState);
   const [input, setInput] = useState('');
-  const [ok, setOk] = useState(false);
+  const [ok, setOk] = useState(false); // 인증 받겠다고 함
   const user = useRecoilState(userInfo);
   const [authentication, setAuthentication] =
     useRecoilState(authenticationState);
@@ -43,7 +43,6 @@ export const AuthenticationModal = () => {
       .post('/mail/send', data)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
-    console.log('hi');
     setOk(true);
   };
 
