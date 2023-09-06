@@ -16,10 +16,7 @@ const ConditionalProfileDisplay = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          return;
-        }
+        if (!isLoggedIn) return;
         const res = await axiosInstance.get<UserDto>(`/user/me`);
         const userData = res.data;
         console.log('userDataCalled');
@@ -33,7 +30,7 @@ const ConditionalProfileDisplay = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <div className="flex items-center mr-3">
