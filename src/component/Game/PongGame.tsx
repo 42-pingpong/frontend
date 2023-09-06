@@ -19,6 +19,7 @@ import {
   roomIdState,
   resetState,
   joinState,
+  playerNumberState,
 } from '../../atom/game';
 import { GameSocket } from '../../sockets/GameSocket';
 import { userInfo } from '../../atom/user';

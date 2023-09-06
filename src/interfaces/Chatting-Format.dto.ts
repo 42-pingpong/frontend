@@ -91,6 +91,34 @@ export interface RequestMuteDto {
   unit: string;
 }
 
+export interface RequestGoPingPongDto {
+  groupChatId: number;
+  userId: number;
+  userNickName: string;
+  targetUserId: number;
+  targetUserNickName: string;
+}
+
+export interface ResponseGoPingPongDto {
+  groupChatId: number;
+  userId: number;
+  userNickName: string;
+  targetUserId: number;
+  targetUserNickName: string;
+}
+
+export interface goPingPongDto {
+  groupChatId: number;
+  userId: number;
+  targetUserId: number;
+}
+
+export interface playerInfoDto {
+  id: number;
+  is_host: boolean;
+  play_number: number;
+  enemy_id: number;
+
 export interface RequestUnbanDto {
   groupChatId: number;
   userId: number;
@@ -106,6 +134,7 @@ export interface RequestUnmuteDto {
 export interface ResponseUnBanDto {
   groupChatId: number;
   userId: number;
+
 }
 
 /*

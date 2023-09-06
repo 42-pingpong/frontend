@@ -1,6 +1,9 @@
 import { atom } from 'recoil';
 import { UserDto } from '../interfaces/User.dto';
-import { senderDTO } from '../interfaces/Chatting-Format.dto';
+import {
+  ResponseGoPingPongDto,
+  senderDTO,
+} from '../interfaces/Chatting-Format.dto';
 
 export const profileModalState = atom<boolean>({
   key: 'profileModalState',
@@ -30,6 +33,27 @@ export const addUserModalState = atom<boolean>({
 export const muteModalState = atom<boolean>({
   key: 'muteModalState',
   default: false,
+});
+
+export const goPingPongModalState = atom<boolean>({
+  key: 'goPingPongModalState',
+  default: false,
+});
+
+export const goPingPongDtoState = atom<ResponseGoPingPongDto>({
+  key: 'goPingPongDtoState',
+  default: {
+    groupChatId: -1,
+    userId: -1,
+    targetUserId: -1,
+    userNickName: '',
+    targetUserNickName: '',
+  },
+});
+
+export const goPingPongRejectState = atom<string>({
+  key: 'goPingPongRejectState',
+  default: '',
 });
 
 export const friendProfileModalState = atom<boolean>({
@@ -79,4 +103,9 @@ export const passwordModalState = atom<boolean>({
 export const clickedRoomIdState = atom({
   key: 'clickedRoomNumber',
   default: '',
+});
+
+export const authenticationModalState = atom<boolean>({
+  key: 'authenticationModalState',
+  default: false,
 });

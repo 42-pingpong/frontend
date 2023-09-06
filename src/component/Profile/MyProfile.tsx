@@ -1,10 +1,12 @@
 import { ServiceTitle } from '../Main/ServiceTitle';
-import { userInfo } from '../../atom/user';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { authenticationState, userInfo } from '../../atom/user';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { profileEditState } from '../../atom/profile';
 import { UserDto } from '../../interfaces/User.dto';
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../api/axios';
+import { authenticationModalState } from '../../atom/modal';
+import { AuthenticationModal } from './Authentication';
 
 export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
   const me = useRecoilValue(userInfo);
@@ -19,6 +21,10 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
     profile: '',
   });
   const setProfileEdit = useSetRecoilState(profileEditState);
+  const isAuthenticated = useRecoilValue(authenticationState);
+  const [authenticationModal, setAuthenticationModal] = useRecoilState(
+    authenticationModalState
+  );
 
   useEffect(() => {
     if (nickName === undefined) {
@@ -51,6 +57,21 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
             <span className="w-full text-[2.8rem] font-bold text-center mb-3 text-gray-500">
               {user.nickName}
             </span>
+            {isAuthenticated ? null : (
+              <div>
+                <button
+                  className="flex w-[50%] h-10 justify-center items-center bg-progressBlue mx-auto rounded-full shadow-xl"
+                  onClick={() => {
+                    setAuthenticationModal(true);
+                  }}
+                >
+                  <span className="text-[1.2rem] font-semibold text-white">
+                    Authorize
+                  </span>
+                </button>
+              </div>
+            )}
+            {authenticationModal && <AuthenticationModal />}
           </div>
         </div>
         <div className="flex flex-grow flex-col mt-5 px-3">

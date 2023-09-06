@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   RequestBanDto,
   RequestBlockDto,
+  RequestGoPingPongDto,
   RequestKickDto,
   senderDTO,
 } from '../../../interfaces/Chatting-Format.dto';
@@ -10,7 +11,8 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { currentChatInfoState } from '../../../atom/chat';
 import { userInfo } from '../../../atom/user';
 import { ChatSocket } from '../../../sockets/ChatSocket';
-import { muteModalState } from '../../../atom/modal';
+import { goPingPongModalState, muteModalState } from '../../../atom/modal';
+import { GameSocket } from '../../../sockets/GameSocket';
 
 export const FuncButton = ({
   name,
@@ -23,6 +25,7 @@ export const FuncButton = ({
   const roomInfo = useRecoilValue(currentChatInfoState);
   const user = useRecoilValue(userInfo);
   const setMuteModal = useSetRecoilState(muteModalState);
+  const setGoPingPongModal = useSetRecoilState(goPingPongModalState);
 
   const handelModalFuc = () => {
     switch (name) {
@@ -73,6 +76,15 @@ export const FuncButton = ({
         setMuteModal(true);
         break;
       case 'Go PingPong': {
+        const reqData: RequestGoPingPongDto = {
+          groupChatId: roomInfo.groupChatId,
+          userId: user.id,
+          userNickName: user.nickName,
+          targetUserId: target.id,
+          targetUserNickName: target.nickName,
+        };
+        ChatSocket.emit('go-pingpong', reqData);
+        console.log('pp');
         break;
       }
       default:

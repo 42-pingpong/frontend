@@ -25,3 +25,8 @@ export const friendListState = atom<UserDto[]>({
   key: 'friendListState',
   default: [],
 });
+
+export const authenticationState = atom({
+  key: 'authenticationState',
+  default: false,
+});
