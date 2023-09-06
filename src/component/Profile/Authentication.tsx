@@ -1,8 +1,9 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { authenticationModalState } from '../../atom/modal';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { authenticationState, userInfo } from '../../atom/user';
 import axiosInstance from '../../api/axios';
+import { setTimeout } from 'timers/promises';
 
 export interface SendMailDto {
   nickName: string;
@@ -10,19 +11,23 @@ export interface SendMailDto {
   mailAddress: string;
 }
 
+const VALIDATIONTIME = 180;
+
 export const AuthenticationModal = () => {
-  const [modal, setModal] = useRecoilState(authenticationModalState);
+  const setModal = useSetRecoilState(authenticationModalState);
   const [input, setInput] = useState('');
-  const [ok, setOk] = useState(false); // 인증 받겠다고 함
+  const [want, setWant] = useState(false); // 인증 받겠다고 함
   const user = useRecoilState(userInfo);
   const [authentication, setAuthentication] =
     useRecoilState(authenticationState);
   const [retry, setRetry] = useState(false);
   const [validationCode, setValidationCode] = useState('');
+  const [validTime, setValidTime] = useState(VALIDATIONTIME);
+  const timeRef = useRef(validTime);
 
   const closeModal = () => {
     setModal(false);
-    setOk(false);
+    setWant(false);
     setRetry(false);
   };
 
@@ -43,8 +48,27 @@ export const AuthenticationModal = () => {
       .post('/mail/send', data)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
-    setOk(true);
+    setWant(true);
   };
+
+  useEffect(() => {
+    if (want == false) return;
+
+    const interval = setInterval(() => {
+      setValidTime((prev) => prev - 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [want]);
+
+  useEffect(() => {
+    if (validTime == 0) {
+      closeModal();
+      setValidTime(VALIDATIONTIME);
+    }
+  }, [validTime]);
 
   const handleAuthenticationSubmit = async (input: string) => {
     console.log(input);
@@ -78,7 +102,7 @@ export const AuthenticationModal = () => {
         id="authentication-content"
         className={`relative flex flex-col w-[30rem] h-[20rem] z-30 bg-[#F8F8F8] rounded-3xl shadow-lg items-center justify-center py-2`}
       >
-        {!ok ? (
+        {!want ? (
           <span className="text-2xl flow items-center grid justify-center mx-10 break-keep relative text-gray-500">
             서비스 이용을 위해 메일로 2차 인증을 진행하시겠습니까?
             <div className="flex mt-[15%]">
@@ -99,6 +123,9 @@ export const AuthenticationModal = () => {
         ) : (
           <span className="text-2xl flow items-center grid justify-center mx-10 break-keep relative text-gray-500">
             메일로 전송된 2차 인증 코드를 입력해주세요.
+            <span className="text-sm mx-auto text-gray-400">
+              남은 시간: {validTime}
+            </span>
             {!authentication && retry && (
               <span className="mt-2 text-lg break-kepp mx-auto text-red-400">
                 입력값을 확인하세요.
