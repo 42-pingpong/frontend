@@ -1,9 +1,8 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { authenticationModalState } from '../../atom/modal';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { authenticationState, userInfo } from '../../atom/user';
 import axiosInstance from '../../api/axios';
-import { setTimeout } from 'timers/promises';
 
 export interface SendMailDto {
   nickName: string;
@@ -23,12 +22,12 @@ export const AuthenticationModal = () => {
   const [retry, setRetry] = useState(false);
   const [validationCode, setValidationCode] = useState('');
   const [validTime, setValidTime] = useState(VALIDATIONTIME);
-  const timeRef = useRef(validTime);
 
   const closeModal = () => {
     setModal(false);
     setWant(false);
     setRetry(false);
+    setValidationCode('');
   };
 
   const handleOnChange = (e: any) => {
@@ -75,16 +74,15 @@ export const AuthenticationModal = () => {
     // back db에서 꺼내와서 비교하면 될듯여
     // 그러면 ,,, 유저인포에 인증받았는지도 추가해야할듯??
     const res = await axiosInstance.get(`/mail/code/${user[0].id}`);
-    if (validationCode === '') setValidationCode(res.data.toString());
-
-    console.log(validationCode, input);
+    if (res.data) setValidationCode(() => res.data.toString());
 
     if (validationCode === input) {
       setAuthentication(true);
-      setModal(false);
+      closeModal();
     } else {
       setRetry(true);
     }
+
     /**
      * 1. input과 db에 저장된 인증코드를 비교한다.
      * 2. 일치하면 유저인포에 인증받았다고 추가한다.
@@ -92,6 +90,16 @@ export const AuthenticationModal = () => {
      * 4. 인증받은 유저만 게임방에 입장할 수 있게 한다.
      */
   };
+
+  useEffect(() => {
+    if (validationCode == '') return;
+    if (validationCode === input) {
+      setAuthentication(true);
+      setModal(false);
+    } else {
+      setRetry(true);
+    }
+  }, [validationCode]);
 
   return (
     <div
@@ -124,7 +132,8 @@ export const AuthenticationModal = () => {
           <span className="text-2xl flow items-center grid justify-center mx-10 break-keep relative text-gray-500">
             메일로 전송된 2차 인증 코드를 입력해주세요.
             <span className="text-sm mx-auto text-gray-400">
-              남은 시간: {validTime}
+              남은 시간: {parseInt((validTime / 60).toString())} :{' '}
+              {validTime % 60}
             </span>
             {!authentication && retry && (
               <span className="mt-2 text-lg break-kepp mx-auto text-red-400">
