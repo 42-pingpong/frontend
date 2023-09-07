@@ -15,8 +15,6 @@ export const BanMuteUser = ({
 }) => {
   const user = useRecoilValue(userInfo);
 
-  console.log(target);
-
   const handleUndo = () => {
     if (listName === 'Ban') {
       const ReqUnBan = {
@@ -29,8 +27,8 @@ export const BanMuteUser = ({
       console.log(target);
       const ReqUnMute = {
         groupChatId: roomId,
-        userId: user.id,
-        requestUserId: target.id,
+        userId: target.id,
+        requestUserId: user.id,
       };
       console.log(ReqUnMute);
       ChatSocket.emit('unmute-user', ReqUnMute);

@@ -26,10 +26,7 @@ export const ChatManage = () => {
 
   useEffect(() => {
     ChatSocket.on('unban-user', handelUnBanUser);
-    ChatSocket.on('unmute-user', (data) => {
-      // unban과 동일하게 리스트에서 제거할거예요..
-      console.log('unmute-user', data);
-    });
+    ChatSocket.on('unmute-user', handleUnMuteUser);
     return () => {
       ChatSocket.off('unban-user');
       ChatSocket.off('unmute-user');
@@ -52,6 +49,12 @@ export const ChatManage = () => {
 
   const handelUnBanUser = (data: ResponseUnBanDto) => {
     setBanList((prev) => prev.filter((item) => item.id !== data.userId));
+  };
+
+  const handleUnMuteUser = (data: ResponseUnBanDto) => {
+    setMuteList((prev) =>
+      prev.filter((item) => item.mutedUser.id !== data.userId)
+    );
   };
 
   const fetchRoomInfo = async () => {

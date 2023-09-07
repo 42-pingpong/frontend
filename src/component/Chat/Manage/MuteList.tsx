@@ -10,7 +10,6 @@ export const MuteList = ({
   list: MutedUserDto[];
   roomId: string;
 }) => {
-  console.log(list);
   return (
     <div className="flex-col flex w-full h-full px-10">
       <div className="flex">
