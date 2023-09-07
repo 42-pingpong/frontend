@@ -9,11 +9,13 @@ export const BanMuteUser = ({
   listName,
   roomId,
 }: {
-  target: any;
+  target: senderDTO;
   listName: string;
   roomId: number;
 }) => {
   const user = useRecoilValue(userInfo);
+
+  console.log(target);
 
   const handleUndo = () => {
     if (listName === 'Ban') {
@@ -28,7 +30,7 @@ export const BanMuteUser = ({
       const ReqUnMute = {
         groupChatId: roomId,
         userId: user.id,
-        requestUserId: target.mutedUser.id,
+        requestUserId: target.id,
       };
       console.log(ReqUnMute);
       ChatSocket.emit('unmute-user', ReqUnMute);
@@ -40,7 +42,7 @@ export const BanMuteUser = ({
         <img src={target.profile} className="flex rounded-full" />
       </div>
       <div className="flex w-1/2">
-        <span className="text-gray-500 text-xl">{user.nickName}</span>
+        <span className="text-gray-500 text-xl">{target.nickName}</span>
       </div>
       <div className="flex w-20 h-6">
         <button
