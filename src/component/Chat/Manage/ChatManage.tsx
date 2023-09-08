@@ -1,43 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { MuteList } from './MuteList';
 import { UserSection } from '../User/UserSection';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { currentChatInfoState, roleState } from '../../../atom/chat';
-import {
-  ChatRoomInfoDTO,
-  MutedUserDto,
-  ResponseUnBanDto,
-  senderDTO,
-} from '../../../interfaces/Chatting-Format.dto';
-import axiosInstance from '../../../api/axios';
+import { useRecoilValue } from 'recoil';
 import { useParams } from 'react-router-dom';
 import { userInfo } from '../../../atom/user';
 import { RoomInfo } from './RoomInfo';
-import { ChatSocket } from '../../../sockets/ChatSocket';
 import { BanList } from './BanList';
+import useUnBan from '../../../hooks/chat/useUnBan';
+import useUnMute from '../../../hooks/chat/useUnMute';
+import { useSetRole } from '../../../hooks/chat/useSetRole';
+import useFetchChatManageInfo from '../../../hooks/chat/useFetchChatManageInfo';
 
 export const ChatManage = () => {
   const roomId = useParams().roomId;
   const user = useRecoilValue(userInfo);
-  const [role, setRole] = useRecoilState(roleState);
-  const [banList, setBanList] = useState<senderDTO[]>([]);
-  const [muteList, setMuteList] = useState<MutedUserDto[]>([]);
-  const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
-
-  useEffect(() => {
-    ChatSocket.on('unban-user', handelUnBanUser);
-    ChatSocket.on('unmute-user', handleUnMuteUser);
-    return () => {
-      ChatSocket.off('unban-user');
-      ChatSocket.off('unmute-user');
-    };
-  }, []);
-
-  useEffect(() => {
-    if (user.id !== -1) {
-      fetchRoomInfo();
-    }
-  }, [user]);
+  const { banList, setBanList } = useUnBan();
+  const { muteList, setMuteList } = useUnMute();
+  const role = useSetRole();
+  const roomInfo = useFetchChatManageInfo(
+    Number(roomId),
+    setBanList,
+    setMuteList
+  );
 
   useEffect(() => {
     if (user.id === -1) return;
@@ -45,32 +29,7 @@ export const ChatManage = () => {
       alert('권한이 없습니다.');
       window.history.back();
     }
-  }, [roomInfo]);
-
-  const handelUnBanUser = (data: ResponseUnBanDto) => {
-    setBanList((prev) => prev.filter((item) => item.id !== data.userId));
-  };
-
-  const handleUnMuteUser = (data: ResponseUnBanDto) => {
-    setMuteList((prev) =>
-      prev.filter((item) => item.mutedUser.id !== data.userId)
-    );
-  };
-
-  const fetchRoomInfo = async () => {
-    const res = await axiosInstance.get(`/chat/groupChat/${roomId}`);
-    const data: ChatRoomInfoDTO = res.data;
-    setRole(
-      data.owner.id === user.id
-        ? 'owner'
-        : data.admin?.find((item) => item.id === user.id)
-        ? 'admin'
-        : 'user'
-    );
-    setRoomInfo(data);
-    setBanList(data.bannedUsers);
-    setMuteList(data.mutedUsers);
-  };
+  }, [role]);
 
   return (
     <div className="flex flex-col h-screen w-full bg-slate-200 py-20 px-16">
@@ -90,7 +49,7 @@ export const ChatManage = () => {
           <MuteList list={muteList} roomId={roomId as string} />
         </div>
         <div className="flex w-full justify-center bg-slate-300">
-          <BanList list={banList} roomId={roomId as string}></BanList>
+          <BanList list={banList} roomId={roomId as string} />
         </div>
       </div>
     </div>

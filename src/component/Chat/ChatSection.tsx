@@ -30,18 +30,19 @@ import {
 import { GameSocket } from '../../sockets/GameSocket';
 import { GoPingPongModal } from './inChatModal/GoPingPongModal';
 import { Chat } from './Chat';
+import useMuteTimeSave from '../../hooks/chat/useMuteTimeSave';
 
 export const ChatSection = () => {
   const navigate = useNavigate();
+  const roomInfoReset = useResetRecoilState(currentChatInfoState);
+  const scrollBottomRef = useRef<HTMLDivElement | null>(null);
+  const param = useParams().id;
+  const id = param === undefined ? 0 : parseInt(param, 10);
+  const user = useRecoilValue(userInfo);
+  const { mute, setMute } = useMuteTimeSave();
   const [input, setInput] = useState('');
   const [chat, setChat] = useState<ResponseGroupChatDTO[]>([]);
-  const roomInfoReset = useResetRecoilState(currentChatInfoState);
   const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
-  const user = useRecoilValue(userInfo);
-  const param = useParams().id;
-  const scrollBottomRef = useRef<HTMLDivElement | null>(null);
-  const id = param === undefined ? 0 : parseInt(param, 10);
-  const [mute, setMute] = useState<boolean>(false);
   const [isGoPingPongModalOpen, setIsGoPingPongModalOpen] =
     useRecoilState(goPingPongModalState);
   const setPingPong = useSetRecoilState(goPingPongDtoState); // groupChatId, userId, targetUserId
@@ -82,22 +83,6 @@ export const ChatSection = () => {
       scrollBottomRef.current.scrollTop = scrollBottomRef.current.scrollHeight;
     }
   }, [chat]);
-
-  useEffect(() => {
-    if (localStorage.getItem('mute')) {
-      const now = new Date();
-      const muteTime = localStorage.getItem('mute');
-      const timeDiff = parseInt(muteTime as string, 10) - now.getTime();
-
-      if (timeDiff > 0) {
-        setMute(true);
-        setTimeout(() => {
-          localStorage.removeItem('mute');
-          setMute(false);
-        }, timeDiff);
-      } else localStorage.removeItem('mute');
-    }
-  }, []);
 
   const handleKick = (data: ResponseFuncDto) => {
     if (data.userId === user.id) {
