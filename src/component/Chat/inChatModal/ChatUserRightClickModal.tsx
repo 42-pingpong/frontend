@@ -39,6 +39,8 @@ export const ChatUserRightClickModal = (props: Props) => {
   const role = useRecoilValue(roleState);
   const isMuteModalOpen = useRecoilValue(muteModalState);
 
+  console.log(props);
+
   if (props.y > 900) props.y -= 300;
 
   if (role === 'user')

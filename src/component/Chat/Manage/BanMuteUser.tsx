@@ -9,7 +9,7 @@ export const BanMuteUser = ({
   listName,
   roomId,
 }: {
-  target: any;
+  target: senderDTO;
   listName: string;
   roomId: number;
 }) => {
@@ -27,8 +27,8 @@ export const BanMuteUser = ({
       console.log(target);
       const ReqUnMute = {
         groupChatId: roomId,
-        userId: user.id,
-        requestUserId: target.mutedUser.id,
+        userId: target.id,
+        requestUserId: user.id,
       };
       console.log(ReqUnMute);
       ChatSocket.emit('unmute-user', ReqUnMute);
@@ -40,7 +40,7 @@ export const BanMuteUser = ({
         <img src={target.profile} className="flex rounded-full" />
       </div>
       <div className="flex w-1/2">
-        <span className="text-gray-500 text-xl">{user.nickName}</span>
+        <span className="text-gray-500 text-xl">{target.nickName}</span>
       </div>
       <div className="flex w-20 h-6">
         <button
