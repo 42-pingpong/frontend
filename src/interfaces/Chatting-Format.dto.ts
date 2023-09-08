@@ -22,7 +22,16 @@ export interface ChatRoomInfoDTO {
   owner: senderDTO;
   ownerId: number;
   admin: senderDTO[];
+  mutedUsers: MutedUserDto[];
+  bannedUsers: senderDTO[];
   joinedUser: senderDTO[];
+}
+
+export interface MutedUserDto {
+  id: number;
+  muteDue: Date;
+  mutedGroupId: number;
+  mutedUser: senderDTO;
 }
 
 export interface JoinGroupChatDTO {
