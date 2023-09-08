@@ -37,20 +37,9 @@ export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
     inputPasswordRef.current = '';
   };
 
-  const closeModal = (e: any) => {
-    const modalContent = document.getElementById('password-content');
-    const modalCloseButton = document.getElementById('modal-close-button');
-
-    if (
-      modalContent &&
-      modalContent.contains(e.target) &&
-      e.target !== modalCloseButton
-    )
-      e.stopPropagation();
-    else {
-      setPassword(!password);
-      navigate('/');
-    }
+  const closeModal = () => {
+    setPassword(!password);
+    navigate('/');
   };
 
   const handleInputChange = (e: any) => {
@@ -67,10 +56,11 @@ export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
   };
 
   return (
-    <div className="background bg-[rgba(0,0,0,0.2)]">
+    <div className="background bg-[rgba(0,0,0,0.2)]" onClick={closeModal}>
       <div
         id="password-content"
         className="w-[22vw] h-[22vh] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[20vh]"
+        onClick={(e) => e.stopPropagation()}
       >
         <p className="py-[7%] px-[8%] font-sans not-italic font-[320]  text-[35px] leading-[41px] tracking-tighter text-[#5D777B]">
           Protected Room

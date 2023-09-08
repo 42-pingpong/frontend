@@ -30,20 +30,8 @@ export const CreateChattingRoomModal = () => {
     setFormValue({ ...formValue, ownerId: user.id });
   }, []);
 
-  const closeModal = (e: any) => {
-    const modalContent = document.getElementById('chattingroom-content');
-    const modalCloseButton = document.getElementById('modal-close-button');
-    const searchUserList = document.getElementById('search-user-list');
-    const memberList = document.getElementById('member-list');
-
-    if (
-      ((modalContent && modalContent.contains(e.target)) ||
-        (searchUserList && searchUserList.contains(e.target)) ||
-        (memberList && memberList.contains(e.target))) &&
-      e.target !== modalCloseButton
-    ) {
-      e.stopPropagation();
-    } else setChattingState(!chattingState);
+  const closeModal = () => {
+    setChattingState(!chattingState);
   };
 
   const isUserDuplicated = (user: UserDto) => {
@@ -125,6 +113,7 @@ export const CreateChattingRoomModal = () => {
       <div
         id="chattingroom-content"
         className="min-w-[500px] w-[30vw] h-[65vh] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[10vh] grid grid-cols-1 grid-rows-4"
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="grid-rows-1">
           <p className="py-[7%] px-[8%]  font-sans font-[320]  text-[35px] leading-[41px] tracking-tighter text-[#5D777B] pb-10">
@@ -140,7 +129,7 @@ export const CreateChattingRoomModal = () => {
                     id={item}
                     className=" checked:bg-sky "
                     onClick={(e) => handleRoomtype(e)}
-                  ></input>{' '}
+                  />
                   {item}
                 </div>
               </label>
@@ -240,7 +229,8 @@ export const CreateChattingRoomModal = () => {
       {userList?.length != 0 && memberFocus && (
         <div
           id="search-user-list"
-          className="flex absolute flex-col top-[46vh] left-[68vw] w-[17vw] h-[30vh] shadow-xl px-12 pb-10 pt-5 bg-[#F8F8F8] rounded-[30px] mx-auto items-center justify-center  z-10"
+          className="flex absolute flex-col top-[46vh] left-[68vw] w-[17vw] h-[30vh] shadow-xl px-12 pb-10 pt-5 bg-[#F8F8F8] rounded-[30px] mx-auto items-center justify-center z-10"
+          onClick={(e) => e.stopPropagation()}
         >
           <span className="flex justify-center w-full items-center font-bold text-3xl text-borderBlue">
             search members
@@ -260,6 +250,7 @@ export const CreateChattingRoomModal = () => {
         <div
           id="member-list"
           className="flex absolute flex-col top-[11vh] left-[68vw] w-[17vw] h-[30vh] shadow-xl px-12 pb-10 pt-5 bg-[#F8F8F8] rounded-[30px] mx-auto items-center justify-center z-10"
+          onClick={(e) => e.stopPropagation()}
         >
           <span className="flex justify-center w-full items-center font-bold text-3xl text-borderBlue">
             invited members
