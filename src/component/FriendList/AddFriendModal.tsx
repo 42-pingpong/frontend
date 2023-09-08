@@ -14,17 +14,7 @@ export const AddFriendModal = () => {
   const friendList = useRecoilValue(friendListState);
 
   const closeModal = (e: any) => {
-    const modalContent = document.getElementById('chattingroom-content');
-    const modalListContent = document.getElementById('search-user-list');
-    const modalCloseButton = document.getElementById('modal-close-button');
-
-    if (
-      ((modalContent && modalContent.contains(e.target)) ||
-        (modalListContent && modalListContent.contains(e.target))) &&
-      e.target !== modalCloseButton
-    )
-      e.stopPropagation();
-    else setAddUser(!addUser);
+    setAddUser(!addUser);
   };
 
   const isUserDuplicated = (user: UserDto) => {
@@ -56,6 +46,7 @@ export const AddFriendModal = () => {
       <div
         id="chattingroom-content"
         className="w-[22vw] h-[22vh] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[20vh]"
+        onClick={(e) => e.stopPropagation()}
       >
         <p className="py-[7%] px-[8%] font-sans not-italic font-[320]  text-[35px] leading-[41px] tracking-tighter text-[#5D777B]">
           Add Friend
@@ -92,6 +83,7 @@ export const AddFriendModal = () => {
         <div
           id="search-user-list"
           className="flex flex-col w-[22vw] h-[45vh] shadow-xl px-12 py-16 bg-[#F8F8F8] rounded-[30px] mx-auto items-center justify-center relative z-10 mt-8"
+          onClick={(e) => e.stopPropagation()}
         >
           <div className="overflow-y-auto w-full h-full inset-0 px-4">
             {userList.map((item) => (

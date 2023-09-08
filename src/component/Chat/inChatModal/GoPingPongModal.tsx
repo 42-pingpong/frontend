@@ -38,13 +38,6 @@ export const GoPingPongModal = () => {
     setModal(!modal);
   };
 
-  const handleContentClick = (e: any) => {
-    const modalCloseButton = document.getElementById('modal-close-button');
-
-    if (e.target === modalCloseButton) setModal(!modal);
-    e.stopPropagation();
-  };
-
   const submitPingPongResponse = (response: string) => {
     if (response === 'Y') {
       console.log('go-pingpong-accept', pingPong);
@@ -69,7 +62,7 @@ export const GoPingPongModal = () => {
         <div
           id="go-pingpong-content"
           className={`relative flex flex-col w-[20rem] h-[20rem] z-30 bg-white rounded-3xl shadow-lg items-center justify-center py-2`}
-          onClick={handleContentClick}
+          onClick={(e) => e.stopPropagation()}
         >
           <p className="px-10 break-keep flex w-full h-20 items-center justify-center font-medium text-gray-500 text-lg">
             {goPingPongReject}
@@ -97,7 +90,7 @@ export const GoPingPongModal = () => {
       <div
         id="go-pingpong-content"
         className={`relative flex flex-col w-[20rem] h-[20rem] z-30 bg-white rounded-3xl shadow-lg items-center justify-center py-2`}
-        onClick={handleContentClick}
+        onClick={(e) => e.stopPropagation()}
       >
         {isTarget ? (
           <p className="px-10 break-keep flexw-full h-20 items-center justify-center font-medium text-gray-500 text-lg">

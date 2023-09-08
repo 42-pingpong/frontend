@@ -25,17 +25,8 @@ export const FriendProfileModal: React.FC<FriendProfileModalProps> = ({
     friendProfileModalState
   );
 
-  const closeModal = (e: any) => {
-    const modalContent = document.getElementById('frined-profile-content');
-    const modalCloseButton = document.getElementById('modal-close-button');
-
-    if (
-      modalContent &&
-      modalContent.contains(e.target) &&
-      e.target !== modalCloseButton
-    )
-      e.stopPropagation();
-    else setFriendProfile(!friendProfile);
+  const closeModal = () => {
+    setFriendProfile(!friendProfile);
   };
 
   const navigateToProfile = (nickName: string) => {
@@ -53,6 +44,7 @@ export const FriendProfileModal: React.FC<FriendProfileModalProps> = ({
         id="frined-profile-content"
         className={`relative flex flex-col float-right bg-white rounded-3xl w-[28rem] h-[24rem] items-center justify-center shadow-lg shadow-gray-300 z-10 right-[35%]`}
         style={{ top: y - 50 }}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="profile-container">
           <div className="profile-image-container">

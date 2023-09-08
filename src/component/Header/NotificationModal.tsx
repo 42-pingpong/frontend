@@ -12,17 +12,8 @@ export const NotificationModal = () => {
   const [notificationResultList, setNotificationResultList] =
     useRecoilState(notiResponseState);
 
-  const closeModal = (e: any) => {
-    const modalContent = document.getElementById('notification-modal-content');
-    const modalCloseButton = document.getElementById('noti-modal-close-button');
-
-    if (
-      modalContent &&
-      modalContent.contains(e.target) &&
-      e.target !== modalCloseButton
-    )
-      e.stopPropagation();
-    else setIsModalOpen(!isModalOpen);
+  const closeModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
   return (
@@ -30,6 +21,7 @@ export const NotificationModal = () => {
       <div
         id="notification-modal-content"
         className="relative flex flex-col float-right bg-white rounded-3xl w-[25rem] h-[31vh] mt-20 mr-20 p-8 items-center justify-center shadow-lg shadow-gray-300"
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col w-full h-full overflow-y-auto py-3">
           {notificationList?.map((item) => (
