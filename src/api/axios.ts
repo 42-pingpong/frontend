@@ -29,8 +29,8 @@ axiosInstance.interceptors.response.use(
 
       if (status === 400) {
         alert('잘못된 요청입니다');
-      } else if (status === 401) {
-        alert('로그인이 필요합니다');
+        // } else if (status === 401) {
+        //   alert('로그인이 필요합니다');
       } else if (status === 403) {
         alert('권한이 없습니다.');
       } else if (status === 404) {

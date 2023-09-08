@@ -60,7 +60,7 @@ export const ProfileModal = () => {
           </div>
         </div>
         <button
-          className="profile-button-container"
+          className="flex relative bg-slate-100 mt-1 w-96 h-16 rounded-3xl shadow-xl justify-center items-center"
           onClick={navigateToProfile}
         >
           <span className="profile-button-text"> Profile </span>

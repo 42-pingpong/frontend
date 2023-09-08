@@ -104,14 +104,14 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
           </div>
           <div className="flex w-full h-28 py-3 flex-grow-0">
             {nickName === undefined ? (
-              <div
+              <button
                 className="flex w-full h-full justify-center items-center bg-progressBlue rounded-full shadow-xl"
                 onClick={() => setProfileEdit(true)}
               >
                 <span className="text-[2rem] font-semibold text-white">
                   Profile Edit
                 </span>
-              </div>
+              </button>
             ) : null}
           </div>
         </div>
