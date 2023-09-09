@@ -15,7 +15,7 @@ export const MuteTimeModal = (props: Props) => {
   const [timeUnit, setTimeUnit] = useState('');
   const [numberInput, setNumberInput] = useState('');
 
-  const closeModal = (e: any) => {
+  const closeModal = () => {
     setModal(!modal);
   };
 
@@ -41,7 +41,7 @@ export const MuteTimeModal = (props: Props) => {
       <div
         id="mute-content"
         className={`relative flex flex-col w-[20rem] h-[20rem] z-30 bg-white rounded-3xl shadow-lg items-center justify-center py-2`}
-        onClick={(e) => e.stopPropagation}
+        onClick={(e) => e.stopPropagation()}
       >
         <span className="flexw-full h-20 items-center justify-center font-medium text-gray-500 text-lg">
           set mute time

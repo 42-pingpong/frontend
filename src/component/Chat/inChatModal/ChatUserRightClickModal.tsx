@@ -17,11 +17,13 @@ interface Props {
 }
 
 export const ChatUserRightClickModal = (props: Props) => {
+  const user = useRecoilValue(userInfo);
+  const roomInfo = useRecoilValue(currentChatInfoState);
+  const role = useRecoilValue(roleState);
+  const isMuteModalOpen = useRecoilValue(muteModalState);
   const [modal, setModal] = useRecoilState(
     chattingProfileOnRightClickModalState
   );
-  const user = useRecoilValue(userInfo);
-  const roomInfo = useRecoilValue(currentChatInfoState);
 
   if (user.id === props.user.id) {
     setModal(false);
@@ -36,11 +38,6 @@ export const ChatUserRightClickModal = (props: Props) => {
     e.stopPropagation();
   };
 
-  const role = useRecoilValue(roleState);
-  const isMuteModalOpen = useRecoilValue(muteModalState);
-
-  console.log(props);
-
   if (props.y > 900) props.y -= 300;
 
   if (role === 'user')
@@ -54,6 +51,7 @@ export const ChatUserRightClickModal = (props: Props) => {
           id="chat-profile-right-content"
           className={`relative flex flex-col w-[11rem] h-[7rem] z-10 bg-white rounded-3xl shadow-lg items-center justify-center py-2`}
           style={{ left: `${props.x + 20}px`, top: `${props.y - 20}px` }}
+          onClick={handleContentClick}
         >
           <FuncButton name={'Block'} target={props.user} />
           <FuncButton name={'Go PingPong'} target={props.user} />
