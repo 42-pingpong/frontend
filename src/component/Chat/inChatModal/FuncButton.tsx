@@ -92,11 +92,11 @@ export const FuncButton = ({
     }
   };
   return (
-    <div
+    <button
       className="flex w-[80%] h-10 rounded-full my-2 shadow-md justify-center items-center bg-progressBlue"
       onClick={handelModalFuc}
     >
       <span className="text-lg font-semibold text-white">{name}</span>
-    </div>
+    </button>
   );
 };

@@ -19,6 +19,7 @@ import {
   JoinGroupChatDTO,
 } from '../../interfaces/Chatting-Format.dto';
 import { Loading } from '../Loading';
+import { useSetRole } from '../../hooks/chat/useSetRole';
 
 export const Chat = () => {
   const isNotificationModalOpen = useRecoilValue(notificationModalState);
@@ -28,18 +29,16 @@ export const Chat = () => {
   const user = useRecoilValue(userInfo);
   const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
   const setPassword = useSetRecoilState(passwordModalState);
-  const setRole = useSetRecoilState(roleState);
   const params = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-
+  const role = useSetRole();
   useLayoutEffect(() => {
     if (params.id === undefined || params.levelOfPublicity === undefined) {
       alert('잘못된 접근입니다.');
       navigate('/');
     }
     if (params.levelOfPublicity === 'Pub') {
-      console.log("ChatSocket.emit('join-room', requestJoinChatRoom);");
       ChatSocket.emit('join-room', requestJoinChatRoom);
     } else if (params.levelOfPublicity === 'Prot') {
       setPassword(true);
@@ -52,16 +51,6 @@ export const Chat = () => {
       ChatSocket.off('error', handleError);
     };
   }, [user]);
-
-  useEffect(() => {
-    setRole(
-      roomInfo.ownerId === user.id
-        ? 'owner'
-        : roomInfo.admin.find((item: any) => item.id === user.id)
-        ? 'admin'
-        : 'user'
-    );
-  }, [roomInfo]);
 
   const requestJoinChatRoom: JoinGroupChatDTO = {
     groupChatId: parseInt(params.id as string, 10),

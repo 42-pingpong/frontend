@@ -1,72 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { userInfo } from '../../../atom/user';
-import {
-  RequestDirectMessageDTO,
-  ResponseDirectMessageDTO,
-  fetchRequestDirectMessageDTO,
-} from '../../../interfaces/Chatting-Format.dto';
-import { ChatSocket } from '../../../sockets/ChatSocket';
 import { ServiceTitle } from '../../Main/ServiceTitle';
 import { DirectMessageBubble } from './DirectMessageBubble';
 import { DirectMessageRoomSign } from './DirectMessageRoomSign';
+import useDirectMessage from '../../../hooks/chat/useDirectMessage';
 
 export const DirectMessage = () => {
-  const [input, setInput] = useState('');
-  const [dm, setDm] = useState<ResponseDirectMessageDTO[]>([]);
-  const user = useRecoilValue(userInfo);
   const param = useParams().id;
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
   const id = param === undefined ? 0 : parseInt(param, 10);
-
-  useEffect(() => {
-    ChatSocket.emit('fetch-direct-message', requestFetchLog);
-    ChatSocket.on('fetch-direct-message', fetchMessageHandler);
-    ChatSocket.on('direct-message', handelDmResponse);
-
-    return () => {
-      ChatSocket.off('direct-message', handelDmResponse);
-      ChatSocket.off('fetch-direct-message', fetchMessageHandler);
-    };
-  }, []);
+  const { input, setInput, dm, handleSendDm } = useDirectMessage(id);
 
   useEffect(() => {
     if (scrollBottomRef.current) {
       scrollBottomRef.current.scrollTop = scrollBottomRef.current.scrollHeight;
     }
   }, [dm]);
-
-  const handelDmResponse = (data: ResponseDirectMessageDTO) => {
-    setDm((prev) => [...prev, data]);
-  };
-
-  const fetchMessageHandler = (
-    data: ResponseDirectMessageDTO | ResponseDirectMessageDTO[]
-  ) => {
-    setDm((prev) =>
-      Array.isArray(data) ? [...prev, ...data] : [...prev, data]
-    );
-  };
-
-  const requestFetchLog: fetchRequestDirectMessageDTO = {
-    userId: user.id,
-    targetId: id,
-  };
-
-  const handleSendDm = () => {
-    if (input === '') return;
-    if (id === undefined) return;
-
-    const newDm: RequestDirectMessageDTO = {
-      receiverId: id,
-      senderId: user.id,
-      message: input,
-    };
-
-    ChatSocket.emit('direct-message', newDm);
-    setInput('');
-  };
 
   return (
     <div className="flex w-full h-full items-center justify-center">

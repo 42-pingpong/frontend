@@ -12,17 +12,8 @@ export const ProfileModal = () => {
   const [userInfoObj, setUserInfoObj] = useRecoilState(userInfo);
   const setProfileEdit = useSetRecoilState(profileEditState);
 
-  const closeModal = (e: any) => {
-    const modalContent = document.getElementById('modal-content');
-    const modalCloseButton = document.getElementById('modal-close-button');
-
-    if (
-      modalContent &&
-      modalContent.contains(e.target) &&
-      e.target !== modalCloseButton
-    )
-      e.stopPropagation();
-    else setIsModalOpen(!isModalOpen);
+  const closeModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
   const navigateToProfile = () => {
@@ -38,6 +29,7 @@ export const ProfileModal = () => {
       <div
         id="modal-content"
         className="relative flex flex-col float-right bg-white rounded-3xl w-[28rem] h-[24rem] mt-20  items-center justify-center shadow-lg shadow-gray-300"
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="profile-container">
           <div className="profile-image-container">
@@ -60,7 +52,7 @@ export const ProfileModal = () => {
           </div>
         </div>
         <button
-          className="profile-button-container"
+          className="flex relative bg-slate-100 mt-1 w-96 h-16 rounded-3xl shadow-xl justify-center items-center"
           onClick={navigateToProfile}
         >
           <span className="profile-button-text"> Profile </span>
