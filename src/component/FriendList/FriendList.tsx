@@ -7,6 +7,7 @@ import { StatusIcon } from './StatusIcon';
 import { Friend } from './Friend';
 import { UserDto } from '../../interfaces/User.dto';
 import { fetchFriendList } from '../../api/Friend/Friend';
+import { RoleInChat } from '../../enum/role.enum';
 
 export const FriendList = () => {
   const isLogin = useRecoilValue(loginState);
@@ -56,7 +57,7 @@ export const FriendList = () => {
         </div>
         <div className="flex flex-col w-full h-full p-1 overflow-y-auto mt-3 mb-10">
           {friendList.map((item) => (
-            <Friend key={item.id} props={item} />
+            <Friend key={item.id} props={item} role={RoleInChat.user} />
           ))}
         </div>
       </div>

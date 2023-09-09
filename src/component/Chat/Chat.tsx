@@ -81,7 +81,7 @@ export const Chat = () => {
             <ChatSection />
           </div>
           <div className="col-span-1 row-span-6">
-            <UserSection bottomIconVisible={true} />
+            <UserSection bottomIconVisible={true} adminButtonVisible={false} />
           </div>
         </div>
         {isProfileModalOpen && <ProfileModal />}

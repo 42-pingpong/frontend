@@ -43,7 +43,7 @@ export const ChatManage = () => {
           admin이랑 joined user 두개만 분리하고
           admin 한테는 권한을 뺏는 버튼
           user한테는 권한을 주는 버튼만 달려고 했습니다.. */}
-          <UserSection bottomIconVisible={false} />
+          <UserSection bottomIconVisible={false} adminButtonVisible={true} />
         </div>
         <div className="flex w-full justify-center bg-slate-300">
           <MuteList list={muteList} roomId={roomId as string} />

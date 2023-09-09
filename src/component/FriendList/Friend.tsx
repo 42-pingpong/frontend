@@ -5,24 +5,30 @@ import {
   clickedYState,
   friendProfileModalState,
 } from '../../atom/modal';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useNavigate } from 'react-router-dom';
-import { userInfo } from '../../atom/user';
-import { memo, useEffect } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { memo } from 'react';
+import { RoleInChat } from '../../enum/role.enum';
+import { GetFriendAdminButton } from './getter/GetFriendAdminButton';
 
-export const Friend = memo(function Friend({ props }: { props: UserDto }) {
+export const Friend = memo(function Friend({
+  props,
+  adminButtonVisible,
+  role = RoleInChat.user,
+}: {
+  props: UserDto;
+  adminButtonVisible?: boolean;
+  role: RoleInChat;
+}) {
   const setX = useSetRecoilState(clickedXState);
   const setY = useSetRecoilState(clickedYState);
   const setClicked = useSetRecoilState(friendProfileModalState);
   const setFriendProfile = useSetRecoilState(clickedFriendProfileState);
-  const navigation = useNavigate();
-  const user = useRecoilValue(userInfo);
 
-  const handleDirectMessage = () => {
-    //socket emit
-    if (props.id === user.id) return;
-    navigation(`/direct-message/${props.id}`);
-  };
+  const ChatManageUserUtilComponent = GetFriendAdminButton({
+    props,
+    adminButtonVisible,
+    role,
+  });
 
   return (
     <div className="flex w-full h-20 bg-sky rounded-full my-3 shadow-md shadow-gray-300 items-center p-4 justify-between">
@@ -41,13 +47,7 @@ export const Friend = memo(function Friend({ props }: { props: UserDto }) {
       <div className="flex w-1/2">
         <span className="text-gray-500 text-xl">{props.nickName}</span>
       </div>
-      <div className="flex w-10 h-6">
-        <img
-          src={require('../../public/plane.png')}
-          className="ml-3"
-          onClick={handleDirectMessage}
-        />
-      </div>
+      {ChatManageUserUtilComponent}
       <div
         className={`${
           props.status === 'online'

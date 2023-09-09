@@ -7,8 +7,10 @@ import { UserList } from './UserList';
 
 export const UserSection = ({
   bottomIconVisible,
+  adminButtonVisible,
 }: {
   bottomIconVisible: boolean;
+  adminButtonVisible: boolean;
 }) => {
   const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
   const [owner, setOwner] = useState<UserDto>();
@@ -63,6 +65,7 @@ export const UserSection = ({
         admin={admin}
         joinedUser={joinedUser}
         bottomIconVisible={bottomIconVisible}
+        adminButtonVisible={adminButtonVisible}
       />
     </div>
   );

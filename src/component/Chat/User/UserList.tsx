@@ -14,17 +14,20 @@ import { UserDto } from '../../../interfaces/User.dto';
 import { currentChatInfoState, roleState } from '../../../atom/chat';
 import { ChatSocket } from '../../../sockets/ChatSocket';
 import { useNavigate, useParams } from 'react-router-dom';
+import { RoleInChat } from '../../../enum/role.enum';
 
 export const UserList = ({
   owner,
   admin,
   joinedUser,
   bottomIconVisible,
+  adminButtonVisible,
 }: {
   owner: UserDto | undefined;
   admin: UserDto[];
   joinedUser: UserDto[];
   bottomIconVisible: boolean;
+  adminButtonVisible: boolean;
 }) => {
   const role = useRecoilValue(roleState);
   const clickedX = useRecoilValue(clickedXState);
@@ -61,16 +64,31 @@ export const UserList = ({
         </div>
         <div className="flex flex-col w-full h-[22%] mt-3 mb-2">
           <span className="font-semibold text-borderBlue text-lg">owner</span>
-          {owner && <Friend props={owner} />}
+          {owner && <Friend props={owner} role={RoleInChat.owner} />}
         </div>
         <span className="font-semibold text-gray-500 text-lg">admin</span>
         <div className="flex flex-col w-full h-[30%] flex-grow overflow-y-auto mt-3 mb-2">
-          {admin && admin.map((item) => <Friend key={item.id} props={item} />)}
+          {admin &&
+            admin.map((item) => (
+              <Friend
+                key={item.id}
+                props={item}
+                adminButtonVisible={adminButtonVisible}
+                role={RoleInChat.admin}
+              />
+            ))}
         </div>
         <span className="font-semibold text-gray-500 text-lg">user</span>
         <div className="flex flex-col w-full h-[30%] flex-grow overflow-y-auto mt-3 mb-2">
           {joinedUser &&
-            joinedUser.map((item) => <Friend key={item.id} props={item} />)}
+            joinedUser.map((item) => (
+              <Friend
+                key={item.id}
+                props={item}
+                adminButtonVisible={adminButtonVisible}
+                role={RoleInChat.user}
+              />
+            ))}
         </div>
         <div>
           {role !== 'user' && bottomIconVisible && (
