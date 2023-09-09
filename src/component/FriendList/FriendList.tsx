@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { friendListState, loginState, userInfo } from '../../atom/user';
 import { StatusSocket } from '../../sockets/StatusSocket';
@@ -7,11 +7,13 @@ import { StatusIcon } from './StatusIcon';
 import { Friend } from './Friend';
 import { UserDto } from '../../interfaces/User.dto';
 import { fetchFriendList } from '../../api/Friend/Friend';
+import { BlockList } from './Block/BlockList';
 
 export const FriendList = () => {
   const isLogin = useRecoilValue(loginState);
   const [userInfoState] = useRecoilState(userInfo);
   const [friendList, setFriendList] = useRecoilState(friendListState);
+  const [isBlockedButton, setIsBlockedButton] = useState(false);
 
   useEffect(() => {
     StatusSocket.on('change-status', handleChangeFriendStatus);
@@ -54,11 +56,29 @@ export const FriendList = () => {
           <StatusIcon props={{ status: 'offline', color: 'bg-red-400' }} />
           <StatusIcon props={{ status: 'ingame', color: 'bg-blue-400' }} />
         </div>
-        <div className="flex flex-col w-full h-full p-1 overflow-y-auto mt-3 mb-10">
-          {friendList.map((item) => (
-            <Friend key={item.id} props={item} />
-          ))}
-        </div>
+        <section className="flex flex-col w-full h-full bg-red-200">
+          <div className="flex flex-row w-full h-20 bg-blue-200 justify-between">
+            <button
+              onClick={() => setIsBlockedButton(false)}
+              className="text-white font-semibold text-3xl aling-center w-full bg-slate-200"
+            >
+              Friend
+            </button>
+            <button
+              onClick={() => setIsBlockedButton(true)}
+              className="text-white font-semibold text-3xl aling-center w-full bg-slate-200"
+            >
+              Block
+            </button>
+          </div>
+          <div className="flex flex-col w-full h-full p-1 overflow-y-auto mt-3 mb-10">
+            {isBlockedButton ? (
+              <BlockList />
+            ) : (
+              friendList.map((item) => <Friend key={item.id} props={item} />)
+            )}
+          </div>
+        </section>
       </div>
     </div>
   );
