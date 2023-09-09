@@ -61,7 +61,11 @@ export const ChattingBubble = memo(
           </span>
         </div>
         {profileRightClickModal && (
-          <ChatUserRightClickModal x={x} y={y} user={clickedUser} />
+          <ChatUserRightClickModal
+            x={x}
+            y={y > 900 ? y - 50 : y}
+            user={clickedUser}
+          />
         )}
       </div>
     ) : (

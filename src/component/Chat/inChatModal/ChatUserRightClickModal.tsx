@@ -38,8 +38,6 @@ export const ChatUserRightClickModal = (props: Props) => {
     e.stopPropagation();
   };
 
-  if (props.y > 900) props.y -= 300;
-
   if (role === 'user')
     return (
       <div

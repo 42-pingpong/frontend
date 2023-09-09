@@ -32,26 +32,28 @@ export const ChatManage = () => {
   }, [roomInfo]);
 
   return (
-    <div className="flex flex-col h-screen w-full bg-slate-200 py-20 px-16">
-      <div className="w-full h-[20vh] bg-red-200 justify-center">
-        <RoomInfo />
-      </div>
-      <div className="grid w-full h-full grid-cols-1 xl:grid-cols-3 gap-10 bg-red-100">
-        <div className="flex w-full justify-center bg-slate-300">
-          {/* 뺄까 생각중입니다 
+    <div className="flex h-screen w-full bg-slate-200 py-20 px-16 justify-center items-center">
+      <section className="flex flex-col h-full w-full max-w-[1800px]">
+        <div className="w-full h-[20vh] bg-red-200 justify-center">
+          <RoomInfo />
+        </div>
+        <div className="grid w-full h-full grid-cols-1 xl:grid-cols-3 gap-10 bg-red-100">
+          <div className="flex w-full justify-center bg-slate-300">
+            {/* 뺄까 생각중입니다 
           이 컴포넌트에서 admin권한을 줬다 뺐는 걸 만드려했어요..
           admin이랑 joined user 두개만 분리하고
           admin 한테는 권한을 뺏는 버튼
           user한테는 권한을 주는 버튼만 달려고 했습니다.. */}
-          <UserSection bottomIconVisible={false} />
+            <UserSection bottomIconVisible={false} />
+          </div>
+          <div className="flex w-full justify-center bg-slate-300">
+            <MuteList list={muteList} roomId={roomId as string} />
+          </div>
+          <div className="flex w-full justify-center bg-slate-300">
+            <BanList list={banList} roomId={roomId as string} />
+          </div>
         </div>
-        <div className="flex w-full justify-center bg-slate-300">
-          <MuteList list={muteList} roomId={roomId as string} />
-        </div>
-        <div className="flex w-full justify-center bg-slate-300">
-          <BanList list={banList} roomId={roomId as string} />
-        </div>
-      </div>
+      </section>
     </div>
   );
 };

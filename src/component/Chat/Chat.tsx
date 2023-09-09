@@ -58,6 +58,7 @@ export const Chat = () => {
   };
 
   const handleError = (data: any) => {
+    console.log(data);
     if (data === 'Request failed with status code 403') {
       alert('채팅방에 입장할 수 없습니다.');
       navigate('/');

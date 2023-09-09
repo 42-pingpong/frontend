@@ -87,6 +87,11 @@ export interface RequestBlockDto {
   blockedUserId: number;
 }
 
+export interface RequestUnBlockDto {
+  userId: number;
+  unBlockedUserId: number;
+}
+
 export interface RequestBanDto {
   groupChatId: number;
   userId: number;
