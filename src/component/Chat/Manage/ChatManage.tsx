@@ -14,9 +14,9 @@ import useFetchChatManageInfo from '../../../hooks/chat/useFetchChatManageInfo';
 export const ChatManage = () => {
   const roomId = useParams().roomId;
   const user = useRecoilValue(userInfo);
+  const role = useSetRole();
   const { banList, setBanList } = useUnBan();
   const { muteList, setMuteList } = useUnMute();
-  const role = useSetRole();
   const roomInfo = useFetchChatManageInfo(
     Number(roomId),
     setBanList,
@@ -24,12 +24,12 @@ export const ChatManage = () => {
   );
 
   useEffect(() => {
-    if (user.id === -1) return;
+    if (roomInfo === undefined || user.id === -1) return;
     if (role === 'user') {
       alert('권한이 없습니다.');
       window.history.back();
     }
-  }, [role]);
+  }, [roomInfo]);
 
   return (
     <div className="flex flex-col h-screen w-full bg-slate-200 py-20 px-16">

@@ -4,6 +4,7 @@ import axiosInstance from '../../api/axios';
 import { roleState, currentChatInfoState } from '../../atom/chat';
 import { userInfo } from '../../atom/user';
 import { ChatRoomInfoDTO } from '../../interfaces/Chatting-Format.dto';
+import { ChatRoom } from '../../component/Chat/ChatList/ChatRoom';
 
 export default function useFetchChatManageInfo(
   roomId: number,
@@ -27,5 +28,5 @@ export default function useFetchChatManageInfo(
     setMuteList(data.mutedUsers);
   };
 
-  return { roomInfo };
+  return roomInfo;
 }
