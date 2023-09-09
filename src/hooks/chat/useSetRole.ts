@@ -12,7 +12,7 @@ export function useSetRole() {
   const [role, setRole] = useRecoilState(roleState);
 
   useEffect(() => {
-    if (!roomInfo) return;
+    if (roomInfo.ownerId === 0 || user.id === -1) return;
     setRole(
       roomInfo.owner.id === user.id
         ? 'owner'
@@ -20,7 +20,7 @@ export function useSetRole() {
         ? 'admin'
         : 'user'
     );
-  }, [roomInfo]);
+  }, [roomInfo, user]);
 
   return role;
 }
