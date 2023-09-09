@@ -16,8 +16,9 @@ export default function useUnmute() {
   }, []);
 
   const handelUnmuteUser = (data: ResponseUnBanDto) => {
-    console.log(data);
-    setMuteList((prev) => prev.filter((item) => item.id !== data.userId));
+    setMuteList((prev) =>
+      prev.filter((item) => item.mutedUser.id !== data.userId)
+    );
   };
   return { muteList, setMuteList };
 }

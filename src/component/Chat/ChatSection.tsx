@@ -12,6 +12,7 @@ import {
   ResponseMuteDto,
   ResponseGoPingPongDto,
   goPingPongDto,
+  ResponseUnBanDto,
 } from '../../interfaces/Chatting-Format.dto';
 import {
   useRecoilState,
@@ -31,6 +32,7 @@ import { GameSocket } from '../../sockets/GameSocket';
 import { GoPingPongModal } from './inChatModal/GoPingPongModal';
 import { Chat } from './Chat';
 import useMuteTimeSave from '../../hooks/chat/useMuteTimeSave';
+import useUnmute from '../../hooks/chat/useUnMute';
 
 export const ChatSection = () => {
   const navigate = useNavigate();
@@ -50,6 +52,7 @@ export const ChatSection = () => {
     chattingProfileOnRightClickModalState
   );
   const setGoPingPongReject = useSetRecoilState(goPingPongRejectState);
+  const unMuteMe = useUnmute();
 
   useLayoutEffect(() => {
     ChatSocket.on('fetch-group-message', fetchMessageHandler);
@@ -61,6 +64,7 @@ export const ChatSection = () => {
     ChatSocket.on('go-pingpong', handleGoPingPong);
     ChatSocket.on('go-pingpong-accept', handleGoPingPongAccept);
     ChatSocket.on('go-pingpong-reject', handleGoPingPongReject);
+    ChatSocket.on('unmute-user', handleUnMuteMe);
 
     if (chat.length === 0)
       ChatSocket.emit('fetch-group-message', requestFetchLog);
@@ -75,6 +79,7 @@ export const ChatSection = () => {
       ChatSocket.off('go-pingpong', handleGoPingPong);
       ChatSocket.off('go-pingpong-accept', handleGoPingPongAccept);
       ChatSocket.off('go-pingpong-rejcet', handleGoPingPongReject);
+      ChatSocket.on('unmute-user', handleUnMuteMe);
     };
   }, [roomInfo]);
 
@@ -83,6 +88,13 @@ export const ChatSection = () => {
       scrollBottomRef.current.scrollTop = scrollBottomRef.current.scrollHeight;
     }
   }, [chat]);
+
+  const handleUnMuteMe = (data: ResponseUnBanDto) => {
+    if (user.id === data.userId) {
+      setMute(false);
+      localStorage.removeItem('mute');
+    }
+  };
 
   const handleKick = (data: ResponseFuncDto) => {
     if (data.userId === user.id) {

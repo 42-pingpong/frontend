@@ -32,6 +32,7 @@ export interface MutedUserDto {
   muteDue: Date;
   mutedGroupId: number;
   mutedUser: senderDTO;
+  mutedUserId: number;
 }
 
 export interface JoinGroupChatDTO {
