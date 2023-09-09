@@ -47,6 +47,9 @@ export const FuncButton = ({
         break;
       }
       case 'Block': {
+        /**
+         * block 리스트 받으면 블락리스트에 있는 유저는 차단못하게 예외처리하기. 지금은 403리턴해줘서 채팅방 입장 못한다는 얼러트 뜨는 에러 있음
+         * */
         const reqData: RequestBlockDto = {
           userId: user.id,
           blockedUserId: target.id,
@@ -72,7 +75,6 @@ export const FuncButton = ({
         break;
       }
       case 'Mute':
-        console.log('mute');
         setMuteModal(true);
         break;
       case 'Go PingPong': {
