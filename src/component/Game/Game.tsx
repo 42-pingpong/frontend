@@ -1,5 +1,10 @@
+import { useEffect } from 'react';
 import { ChatSection } from '../Chat/ChatSection';
+import { DirectMessage } from '../Chat/DirectMessage/DirectMessage';
 import { GameSection } from './GameSection';
+import { GameSocket } from '../../sockets/GameSocket';
+import { useRecoilValue } from 'recoil';
+import { playerNumberState } from '../../atom/game';
 
 export const Game = () => {
   return (
@@ -16,7 +21,7 @@ export const Game = () => {
             id="chat-section"
             className="col-span-1 row-span-6 h-[80vh] game:block hidden"
           >
-            <ChatSection />
+            <DirectMessage />
           </div>
         </div>
       </div>
