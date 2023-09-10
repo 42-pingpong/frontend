@@ -4,11 +4,15 @@ import { ServiceTitle } from '../../Main/ServiceTitle';
 import { DirectMessageBubble } from './DirectMessageBubble';
 import { DirectMessageRoomSign } from './DirectMessageRoomSign';
 import useDirectMessage from '../../../hooks/chat/useDirectMessage';
+import { useRecoilValue } from 'recoil';
+import { enemyIdState, playerNumberState } from '../../../atom/game';
 
 export const DirectMessage = () => {
   const param = useParams().id;
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
-  const id = param === undefined ? 0 : parseInt(param, 10);
+  const enemyId = useRecoilValue(enemyIdState);
+  const id = enemyId !== 0 ? enemyId : param ? parseInt(param, 10) : 0;
+
   const { input, setInput, dm, handleSendDm } = useDirectMessage(id);
 
   useEffect(() => {

@@ -1,9 +1,10 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   player2ScoreState,
   player1ScoreState,
   player1NameState,
   player2NameState,
+  enemyIdState,
 } from '../../atom/game';
 
 import { useEffect } from 'react';
@@ -15,6 +16,7 @@ export const Matchpoint = () => {
   const [player2Score, setPlayer2Score] = useRecoilState(player2ScoreState);
   const [player1Name, setPlayer1Name] = useRecoilState(player1NameState);
   const [player2Name, setPlayer2Name] = useRecoilState(player2NameState);
+  const setEnemyId = useSetRecoilState(enemyIdState);
   const user = useRecoilValue(userInfo);
 
   useEffect(() => {
@@ -23,6 +25,10 @@ export const Matchpoint = () => {
     GameSocket.on('user-name', (p1: string, p2: string) => {
       setPlayer1Name(p1);
       setPlayer2Name(p2);
+    });
+
+    GameSocket.on('user-id', (enemyId: number) => {
+      setEnemyId(enemyId);
     });
 
     GameSocket.on('player1Score', (score: number) => {

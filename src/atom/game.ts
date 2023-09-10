@@ -99,3 +99,8 @@ export const joinState = atom({
   key: 'join',
   default: false,
 });
+
+export const enemyIdState = atom({
+  key: 'enemyId',
+  default: 0,
+});
