@@ -17,5 +17,5 @@ export const useFetchBlockList = () => {
     setBlockList(res.data);
   };
 
-  return blockList;
+  return { blockList, setBlockList };
 };
