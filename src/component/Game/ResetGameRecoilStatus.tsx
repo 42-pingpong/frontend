@@ -18,6 +18,7 @@ import {
   readyState,
   roomIdState,
   startState,
+  enemyIdState,
 } from '../../atom/game';
 import { useEffect } from 'react';
 import { GameSocket } from '../../sockets/GameSocket';
@@ -42,6 +43,7 @@ export const ResetGameRecoilStatus = () => {
   const func21 = useResetRecoilState(player2NameState);
   const func22 = useResetRecoilState(resetState);
   const func23 = useResetRecoilState(joinState);
+  const func24 = useResetRecoilState(enemyIdState);
 
   const end = useRecoilValue(endState);
   const [reset, setReset] = useRecoilState(resetState);
@@ -88,6 +90,7 @@ export const ResetGameRecoilStatus = () => {
     func21();
     func22();
     func23();
+    func24();
   }, [reset]);
 
   return null;
