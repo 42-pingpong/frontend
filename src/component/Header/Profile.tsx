@@ -28,7 +28,7 @@ const Profile = () => {
   const prevNotificationList = useRef<ResponseNotificationDto[]>([]);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (userInfoObj.id !== -1 && isLoggedIn) {
       /**
        * socket connect
        */
@@ -76,7 +76,7 @@ const Profile = () => {
   ) => {
     console.log('saveNotificationList called');
     const dataArray = Array.isArray(data) ? data : [data];
-    if (dataArray.length === 0) return;
+    if (dataArray.length === 0 || dataArray[0] === null) return;
 
     const filteredDataArray = dataArray.filter(
       (item) => item.isAccepted !== 'Y'
