@@ -1,0 +1,17 @@
+version: '3.0'
+
+services:
+  react:
+    container_name: react
+    build: ./
+    env_file:
+      - .env
+    volumes:
+      - '.:/var/frontend'
+    ports:
+      - '$REACT_PORT:10003'
+    networks:
+      - intra
+
+networks:
+  intra:
