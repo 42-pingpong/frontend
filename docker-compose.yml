@@ -1,4 +1,4 @@
-version: '3.0'
+version: '3.8'
 
 services:
   react:
@@ -9,7 +9,7 @@ services:
     volumes:
       - '.:/var/frontend'
     ports:
-      - '$REACT_PORT:10003'
+      - "10003:10003"
     networks:
       - intra
 
