@@ -12,7 +12,7 @@ RUN chmod +x /var/frontend/react.sh
 COPY package.json /var/frontend/package.json
 RUN npm install
 
-COPY .env /var/frontend/.env
+COPY .env.dev /var/frontend/.env.dev
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
