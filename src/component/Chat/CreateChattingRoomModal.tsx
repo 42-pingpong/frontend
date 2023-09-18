@@ -112,7 +112,7 @@ export const CreateChattingRoomModal = () => {
     <div className="background bg-[rgba(0,0,0,0.2)]" onClick={closeModal}>
       <div
         id="chattingroom-content"
-        className="min-w-[500px] w-[30vw] h-[65vh] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[10vh] grid grid-cols-1 grid-rows-4"
+        className="min-w-[500px] w-[30vw] h-[65vh] min-h-[800px] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[10vh] grid grid-cols-1 grid-rows-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="grid-rows-1">

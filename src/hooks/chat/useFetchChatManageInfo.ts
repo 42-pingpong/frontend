@@ -3,13 +3,17 @@ import { useRecoilValue, useRecoilState } from 'recoil';
 import axiosInstance from '../../api/axios';
 import { roleState, currentChatInfoState } from '../../atom/chat';
 import { userInfo } from '../../atom/user';
-import { ChatRoomInfoDTO } from '../../interfaces/Chatting-Format.dto';
+import {
+  ChatRoomInfoDTO,
+  MutedUserDto,
+  senderDTO,
+} from '../../interfaces/Chatting-Format.dto';
 import { ChatRoom } from '../../component/Chat/ChatList/ChatRoom';
 
 export default function useFetchChatManageInfo(
   roomId: number,
-  setBanList: any,
-  setMuteList: any
+  setBanList: (bannedUsers: senderDTO[]) => void,
+  setMuteList: (mutedUsers: MutedUserDto[]) => void
 ) {
   const user = useRecoilValue(userInfo);
   const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
