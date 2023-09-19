@@ -24,7 +24,6 @@ export const Friend = memo(function Friend(props: props) {
     <div className="flex w-full h-20 bg-sky rounded-full my-3 shadow-md shadow-gray-300 items-center p-4 justify-between">
       <div
         className="flex w-14 h-14 rounded-full border-2"
-        // onclick으로 좌표랑 클릭된 애 누군지 recoil로 넘김
         onClick={(e) => {
           setX(e.clientX);
           setY(e.clientY);
@@ -34,7 +33,7 @@ export const Friend = memo(function Friend(props: props) {
       >
         <img src={data.profile} className="flex rounded-full" />
       </div>
-      <div className="flex w-1/2">
+      <div className={`${children ? 'w-[35%]' : 'w-[70%]'}`}>
         <span className="text-gray-500 text-xl">{data.nickName}</span>
       </div>
       {children}
