@@ -24,7 +24,7 @@ export const RoomInfo = (props: props) => {
       <div className="flex w-[40%] min-w-min-[500vw] h-full">
         <ChatList props={props.roomInfo} />
       </div>
-      <div className="flex absolute left-[70vw] w-[12vw] justify-between">
+      <div className="flex absolute left-[70vw] w-[220px] justify-between">
         {props.role === 'owner' &&
           props.roomInfo.levelOfPublicity !== 'Priv' && (
             <PassWordButton
