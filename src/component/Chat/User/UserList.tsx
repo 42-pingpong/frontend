@@ -14,6 +14,9 @@ import { UserDto } from '../../../interfaces/User.dto';
 import { currentChatInfoState, roleState } from '../../../atom/chat';
 import { ChatSocket } from '../../../sockets/ChatSocket';
 import { useNavigate, useParams } from 'react-router-dom';
+import { userInfo } from '../../../atom/user';
+import { DmButton } from './DmButton';
+import { RoleUserList } from './RoleUserList';
 
 export const UserList = ({
   owner,
@@ -35,6 +38,7 @@ export const UserList = ({
   const id = useParams().id;
   const roomInfoReset = useResetRecoilState(currentChatInfoState);
   const roomInfo = useRecoilValue(currentChatInfoState);
+  const user = useRecoilValue(userInfo);
 
   const handleLeaveGroupChatRoom = () => {
     console.log('leave');
@@ -45,7 +49,6 @@ export const UserList = ({
 
   const handleManageChatRoom = () => {
     navigation(`/chat-manage/${roomInfo.groupChatId}`);
-    console.log('whsskglaemfek');
   };
 
   return (
@@ -61,17 +64,14 @@ export const UserList = ({
         </div>
         <div className="flex flex-col w-full h-[22%] mt-3 mb-2">
           <span className="font-semibold text-borderBlue text-lg">owner</span>
-          {owner && <Friend props={owner} />}
+          {owner && (
+            <Friend data={owner}>
+              <DmButton item={owner} />
+            </Friend>
+          )}
         </div>
-        <span className="font-semibold text-gray-500 text-lg">admin</span>
-        <div className="flex flex-col w-full h-[30%] flex-grow overflow-y-auto mt-3 mb-2">
-          {admin && admin.map((item) => <Friend key={item.id} props={item} />)}
-        </div>
-        <span className="font-semibold text-gray-500 text-lg">user</span>
-        <div className="flex flex-col w-full h-[30%] flex-grow overflow-y-auto mt-3 mb-2">
-          {joinedUser &&
-            joinedUser.map((item) => <Friend key={item.id} props={item} />)}
-        </div>
+        <RoleUserList list={admin} role="admin" />
+        <RoleUserList list={joinedUser} role="user" />
         <div>
           {role !== 'user' && bottomIconVisible && (
             <div className="opacity-20">

@@ -5,24 +5,20 @@ import {
   clickedYState,
   friendProfileModalState,
 } from '../../atom/modal';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useNavigate } from 'react-router-dom';
-import { userInfo } from '../../atom/user';
-import { memo, useEffect } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { memo } from 'react';
 
-export const Friend = memo(function Friend({ props }: { props: UserDto }) {
+interface props {
+  data: UserDto;
+  children?: React.ReactNode;
+}
+
+export const Friend = memo(function Friend(props: props) {
   const setX = useSetRecoilState(clickedXState);
   const setY = useSetRecoilState(clickedYState);
   const setClicked = useSetRecoilState(friendProfileModalState);
   const setFriendProfile = useSetRecoilState(clickedFriendProfileState);
-  const navigation = useNavigate();
-  const user = useRecoilValue(userInfo);
-
-  const handleDirectMessage = () => {
-    //socket emit
-    if (props.id === user.id) return;
-    navigation(`/direct-message/${props.id}`);
-  };
+  const { data, children } = props;
 
   return (
     <div className="flex w-full h-20 bg-sky rounded-full my-3 shadow-md shadow-gray-300 items-center p-4 justify-between">
@@ -32,27 +28,21 @@ export const Friend = memo(function Friend({ props }: { props: UserDto }) {
         onClick={(e) => {
           setX(e.clientX);
           setY(e.clientY);
-          setFriendProfile(props);
+          setFriendProfile(data);
           setClicked(true);
         }}
       >
-        <img src={props.profile} className="flex rounded-full" />
+        <img src={data.profile} className="flex rounded-full" />
       </div>
       <div className="flex w-1/2">
-        <span className="text-gray-500 text-xl">{props.nickName}</span>
+        <span className="text-gray-500 text-xl">{data.nickName}</span>
       </div>
-      <div className="flex w-10 h-6">
-        <img
-          src={require('../../public/plane.png')}
-          className="ml-3"
-          onClick={handleDirectMessage}
-        />
-      </div>
+      {children}
       <div
         className={`${
-          props.status === 'online'
+          data.status === 'online'
             ? 'bg-green-400'
-            : props.status === 'offline'
+            : data.status === 'offline'
             ? 'bg-red-400'
             : 'bg-blue-400 '
         } w-5 h-5 mr-3 rounded-full `}

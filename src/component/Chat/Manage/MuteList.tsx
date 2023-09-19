@@ -26,7 +26,7 @@ export const MuteList = ({
         ))}
         {list?.length == 0 && (
           <div className="flex justify-center items-center h-full w-full text-2xl text-slate-400">
-            No Banned User
+            No Muted User
           </div>
         )}
       </div>

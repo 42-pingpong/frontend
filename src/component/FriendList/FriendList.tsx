@@ -8,6 +8,7 @@ import { Friend } from './Friend';
 import { UserDto } from '../../interfaces/User.dto';
 import { fetchFriendList } from '../../api/Friend/Friend';
 import { BlockList } from './Block/BlockList';
+import { DmButton } from '../Chat/User/DmButton';
 
 const Button = ({
   onClick,
@@ -41,7 +42,9 @@ const StatusIconSection = () => (
 const FriendsSection = ({ friendList }: { friendList: UserDto[] }) => (
   <div>
     {friendList.map((item) => (
-      <Friend key={item.id} props={item} />
+      <Friend key={item.id} data={item}>
+        <DmButton item={item} />
+      </Friend>
     ))}
   </div>
 );
