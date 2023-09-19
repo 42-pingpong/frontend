@@ -98,7 +98,10 @@ export const CreateChattingRoomModal = () => {
       alert('채팅방 이름을 입력해주세요.');
       return;
     }
-    if (formValue.maxParticipants === 0) {
+    if (
+      formValue.levelOfPublicity !== 'Priv' &&
+      formValue.maxParticipants === 0
+    ) {
       alert('최대 참여 인원을 입력해주세요.');
       return;
     }
