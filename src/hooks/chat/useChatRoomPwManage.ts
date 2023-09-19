@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axiosInstance from '../../api/axios';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentChatInfoState } from '../../atom/chat';
 
 export default function useChatRoomPwManage() {
-  const [passWord, setPassWord] = React.useState<string>('');
-  const [passWordModal, setPassWordModal] = React.useState<boolean>(false);
-  const roomInfo = useRecoilValue(currentChatInfoState);
+  const [passWord, setPassWord] = useState<string>('');
+  const [passWordModal, setPassWordModal] = useState<boolean>(false);
+  const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
 
   const changePassword = async () => {
     if (passWord.length < 1) {
@@ -27,6 +27,8 @@ export default function useChatRoomPwManage() {
     if (res.status === 200) {
       setPassWord('');
       setPassWordModal(false);
+      if (roomInfo.levelOfPublicity === 'Pub')
+        setRoomInfo({ ...roomInfo, levelOfPublicity: 'Prot' });
       alert('비밀번호가 변경되었습니다.');
     }
   };
@@ -44,6 +46,8 @@ export default function useChatRoomPwManage() {
     if (res.status === 200) {
       setPassWord('');
       setPassWordModal(false);
+      if (roomInfo.levelOfPublicity === 'Prot')
+        setRoomInfo({ ...roomInfo, levelOfPublicity: 'Pub' });
       alert('비밀번호가 삭제되었습니다.');
     }
   };
