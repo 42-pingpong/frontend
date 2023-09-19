@@ -3,6 +3,8 @@ import { ServiceTitle } from '../../Main/ServiceTitle';
 import { senderDTO } from '../../../interfaces/Chatting-Format.dto';
 import { StatusIcon } from '../../FriendList/StatusIcon';
 import axiosInstance from '../../../api/axios';
+import { useRecoilState } from 'recoil';
+import { currentChatInfoState } from '../../../atom/chat';
 
 interface props {
   owner: senderDTO;
@@ -14,23 +16,31 @@ interface props {
 
 export const UserList = (props: props) => {
   const { owner, admin, joinedUser, roomId, userId } = props;
+  const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
 
-  const handleAddAdmin = async (id: number) => {
-    const uri = `/chat/groupChat/${roomId}/admin?userId=${userId}&requestedId=${id}`;
-
+  const handleAddAdmin = async (data: senderDTO) => {
+    const uri = `/chat/groupChat/${roomId}/admin?userId=${userId}&requestedId=${data.id}`;
     const res = await axiosInstance.post(uri);
 
-    if (res.status === 200) {
-      console.log(res.data);
+    if (res.status === 200 || res.status === 201) {
+      setRoomInfo({
+        ...roomInfo,
+        admin: [...roomInfo.admin, data],
+        joinedUser: roomInfo.joinedUser.filter((item) => item.id !== data.id),
+      });
     }
   };
-  const handleDeleteAdmin = async (id: number) => {
-    const uri = `/chat/groupChat/${roomId}/admin?userId=${userId}&requestedId=${id}`;
 
+  const handleDeleteAdmin = async (data: senderDTO) => {
+    const uri = `/chat/groupChat/${roomId}/admin?userId=${userId}&requestedId=${data.id}`;
     const res = await axiosInstance.delete(uri);
 
-    if (res.status === 200) {
-      console.log(res.data);
+    if (res.status === 200 || res.status === 201) {
+      setRoomInfo({
+        ...roomInfo,
+        admin: roomInfo.admin.filter((item) => item.id !== data.id),
+        joinedUser: [...roomInfo.joinedUser, data],
+      });
     }
   };
 
@@ -57,7 +67,7 @@ export const UserList = (props: props) => {
                 <div className="flex w-20 h-6">
                   <button
                     className="flex bg-progressBlue rounded-full ml-3"
-                    onClick={() => handleDeleteAdmin(item.id)}
+                    onClick={() => handleDeleteAdmin(item)}
                   >
                     관리자 해제
                   </button>
@@ -73,7 +83,7 @@ export const UserList = (props: props) => {
                 <div className="flex w-20 h-6">
                   <button
                     className="flex bg-progressBlue rounded-full ml-3"
-                    onClick={() => handleAddAdmin(item.id)}
+                    onClick={() => handleAddAdmin(item)}
                   >
                     관리자 등록
                   </button>
