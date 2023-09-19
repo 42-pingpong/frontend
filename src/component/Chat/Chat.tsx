@@ -33,6 +33,7 @@ export const Chat = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const role = useSetRole();
+
   useLayoutEffect(() => {
     if (params.id === undefined || params.levelOfPublicity === undefined) {
       alert('잘못된 접근입니다.');

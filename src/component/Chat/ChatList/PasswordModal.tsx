@@ -33,7 +33,9 @@ export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
   };
 
   const handleJoinChatRoomError = (data: any) => {
-    alert('비밀번호가 틀렸습니다.');
+    console.log(data);
+    //alert('비밀번호가 틀렸습니다.');
+    // Chat 컴포넌트에 있는 error event에 걸려서 alter두개뜸..
     inputPasswordRef.current = '';
   };
 
@@ -46,7 +48,7 @@ export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
     inputPasswordRef.current = e.target.value;
   };
 
-  const handlePassword = (e: any) => {
+  const handlePassword = () => {
     const requestJoinChatRoom: JoinGroupChatDTO = {
       groupChatId: parseInt(groupChatId, 10),
       userId: user.id,
@@ -73,6 +75,11 @@ export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
               type="text"
               onChange={handleInputChange}
               className="px-5 align-middle justify-center rounded-[50px] shadow-lg w-[100%] h-[3rem] font-light "
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handlePassword();
+                }
+              }}
             ></input>
           </div>
         </div>
