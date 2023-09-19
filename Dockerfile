@@ -9,10 +9,9 @@ RUN apk add --no-cache dumb-init git tzdata curl && \
 COPY react.sh /var/frontend/react.sh
 RUN chmod +x /var/frontend/react.sh 
 
+COPY .env.dev /var/frontend/.env
 COPY package.json /var/frontend/package.json
 RUN npm install
-
-COPY .env.dev /var/frontend/.env.dev
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
