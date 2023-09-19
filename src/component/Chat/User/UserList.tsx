@@ -70,8 +70,8 @@ export const UserList = ({
             </Friend>
           )}
         </div>
-        <RoleUserList list={admin} role="admin" />
-        <RoleUserList list={joinedUser} role="user" />
+        <RoleUserList list={admin} role="admin" type="dm" />
+        <RoleUserList list={joinedUser} role="user" type="dm" />
         <div>
           {role !== 'user' && bottomIconVisible && (
             <div className="opacity-20">

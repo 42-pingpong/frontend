@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { MuteList } from './MuteList';
-import { UserSection } from '../User/UserSection';
 import { useRecoilValue } from 'recoil';
 import { useParams } from 'react-router-dom';
 import { userInfo } from '../../../atom/user';
@@ -44,8 +43,6 @@ export const ChatManage = () => {
               owner={roomInfo.owner}
               admin={roomInfo.admin}
               joinedUser={roomInfo.joinedUser}
-              roomId={Number(roomId)}
-              userId={user.id}
             />
           </div>
           <div className="flex w-full justify-center">

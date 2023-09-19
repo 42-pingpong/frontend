@@ -2,17 +2,16 @@ import React from 'react';
 import { UserDto } from '../../../interfaces/User.dto';
 import { Friend } from '../../FriendList/Friend';
 import { DmButton } from './DmButton';
-import { useRecoilValue } from 'recoil';
-import { userInfo } from '../../../atom/user';
-import { useNavigate } from 'react-router-dom';
+import { AdminButton } from '../Manage/AdminButton';
 
 interface props {
   list: UserDto[];
   role: string;
+  type: string;
 }
 
 export const RoleUserList = (props: props) => {
-  const { list, role } = props;
+  const { list, role, type } = props;
 
   return (
     <>
@@ -21,7 +20,13 @@ export const RoleUserList = (props: props) => {
         {list &&
           list.map((item) => (
             <Friend key={item.id} data={item}>
-              <DmButton item={item} />
+              {type === 'dm' && <DmButton item={item} />}
+              {type === 'adminManage' && (
+                <AdminButton
+                  data={item}
+                  text={role === 'admin' ? '관리자 해제' : '관리자 등록'}
+                />
+              )}
             </Friend>
           ))}
       </div>
