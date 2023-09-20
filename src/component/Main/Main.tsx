@@ -7,6 +7,7 @@ import {
   clickedXState,
   clickedYState,
   friendProfileModalState,
+  gameModeModalState,
   notificationModalState,
   passwordModalState,
   profileModalState,
@@ -21,6 +22,7 @@ import { FriendProfileModal } from '../FriendList/FriendProfileModal';
 import { NotificationModal } from '../Header/NotificationModal';
 import { PasswordModal } from '../Chat/ChatList/PasswordModal';
 import { ResetGameRecoilStatus } from '../Game/ResetGameRecoilStatus';
+import { GameModeModal } from '../Game/GameModeModal';
 
 export const Main = () => {
   const isProfileModalOpen = useRecoilValue(profileModalState);
@@ -33,6 +35,7 @@ export const Main = () => {
   const clickedY = useRecoilValue(clickedYState);
   const clickedFriendProfile = useRecoilValue(clickedFriendProfileState);
   const clickedRoomId = useRecoilValue(clickedRoomIdState);
+  const isGameModeModalOpen = useRecoilValue(gameModeModalState);
 
   return (
     <div className="flex p-32 items-center justify-center h-screen">
@@ -58,6 +61,7 @@ export const Main = () => {
           y={clickedY}
         />
       )}
+      {isGameModeModalOpen && <GameModeModal />}
       {<ResetGameRecoilStatus />}
     </div>
   );

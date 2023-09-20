@@ -104,3 +104,13 @@ export const enemyIdState = atom({
   key: 'enemyId',
   default: 0,
 });
+
+export const gameModeState = atom({
+  key: 'gameMode',
+  default: '',
+});
+
+export const paddleHeightState = atom({
+  key: 'paddleHeight',
+  default: 130,
+});

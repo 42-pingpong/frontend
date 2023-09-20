@@ -109,3 +109,8 @@ export const authenticationModalState = atom<boolean>({
   key: 'authenticationModalState',
   default: false,
 });
+
+export const gameModeModalState = atom<boolean>({
+  key: 'gameModeModalState',
+  default: false,
+});
