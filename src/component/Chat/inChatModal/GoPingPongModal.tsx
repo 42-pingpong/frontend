@@ -44,7 +44,6 @@ export const GoPingPongModal = () => {
 
   const submitPingPongResponse = (response: string) => {
     if (response === 'Y') {
-      console.log('go-pingpong-accept', reqData);
       ChatSocket.emit('go-pingpong-accept', {
         groupChatId: reqData.groupChatId,
         userId: reqData.userId,

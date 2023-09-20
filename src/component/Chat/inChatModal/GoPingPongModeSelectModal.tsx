@@ -19,7 +19,6 @@ export const GoPingPongModeSelectModal = () => {
 
   const handleGameMode = (e: any) => {
     setGameMode(e.target.id);
-    console.log(e.target.id);
   };
 
   const closeModal = () => {
@@ -65,10 +64,8 @@ export const GoPingPongModeSelectModal = () => {
           type="submit"
           className="bg-progressBlue rounded-full h-10 w-20 font-semibold text-white shadow-sm mt-3"
           onClick={() => {
-            console.log(gameMode);
             closeModal();
             setGoPingPongModal(true);
-            console.log(reqData);
             ChatSocket.emit('go-pingpong', reqData);
           }}
         >
