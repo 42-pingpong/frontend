@@ -35,9 +35,14 @@ export const GameModeModal = () => {
     setModalOpen(false);
     resetGameMode();
     setMatching(true);
-    GameSocket.emit('enter-queue', user.id, gameMode);
-    if (gameMode === 'HARD') setPaddleHeight(100);
-    else setPaddleHeight(130);
+
+    if (gameMode === 'NORMAL') {
+      GameSocket.emit('normal-matching', user.id);
+      setPaddleHeight(130);
+    } else {
+      GameSocket.emit('hard-matching', user.id);
+      setPaddleHeight(100);
+    }
   };
 
   return (

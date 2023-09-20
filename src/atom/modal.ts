@@ -56,6 +56,28 @@ export const goPingPongRejectState = atom<string>({
   default: '',
 });
 
+export const goPingPongModeSelectModalState = atom<boolean>({
+  key: 'goPingPongModeSelectState',
+  default: false,
+});
+
+export const goPingPongModeState = atom<string>({
+  key: 'goPingPongModeState',
+  default: '',
+});
+
+export const goPingPongRequestedDataState = atom<ResponseGoPingPongDto>({
+  key: 'goPingPongRequestedDataState',
+  default: {
+    groupChatId: -1,
+    userId: -1,
+    targetUserId: -1,
+    userNickName: '',
+    targetUserNickName: '',
+    gameMode: '',
+  },
+});
+
 export const friendProfileModalState = atom<boolean>({
   key: 'friendProfileModalState',
   default: false,

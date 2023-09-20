@@ -120,6 +120,7 @@ export interface ResponseGoPingPongDto {
   userNickName: string;
   targetUserId: number;
   targetUserNickName: string;
+  gameMode?: string;
 }
 
 export interface goPingPongDto {
