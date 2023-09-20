@@ -27,8 +27,12 @@ export default function useChatRoomPwManage() {
     if (res.status === 200) {
       setPassWord('');
       setPassWordModal(false);
+      setRoomInfo({ ...roomInfo, curPassword: passWord });
       if (roomInfo.levelOfPublicity === 'Pub')
-        setRoomInfo({ ...roomInfo, levelOfPublicity: 'Prot' });
+        setRoomInfo({
+          ...roomInfo,
+          levelOfPublicity: 'Prot',
+        });
       alert('비밀번호가 변경되었습니다.');
     }
   };
