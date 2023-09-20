@@ -4,10 +4,11 @@ interface props {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setPassWord: React.Dispatch<React.SetStateAction<string>>;
   changePassword: () => void;
+  levelOfPublicity: string;
 }
 
 export const PassWordChangeModal = (props: props) => {
-  const { setModalOpen, setPassWord, changePassword } = props;
+  const { setModalOpen, setPassWord, changePassword, levelOfPublicity } = props;
   const closeModal = () => {
     setModalOpen(false);
   };
@@ -15,6 +16,21 @@ export const PassWordChangeModal = (props: props) => {
   const handlePassWordInput = (e: any) => {
     setPassWord(e.target.value);
   };
+
+  const textArray = [
+    {
+      title: '비밀번호 추가',
+      placeholder: '새로운 비밀번호를 입력해주세요.',
+      button: '추가',
+    },
+    {
+      title: '비밀번호 변경',
+      placeholder: '변경할 비밀번호를 입력해주세요.',
+      button: '변경',
+    },
+  ];
+
+  const text = levelOfPublicity === 'Pub' ? textArray[0] : textArray[1];
 
   return (
     <div
@@ -26,11 +42,11 @@ export const PassWordChangeModal = (props: props) => {
         onClick={(e) => e.stopPropagation()}
       >
         <span className="flex text-gray-400 text-lg mb-6 font-semibold">
-          비밀번호 변경
+          {text.title}
         </span>
         <input
           type="text"
-          placeholder="변경할 비밀번호를 입력해주세요."
+          placeholder={text.placeholder}
           onChange={handlePassWordInput}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
@@ -43,7 +59,7 @@ export const PassWordChangeModal = (props: props) => {
           onClick={changePassword}
           className="w-16 h-8 bg-progressBlue rounded-full text-white mt-6"
         >
-          변경
+          {text.button}
         </button>
       </div>
     </div>

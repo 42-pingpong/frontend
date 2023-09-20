@@ -25,6 +25,7 @@ export interface ChatRoomInfoDTO {
   mutedUsers: MutedUserDto[];
   bannedUsers: senderDTO[];
   joinedUser: senderDTO[];
+  curPassword?: string;
 }
 
 export interface MutedUserDto {
