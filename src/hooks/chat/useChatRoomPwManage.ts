@@ -24,15 +24,20 @@ export default function useChatRoomPwManage() {
       updateRoomInfo
     );
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       setPassWord('');
       setPassWordModal(false);
-      setRoomInfo({ ...roomInfo, curPassword: passWord });
-      if (roomInfo.levelOfPublicity === 'Pub')
-        setRoomInfo({
-          ...roomInfo,
-          levelOfPublicity: 'Prot',
-        });
+      setRoomInfo({
+        ...roomInfo,
+        curPassword: passWord,
+        levelOfPublicity: 'Prot',
+      });
+      //console.log('비밀번호 추가 완');
+      //if (roomInfo.levelOfPublicity === 'Pub')
+      //  setRoomInfo({
+      //    ...roomInfo,
+      //    levelOfPublicity: 'Prot',
+      //  });
       alert('비밀번호가 변경되었습니다.');
     }
   };
@@ -47,7 +52,7 @@ export default function useChatRoomPwManage() {
       updateRoomInfo
     );
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       setPassWord('');
       setPassWordModal(false);
       if (roomInfo.levelOfPublicity === 'Prot')
