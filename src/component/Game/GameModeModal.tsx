@@ -28,7 +28,6 @@ export const GameModeModal = () => {
   };
 
   const submitGameMode = () => {
-    console.log('gameMode', gameMode);
     if (gameMode === '') {
       alert('게임 모드를 선택해주세요.');
       return;

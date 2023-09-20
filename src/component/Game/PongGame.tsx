@@ -65,7 +65,6 @@ export const PongGame = ({ props }: { props: number }) => {
 
   useEffect(() => {
     setJoin(true);
-    console.log(paddleHeight);
 
     GameSocket.on('ready', (start: boolean) => {
       setReady(start);
