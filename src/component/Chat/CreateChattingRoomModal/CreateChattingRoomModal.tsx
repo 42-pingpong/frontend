@@ -1,20 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { chattingModalState } from '../../atom/modal';
+import { chattingModalState } from '../../../atom/modal';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { ChatSocket } from '../../sockets/ChatSocket';
-import { userInfo } from '../../atom/user';
-import axiosInstance from '../../api/axios';
-import { UserDto } from '../../interfaces/User.dto';
+import { ChatSocket } from '../../../sockets/ChatSocket';
+import { userInfo } from '../../../atom/user';
+import axiosInstance from '../../../api/axios';
+import { UserDto } from '../../../interfaces/User.dto';
 import {
   chatMemberListState,
   chatRoomState,
   createChatRoomState,
-} from '../../atom/chat';
-import { ChatRoomDTO } from '../../interfaces/Chatting-Format.dto';
-import { ChatSearchUserList } from './ChatSearchUser';
-import { ChatMembersModal } from './ChatMembersModal';
-
-const roomtypeList = ['Public', 'Protected', 'Private'];
+} from '../../../atom/chat';
+import { ChatRoomDTO } from '../../../interfaces/Chatting-Format.dto';
+import { ChatSearchUserList } from '../ChatSearchUser';
+import { ChatMembersModal } from '../ChatMembersModal';
+import { Public } from './Public';
+import { Protected } from './Protected';
+import { RoomTypeRadio } from './RoomTypeRadio';
 
 export const CreateChattingRoomModal = () => {
   const [chattingState, setChattingState] = useRecoilState(chattingModalState);
@@ -122,25 +123,9 @@ export const CreateChattingRoomModal = () => {
           <p className="py-[7%] px-[8%]  font-sans font-[320]  text-[35px] leading-[41px] tracking-tighter text-[#5D777B] pb-10">
             Create Chatting Room
           </p>
-          <div className="pb-[6%] px-[8%] flex justify-center space-x-[5vw] text-[#5D777B] text-2xl font-light tracking-tight">
-            {roomtypeList.map((item, idx) => (
-              <label key={idx}>
-                <div className="checkbox inline-block">
-                  <input
-                    name="levelOfPublicity"
-                    type="radio"
-                    id={item}
-                    className=" checked:bg-sky "
-                    onClick={(e) => handleRoomtype(e)}
-                  />
-                  {item}
-                </div>
-              </label>
-            ))}
-          </div>
+          <RoomTypeRadio handleRoomtype={handleRoomtype} />
         </div>
-
-        <div className="relative row-span-3 grid gap-10">
+        <div className="relative row-span-3 grid gap-10 bg-red-100">
           <div className="px-[8%] text-[#5D777B] text-2xl ">
             <h1 className="pb-3 font-light tracking-tight"> Title</h1>
             <input
@@ -148,79 +133,36 @@ export const CreateChattingRoomModal = () => {
               type="text"
               className="px-5 align-middle justify-center rounded-[50px] shadow-lg w-[100%] h-[3rem] font-light"
               onChange={(e) => handleOnChange(e)}
-            ></input>
+            />
           </div>
-
-          {formValue.levelOfPublicity !== 'Priv' ? (
-            <div className="px-[8%] text-[#5D777B] text-2xl relative ">
-              <h1 className="pb-3 font-light tracking-tight">
-                Max Participant
-              </h1>
-              <input
-                name="maxParticipants"
-                type="number"
-                min={2}
-                max={10}
-                placeholder="You can invite up to 10 people"
-                className="px-5 align-middle justify-center rounded-[50px] shadow-lg w-[100%] h-[3rem] font-light"
-                onChange={(e) => handleOnChange(e)}
-              />
-            </div>
-          ) : (
-            <></>
+          {formValue.levelOfPublicity === 'Pub' && (
+            <Public
+              handleOnChange={handleOnChange}
+              handleRefChange={handleRefChange}
+              userSearch={userSearch}
+              setMemberFocus={setMemberFocus}
+            />
           )}
-          {formValue.levelOfPublicity !== 'Priv' ? (
-            <div className="px-[8%] text-[#5D777B] text-2xl relative ">
-              <h1 className="pb-3 font-light tracking-tight"> Member</h1>
-              <input
-                id="member"
-                name="member"
-                type="text"
-                className="px-5 align-middle justify-center rounded-[50px] shadow-lg w-[100%] h-[3rem] font-light"
-                onChange={(e) => {
-                  handleRefChange(e);
-                }}
-                onFocus={() => {
-                  setMemberFocus(true);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    userSearch();
-                  }
-                }}
-              ></input>
-            </div>
-          ) : (
-            <></>
-          )}
-
-          {formValue.levelOfPublicity === 'Prot' ? (
-            <div className="px-[8%] text-[#5D777B] text-2xl">
-              <h1 className="pb-3 font-light tracking-tight"> Password </h1>
-              <input
-                name="password"
-                type="text"
-                className="px-5 align-middle justify-center rounded-[50px] shadow-lg w-[100%] h-[3rem] font-light"
-                onChange={(e) => handleOnChange(e)}
-              ></input>
-            </div>
-          ) : (
-            <></>
+          {formValue.levelOfPublicity === 'Prot' && (
+            <Protected
+              handleOnChange={handleOnChange}
+              handleRefChange={handleRefChange}
+              userSearch={userSearch}
+              setMemberFocus={setMemberFocus}
+            />
           )}
         </div>
-
         <div className="grid-rows-end">
           <button
             type="button"
             className="right-0  inline-block float-right mr-[10%] mb-[5%]"
-            onClick={() => handleSubmit()}
+            onClick={handleSubmit}
           >
             <p className="font-sans not-italic font-[320] text-2xl leading-[41px] tracking-tighter text-[#5D777B]">
               Create
             </p>
           </button>
         </div>
-
         <button
           id="modal-close-button"
           className="absolute top-3 right-7 p-0 text-gray-400 text-lg"
