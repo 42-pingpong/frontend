@@ -11,11 +11,15 @@ import {
   createChatRoomState,
 } from '../../../atom/chat';
 import { ChatRoomDTO } from '../../../interfaces/Chatting-Format.dto';
-import { ChatSearchUserList } from '../ChatSearchUser';
-import { ChatMembersModal } from '../ChatMembersModal';
-import { Public } from './Public';
-import { Protected } from './Protected';
-import { RoomTypeRadio } from './RoomTypeRadio';
+import { Public } from './component/Public';
+import { Protected } from './component/Protected';
+import { RoomTypeRadio } from './component/RoomTypeRadio';
+import { SearchMemberModal } from './modal/SearchMemberModal';
+import {
+  excludeMeFriendList,
+  isUserDuplicated,
+} from '../../../utils/createChatUtils';
+import { closeModal } from '../../../utils/modalClose';
 
 export const CreateChattingRoomModal = () => {
   const [chattingState, setChattingState] = useRecoilState(chattingModalState);
@@ -30,15 +34,6 @@ export const CreateChattingRoomModal = () => {
   useEffect(() => {
     setFormValue({ ...formValue, ownerId: user.id });
   }, []);
-
-  const closeModal = () => {
-    setChattingState(!chattingState);
-  };
-
-  const isUserDuplicated = (user: UserDto) => {
-    if (formValue.participants === undefined) return false;
-    return formValue.participants?.some((item) => item === user.id);
-  };
 
   const handleRoomtype = (e: any) => {
     let roomtype: string;
@@ -68,18 +63,15 @@ export const CreateChattingRoomModal = () => {
     }
   };
 
-  const excludeMeFriendList = (data: any) =>
-    data.filter((item: UserDto) => item.id !== user.id);
-
   const userSearch = async () => {
-    console.log(memberRef.current);
     if (memberRef.current === '') return;
+
     const res = await axiosInstance.get(
       `/user/search?nickName=${memberRef.current}`
     );
 
     if (res.data !== undefined) {
-      const searchList: UserDto[] = excludeMeFriendList(res.data);
+      const searchList: UserDto[] = excludeMeFriendList(res.data, user.id);
       if (searchList.length === 0) {
         setUserList([]);
         return;
@@ -93,8 +85,6 @@ export const CreateChattingRoomModal = () => {
   };
 
   const handleSubmit = () => {
-    console.log(formValue);
-
     if (formValue.chatName === '') {
       alert('채팅방 이름을 입력해주세요.');
       return;
@@ -113,7 +103,10 @@ export const CreateChattingRoomModal = () => {
   };
 
   return (
-    <div className="background bg-[rgba(0,0,0,0.2)]" onClick={closeModal}>
+    <div
+      className="background bg-[rgba(0,0,0,0.2)]"
+      onClick={() => closeModal(chattingState, setChattingState)}
+    >
       <div
         id="chattingroom-content"
         className="min-w-[500px] w-[30vw] h-[65vh] min-h-[800px] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[10vh] grid grid-cols-1 grid-rows-4"
@@ -125,7 +118,7 @@ export const CreateChattingRoomModal = () => {
           </p>
           <RoomTypeRadio handleRoomtype={handleRoomtype} />
         </div>
-        <div className="relative row-span-3 grid gap-10 bg-red-100">
+        <div className="relative row-span-3 grid gap-10">
           <div className="px-[8%] text-[#5D777B] text-2xl ">
             <h1 className="pb-3 font-light tracking-tight"> Title</h1>
             <input
@@ -166,46 +159,24 @@ export const CreateChattingRoomModal = () => {
         <button
           id="modal-close-button"
           className="absolute top-3 right-7 p-0 text-gray-400 text-lg"
-          onClick={closeModal}
+          onClick={() => closeModal(chattingState, setChattingState)}
         >
           X
         </button>
       </div>
-      {userList?.length != 0 && memberFocus && (
-        <div
-          id="search-user-list"
-          className="flex absolute flex-col top-[46vh] left-[68vw] w-[17vw] h-[30vh] shadow-xl px-12 pb-10 pt-5 bg-[#F8F8F8] rounded-[30px] mx-auto items-center justify-center z-10"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <span className="flex justify-center w-full items-center font-bold text-3xl text-borderBlue">
-            search members
-          </span>
-          <div className="overflow-y-auto w-full h-full inset-0 px-4">
-            {userList.map((item) => (
-              <ChatSearchUserList
-                key={item.id}
-                props={item}
-                isDuplicated={isUserDuplicated(item)}
-              />
-            ))}
-          </div>
-        </div>
+      {userList.length != 0 && memberFocus && (
+        <SearchMemberModal
+          userList={userList}
+          topPositon={46}
+          modalName={'search members'}
+        />
       )}
       {chatMembers.length != 0 && memberFocus && (
-        <div
-          id="member-list"
-          className="flex absolute flex-col top-[11vh] left-[68vw] w-[17vw] h-[30vh] shadow-xl px-12 pb-10 pt-5 bg-[#F8F8F8] rounded-[30px] mx-auto items-center justify-center z-10"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <span className="flex justify-center w-full items-center font-bold text-3xl text-borderBlue">
-            invited members
-          </span>
-          <div className="overflow-y-auto w-full h-full inset-0 px-4">
-            {chatMembers.map((item) => (
-              <ChatMembersModal key={item.id} props={item} />
-            ))}
-          </div>
-        </div>
+        <SearchMemberModal
+          userList={chatMembers}
+          topPositon={11}
+          modalName={'invited members'}
+        />
       )}
     </div>
   );

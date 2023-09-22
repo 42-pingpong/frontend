@@ -12,15 +12,15 @@ export const RoomTypeRadio = (props: Props) => {
     <div className="pb-[6%] px-[8%] flex justify-center space-x-[5vw] text-[#5D777B] text-2xl font-light tracking-tight">
       {roomtypeList.map((item, idx) => (
         <label key={idx}>
-          <div className="checkbox inline-block">
+          <div className="checkbox flex justify-center items-center">
             <input
               name="levelOfPublicity"
               type="radio"
               id={item}
-              className=" checked:bg-sky"
+              className="flex checked:bg-sky"
               onClick={(e) => handleRoomtype(e)}
             />
-            {item}
+            <span className="flex pl-2">{item}</span>
           </div>
         </label>
       ))}
