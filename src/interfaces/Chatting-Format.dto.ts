@@ -177,7 +177,7 @@ export interface fetchRequestDirectMessageDTO {
 /*
  * Common
  */
-interface MessageInfoDTO {
+export interface MessageInfoDTO {
   messageId: number;
   message: string;
   createdAt: string;
