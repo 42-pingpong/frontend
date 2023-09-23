@@ -1,5 +1,4 @@
 import { useRecoilState } from 'recoil';
-import { friendProfileModalState } from '../../atom/modal';
 import { UserDto } from '../../interfaces/User.dto';
 import { useNavigate } from 'react-router-dom';
 import { closeModal } from '../../utils/modalClose';
@@ -14,26 +13,22 @@ interface FriendProfileModalProps {
   user: UserDto;
   x: number;
   y: number;
+  onClosed: () => void;
 }
 
 export const FriendProfileModal = (props: FriendProfileModalProps) => {
-  const { user, x, y } = props;
+  const { user, x, y, onClosed } = props;
   const navigation = useNavigate();
-  const [friendProfile, setFriendProfile] = useRecoilState(
-    friendProfileModalState
-  );
 
   const navigateToProfile = (nickName: string) => {
     // 네비게이터가 라우팅 해주는 것 같아서 일단 이렇게 넣어뒀어여
     navigation(`profile/:${nickName}`);
-    setFriendProfile(!friendProfile);
+    onClosed();
   };
 
+  console.log(user);
   return (
-    <div
-      className="background bg-[rgba(0,0,0,0.1)]"
-      onClick={() => closeModal(friendProfile, setFriendProfile)}
-    >
+    <div className="background bg-[rgba(0,0,0,0.1)]" onClick={onClosed}>
       <div
         id="frined-profile-content"
         className={`relative flex flex-col float-right bg-white rounded-3xl w-[28rem] h-[24rem] items-center justify-center shadow-lg shadow-gray-300 z-10 right-[35%]`}
@@ -69,7 +64,7 @@ export const FriendProfileModal = (props: FriendProfileModalProps) => {
         <button
           id="modal-close-button"
           className="absolute top-3 right-7 p-0 text-gray-400 text-lg"
-          onClick={() => closeModal(friendProfile, setFriendProfile)}
+          onClick={onClosed}
         >
           X
         </button>

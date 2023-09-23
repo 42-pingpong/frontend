@@ -2,10 +2,6 @@ import { useRecoilValue } from 'recoil';
 import {
   addUserModalState,
   chattingModalState,
-  clickedFriendProfileState,
-  clickedXState,
-  clickedYState,
-  friendProfileModalState,
   notificationModalState,
   profileModalState,
 } from '../../atom/modal';
@@ -15,7 +11,6 @@ import { GameMatch } from '../Game/GameMatch/GameMatch';
 import { CreateChattingRoomModal } from '../Chat/CreateChattingRoomModal/CreateChattingRoomModal';
 import { AddFriendModal } from '../FriendList/AddFriendModal';
 import { FriendList } from '../FriendList/FriendList';
-import { FriendProfileModal } from '../FriendList/FriendProfileModal';
 import { NotificationModal } from '../Header/NotificationModal';
 import { ResetGameRecoilStatus } from '../Game/ResetGameRecoilStatus';
 
@@ -23,11 +18,7 @@ export const Main = () => {
   const isProfileModalOpen = useRecoilValue(profileModalState);
   const isChattingModalOpen = useRecoilValue(chattingModalState);
   const isAddUserModalOpen = useRecoilValue(addUserModalState);
-  const isFirendProfileModalOpen = useRecoilValue(friendProfileModalState);
   const isNotificationModalOpen = useRecoilValue(notificationModalState);
-  const clickedX = useRecoilValue(clickedXState);
-  const clickedY = useRecoilValue(clickedYState);
-  const clickedFriendProfile = useRecoilValue(clickedFriendProfileState);
 
   return (
     <div className="flex p-32 items-center justify-center h-screen">
@@ -46,13 +37,6 @@ export const Main = () => {
       {isNotificationModalOpen && <NotificationModal />}
       {isChattingModalOpen && <CreateChattingRoomModal />}
       {isAddUserModalOpen && <AddFriendModal />}
-      {isFirendProfileModalOpen && (
-        <FriendProfileModal
-          user={clickedFriendProfile}
-          x={clickedX}
-          y={clickedY > 900 ? clickedY - 300 : clickedY}
-        />
-      )}
       {<ResetGameRecoilStatus />}
     </div>
   );
