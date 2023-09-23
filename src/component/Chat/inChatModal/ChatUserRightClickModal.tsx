@@ -1,9 +1,5 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-  chattingProfileOnRightClickModalState,
-  goPingPongModalState,
-  muteModalState,
-} from '../../../atom/modal';
+import { muteModalState } from '../../../atom/modal';
 import { FuncButton } from './FuncButton';
 import { currentChatInfoState, roleState } from '../../../atom/chat';
 import { userInfo } from '../../../atom/user';
@@ -14,6 +10,7 @@ interface Props {
   user: senderDTO;
   x: number;
   y: number;
+  onClosed: () => void;
 }
 
 export const ChatUserRightClickModal = (props: Props) => {
@@ -21,18 +18,11 @@ export const ChatUserRightClickModal = (props: Props) => {
   const roomInfo = useRecoilValue(currentChatInfoState);
   const role = useRecoilValue(roleState);
   const isMuteModalOpen = useRecoilValue(muteModalState);
-  const [modal, setModal] = useRecoilState(
-    chattingProfileOnRightClickModalState
-  );
 
   if (user.id === props.user.id) {
-    setModal(false);
+    props.onClosed();
     return null;
   }
-
-  const closeModal = () => {
-    setModal(!modal);
-  };
 
   const handleContentClick = (e: any) => {
     e.stopPropagation();
@@ -43,11 +33,11 @@ export const ChatUserRightClickModal = (props: Props) => {
       <div
         aria-hidden={true}
         className="background bg-[rgba(0,0,0,0.1)]"
-        onClick={closeModal}
+        onClick={props.onClosed}
       >
         <div
           id="chat-profile-right-content"
-          className={`relative flex flex-col w-[11rem] h-[7rem] z-10 bg-white rounded-3xl shadow-lg items-center justify-center py-2`}
+          className={`relative flex flex-col w-[11rem] h-[7rem] z-50 bg-white rounded-3xl shadow-lg items-center justify-center py-2`}
           style={{ left: `${props.x + 20}px`, top: `${props.y - 20}px` }}
           onClick={handleContentClick}
         >
@@ -61,7 +51,7 @@ export const ChatUserRightClickModal = (props: Props) => {
       <div
         aria-hidden={true}
         className="background bg-[rgba(0,0,0,0.1)]"
-        onClick={closeModal}
+        onClick={props.onClosed}
       >
         <div
           id="chat-profile-right-content"

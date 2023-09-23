@@ -4,6 +4,7 @@ import { RequestFriend } from '../FriendList/RequestFriend';
 import './styles.css';
 import { notiResponseState, notificationState } from '../../atom/notification';
 import { ResponseFriend } from '../FriendList/ResponseFriend';
+import { closeModal } from '../../utils/modalClose';
 
 export const NotificationModal = () => {
   const [isModalOpen, setIsModalOpen] = useRecoilState(notificationModalState);
@@ -12,12 +13,12 @@ export const NotificationModal = () => {
   const [notificationResultList, setNotificationResultList] =
     useRecoilState(notiResponseState);
 
-  const closeModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
   return (
-    <div aria-hidden={true} className="background" onClick={closeModal}>
+    <div
+      aria-hidden={true}
+      className="background"
+      onClick={() => closeModal(isModalOpen, setIsModalOpen)}
+    >
       <div
         id="notification-modal-content"
         className="relative flex flex-col float-right bg-white rounded-3xl w-[25rem] h-[31vh] mt-20 mr-20 p-8 items-center justify-center shadow-lg shadow-gray-300"
@@ -32,7 +33,10 @@ export const NotificationModal = () => {
           ))}
         </div>
         <div className="absolute top-3 right-5 p-0  text-gray-400 text-lg">
-          <button id="noti-modal-close-button" onClick={closeModal}>
+          <button
+            id="noti-modal-close-button"
+            onClick={() => closeModal(isModalOpen, setIsModalOpen)}
+          >
             X
           </button>
         </div>

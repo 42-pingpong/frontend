@@ -1,20 +1,11 @@
-import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import {
-  clickedXState,
-  clickedYState,
-  clickedFriendProfileState,
-  friendProfileModalState,
-} from '../../../atom/modal';
 import { Friend } from '../../FriendList/Friend';
-import { FriendProfileModal } from '../../FriendList/FriendProfileModal';
 import { StatusIcon } from '../../FriendList/StatusIcon';
 import { ServiceTitle } from '../../Main/ServiceTitle';
 import { UserDto } from '../../../interfaces/User.dto';
 import { currentChatInfoState, roleState } from '../../../atom/chat';
 import { ChatSocket } from '../../../sockets/ChatSocket';
 import { useNavigate, useParams } from 'react-router-dom';
-import { userInfo } from '../../../atom/user';
 import { DmButton } from './DmButton';
 import { RoleUserList } from './RoleUserList';
 
@@ -30,15 +21,10 @@ export const UserList = ({
   bottomIconVisible: boolean;
 }) => {
   const role = useRecoilValue(roleState);
-  const clickedX = useRecoilValue(clickedXState);
-  const clickedY = useRecoilValue(clickedYState);
-  const clickedFriendProfile = useRecoilValue(clickedFriendProfileState);
-  const isFirendProfileModalOpen = useRecoilValue(friendProfileModalState);
   const navigation = useNavigate();
   const id = useParams().id;
   const roomInfoReset = useResetRecoilState(currentChatInfoState);
   const roomInfo = useRecoilValue(currentChatInfoState);
-  const user = useRecoilValue(userInfo);
 
   const handleLeaveGroupChatRoom = () => {
     console.log('leave');
@@ -91,14 +77,6 @@ export const UserList = ({
           </div>
         </div>
       </div>
-
-      {isFirendProfileModalOpen && (
-        <FriendProfileModal
-          user={clickedFriendProfile}
-          x={clickedX}
-          y={clickedY}
-        />
-      )}
     </div>
   );
 };

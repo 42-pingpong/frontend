@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import axiosInstance from '../../api/axios';
 import { authenticationModalState } from '../../atom/modal';
 import { AuthenticationModal } from './Authentication';
+import { Profile } from './Profile';
+import { ProfileInfoTitle } from './ProfileInfoTitle';
 
 export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
   const me = useRecoilValue(userInfo);
@@ -26,18 +28,18 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
     authenticationModalState
   );
 
-  useEffect(() => {
-    if (nickName === undefined) {
-      setUser(me);
-    } else {
-      fetchUser();
-    }
-  }, []);
-
   const fetchUser = async () => {
     const res = await axiosInstance.get(`/user/search?nickName=${nickName}`);
     setUser(res.data[0]);
   };
+
+  useEffect(() => {
+    if (nickName === undefined && me.id !== -1) {
+      setUser(me);
+    } else if (nickName !== undefined && me.id !== -1) {
+      fetchUser();
+    }
+  }, [me, nickName]);
 
   return (
     <div className="flex flex-col h-full min-w-max">
@@ -76,9 +78,7 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
         </div>
         <div className="flex flex-grow flex-col mt-5 px-3">
           <div className="flex w-full flex-col items-start justify-center h-32 flex-grow">
-            <span className="text-[1.2rem] font-bold text-center mb-3 text-borderBlue">
-              name
-            </span>
+            <ProfileInfoTitle title="name" />
             <span className="text-[1.8rem] font-semibold text-center text-gray-500">
               {user.fullName}
             </span>
@@ -87,23 +87,19 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
             </span>
           </div>
           <div className="flex flex-col w-full h-32 flex-grow-0 items-start">
-            <span className="text-[1.2rem] font-bold text-center mb-3 text-borderBlue">
-              intra level
-            </span>
+            <ProfileInfoTitle title="intra level" />
             <span className="text-[1.6rem] font-semibold text-center text-gray-500">
               {user.level}
             </span>
           </div>
           <div className="flex w-full h-32 flex-grow items-start flex-col">
-            <span className="text-[1.2rem] font-bold text-center mb-3 text-borderBlue">
-              introduction
-            </span>
+            <ProfileInfoTitle title="introduction" />
             <span className="text-[1rem] font-semibold text-gray-500">
               {user.selfIntroduction}
             </span>
           </div>
           <div className="flex w-full h-28 py-3 flex-grow-0">
-            {nickName === undefined ? (
+            {nickName === undefined && (
               <button
                 className="flex w-full h-full justify-center items-center bg-progressBlue rounded-full shadow-xl"
                 onClick={() => setProfileEdit(true)}
@@ -112,7 +108,7 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
                   Profile Edit
                 </span>
               </button>
-            ) : null}
+            )}
           </div>
         </div>
       </div>
