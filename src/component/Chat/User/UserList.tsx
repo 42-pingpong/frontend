@@ -96,7 +96,7 @@ export const UserList = ({
         <FriendProfileModal
           user={clickedFriendProfile}
           x={clickedX}
-          y={clickedY}
+          y={clickedY > 900 ? clickedY - 300 : clickedY}
         />
       )}
     </div>
