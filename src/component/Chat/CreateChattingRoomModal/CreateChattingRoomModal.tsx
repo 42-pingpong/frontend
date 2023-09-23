@@ -5,11 +5,6 @@ import { ChatSocket } from '../../../sockets/ChatSocket';
 import { userInfo } from '../../../atom/user';
 import axiosInstance from '../../../api/axios';
 import { UserDto } from '../../../interfaces/User.dto';
-import {
-  chatMemberListState,
-  chatRoomState,
-  createChatRoomState,
-} from '../../../atom/chat';
 import { ChatRoomDTO } from '../../../interfaces/Chatting-Format.dto';
 import { Public } from './component/Public';
 import { Protected } from './component/Protected';
@@ -17,6 +12,11 @@ import { RoomTypeRadio } from './component/RoomTypeRadio';
 import { SearchMemberModal } from './modal/SearchMemberModal';
 import { excludeMeFriendList } from '../../../utils/createChatUtils';
 import { closeModal } from '../../../utils/modalClose';
+import {
+  chatMemberListState,
+  chatRoomState,
+  createChatRoomState,
+} from '../../../atom/chat';
 
 export const CreateChattingRoomModal = () => {
   const [chattingState, setChattingState] = useRecoilState(chattingModalState);
@@ -26,7 +26,7 @@ export const CreateChattingRoomModal = () => {
   const [memberFocus, setMemberFocus] = useState(false);
   const setChatRoomList = useSetRecoilState(chatRoomState);
   const [formValue, setFormValue] = useRecoilState(createChatRoomState);
-  const [chatMembers, setChatMembers] = useRecoilState(chatMemberListState);
+  const chatMembers = useRecoilValue(chatMemberListState);
 
   useEffect(() => {
     setFormValue({ ...formValue, ownerId: user.id });

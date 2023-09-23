@@ -1,7 +1,6 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   chattingProfileOnRightClickModalState,
-  goPingPongModalState,
   muteModalState,
 } from '../../../atom/modal';
 import { FuncButton } from './FuncButton';
@@ -9,6 +8,7 @@ import { currentChatInfoState, roleState } from '../../../atom/chat';
 import { userInfo } from '../../../atom/user';
 import { senderDTO } from '../../../interfaces/Chatting-Format.dto';
 import { MuteTimeModal } from './MuteTimeModal';
+import { closeModal } from '../../../utils/modalClose';
 
 interface Props {
   user: senderDTO;
@@ -30,10 +30,6 @@ export const ChatUserRightClickModal = (props: Props) => {
     return null;
   }
 
-  const closeModal = () => {
-    setModal(!modal);
-  };
-
   const handleContentClick = (e: any) => {
     e.stopPropagation();
   };
@@ -43,7 +39,7 @@ export const ChatUserRightClickModal = (props: Props) => {
       <div
         aria-hidden={true}
         className="background bg-[rgba(0,0,0,0.1)]"
-        onClick={closeModal}
+        onClick={() => closeModal(modal, setModal)}
       >
         <div
           id="chat-profile-right-content"
@@ -61,7 +57,7 @@ export const ChatUserRightClickModal = (props: Props) => {
       <div
         aria-hidden={true}
         className="background bg-[rgba(0,0,0,0.1)]"
-        onClick={closeModal}
+        onClick={() => closeModal(modal, setModal)}
       >
         <div
           id="chat-profile-right-content"

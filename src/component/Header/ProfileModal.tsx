@@ -5,16 +5,13 @@ import { userInfo } from '../../atom/user';
 import Logout from './Logout';
 import './styles.css';
 import { profileEditState } from '../../atom/profile';
+import { closeModal } from '../../utils/modalClose';
 
 export const ProfileModal = () => {
   const navigation = useNavigate();
   const [isModalOpen, setIsModalOpen] = useRecoilState(profileModalState);
   const [userInfoObj, setUserInfoObj] = useRecoilState(userInfo);
   const setProfileEdit = useSetRecoilState(profileEditState);
-
-  const closeModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
 
   const navigateToProfile = () => {
     navigation('/profile');
@@ -25,7 +22,11 @@ export const ProfileModal = () => {
   return (
     //fixed : viewport를 기준으로 한다. (조상의 position에 영향을 받지 않고 화면 전체를 기준으로 한다)
     // 그래서.. 스크롤을 내려도 고정된다..
-    <div aria-hidden={true} className="background" onClick={closeModal}>
+    <div
+      aria-hidden={true}
+      className="background"
+      onClick={() => closeModal(isModalOpen, setIsModalOpen)}
+    >
       <div
         id="modal-content"
         className="relative flex flex-col float-right bg-white rounded-3xl w-[28rem] h-[24rem] mt-20  items-center justify-center shadow-lg shadow-gray-300"
@@ -59,7 +60,10 @@ export const ProfileModal = () => {
         </button>
         <Logout />
         <div className="close-button">
-          <button id="modal-close-button" onClick={closeModal}>
+          <button
+            id="modal-close-button"
+            onClick={() => closeModal(isModalOpen, setIsModalOpen)}
+          >
             X
           </button>
         </div>

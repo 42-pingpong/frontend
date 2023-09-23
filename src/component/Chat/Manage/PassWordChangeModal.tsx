@@ -1,4 +1,5 @@
 import React from 'react';
+import { closeModal } from '../../../utils/modalClose';
 
 interface props {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -9,9 +10,6 @@ interface props {
 
 export const PassWordChangeModal = (props: props) => {
   const { setModalOpen, setPassWord, changePassword, levelOfPublicity } = props;
-  const closeModal = () => {
-    setModalOpen(false);
-  };
 
   const handlePassWordInput = (e: any) => {
     setPassWord(e.target.value);
@@ -35,7 +33,7 @@ export const PassWordChangeModal = (props: props) => {
   return (
     <div
       className="flex background bg-[rgba(0,0,0,0.2)] justify-center items-center"
-      onClick={closeModal}
+      onClick={() => closeModal(true, setModalOpen)}
     >
       <div
         className="flex w-[25vw] h-[20vh] min-w-[300px] bg-white justify-center items-center flex-col rounded-3xl"
