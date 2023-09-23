@@ -17,6 +17,7 @@ import {
   chatRoomState,
   createChatRoomState,
 } from '../../../atom/chat';
+import { CreateGroupchatDto } from '../../../interfaces/Groupchat-Create.dto';
 
 export const CreateChattingRoomModal = () => {
   const [chattingState, setChattingState] = useRecoilState(chattingModalState);
@@ -93,7 +94,24 @@ export const CreateChattingRoomModal = () => {
       alert('최대 참여 인원을 입력해주세요.');
       return;
     }
-    ChatSocket.emit('create-room', formValue, (res: ChatRoomDTO) => {
+    if (formValue.levelOfPublicity === 'Prot' && chatMembers.length === 0) {
+      ChatSocket.emit('create-room', formValue, (res: ChatRoomDTO) => {
+        setChatRoomList((prev) => [...prev, res]);
+      });
+      setChattingState(!chattingState);
+    }
+  };
+
+  const handlePrivateSubmit = () => {
+    const privateForm: CreateGroupchatDto = {
+      chatName: formValue.chatName,
+      levelOfPublicity: 'Pub',
+      maxParticipants: 1,
+      ownerId: user.id,
+      participants: [],
+    };
+
+    ChatSocket.emit('create-room', privateForm, (res: ChatRoomDTO) => {
       setChatRoomList((prev) => [...prev, res]);
     });
     setChattingState(!chattingState);
@@ -146,7 +164,11 @@ export const CreateChattingRoomModal = () => {
           <button
             type="button"
             className="right-0  inline-block float-right mr-[10%] mb-[5%]"
-            onClick={handleSubmit}
+            onClick={
+              formValue.levelOfPublicity === 'Priv'
+                ? handlePrivateSubmit
+                : handleSubmit
+            }
           >
             <p className="font-sans not-italic font-[320] text-2xl leading-[41px] tracking-tighter text-[#5D777B]">
               Create
