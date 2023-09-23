@@ -1,6 +1,5 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
 import {
-  goPingPongDtoState,
   goPingPongModalState,
   goPingPongModeSelectModalState,
   goPingPongRequestedDataState,
@@ -16,18 +15,26 @@ export const GoPingPongModeSelectModal = () => {
   const [gameMode, setGameMode] = useState('');
   const [reqData, setReqData] = useRecoilState(goPingPongRequestedDataState);
   const setGoPingPongModal = useSetRecoilState(goPingPongModalState);
+  // const func = useResetRecoilState(goPingPongRequestedDataState);
+
+  // useEffect(() => {
+  //   return () => func();
+  // }, []);
 
   const handleGameMode = (e: any) => {
     setGameMode(e.target.id);
+    setReqData({ ...reqData, gameMode: e.target.id });
   };
 
   const closeModal = () => {
     setGoPingPongModeSelectModal(false);
   };
 
-  useEffect(() => {
-    setReqData({ ...reqData, gameMode: gameMode });
-  }, [gameMode]);
+  const submitGameMode = () => {
+    closeModal();
+    setGoPingPongModal(true);
+    ChatSocket.emit('go-pingpong', reqData);
+  };
 
   return (
     <div
@@ -61,12 +68,10 @@ export const GoPingPongModeSelectModal = () => {
 
         <div className="flex w-[18rem] justify-between p-2"></div>
         <button
-          type="submit"
+          // type="submit"
           className="bg-progressBlue rounded-full h-10 w-20 font-semibold text-white shadow-sm mt-3"
           onClick={() => {
-            closeModal();
-            setGoPingPongModal(true);
-            ChatSocket.emit('go-pingpong', reqData);
+            submitGameMode();
           }}
         >
           쨰리기

@@ -48,6 +48,7 @@ export const GoPingPongModal = () => {
         groupChatId: reqData.groupChatId,
         userId: reqData.userId,
         targetUserId: reqData.targetUserId,
+        gameMode: reqData.gameMode,
       });
       setModal(!modal);
     } else {

@@ -176,11 +176,11 @@ export const ChatSection = () => {
 
   const handleGoPingPongAccept = (data: goPingPongDto) => {
     if (data.userId !== user.id && data.targetUserId !== user.id) return;
-    const gameMode = goPingPongRequestedData.gameMode;
     user.id === data.userId
-      ? GameSocket.emit('go-pingpong', data, true, 1, gameMode)
-      : GameSocket.emit('go-pingpong', data, false, 2, gameMode);
-    if (gameMode === 'HARD') setPaddleHeight(100);
+      ? GameSocket.emit('go-pingpong', data, true, 1, data.gameMode)
+      : GameSocket.emit('go-pingpong', data, false, 2, data.gameMode);
+    if (data.gameMode === 'HARD') setPaddleHeight(100);
+    else setPaddleHeight(130);
 
     setIsGoPingPongModalOpen(false);
     setTimeout(() => {
@@ -190,12 +190,6 @@ export const ChatSection = () => {
   };
 
   const handleGoPingPongReject = (response: any) => {
-    console.log(
-      'reject',
-      response[0].userId,
-      response[0].targetUserId,
-      user.id
-    );
     if (response[0].userId !== user.id && response[0].targetUserId !== user.id)
       return;
     if (response[1] === 'N') {

@@ -127,6 +127,7 @@ export interface goPingPongDto {
   groupChatId: number;
   userId: number;
   targetUserId: number;
+  gameMode: string;
 }
 
 export interface playerInfoDto {
