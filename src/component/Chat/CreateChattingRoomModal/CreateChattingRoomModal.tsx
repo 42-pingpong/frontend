@@ -15,10 +15,7 @@ import { Public } from './component/Public';
 import { Protected } from './component/Protected';
 import { RoomTypeRadio } from './component/RoomTypeRadio';
 import { SearchMemberModal } from './modal/SearchMemberModal';
-import {
-  excludeMeFriendList,
-  isUserDuplicated,
-} from '../../../utils/createChatUtils';
+import { excludeMeFriendList } from '../../../utils/createChatUtils';
 import { closeModal } from '../../../utils/modalClose';
 
 export const CreateChattingRoomModal = () => {
