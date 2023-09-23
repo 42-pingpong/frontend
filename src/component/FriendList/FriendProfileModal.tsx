@@ -26,13 +26,12 @@ export const FriendProfileModal = (props: FriendProfileModalProps) => {
     onClosed();
   };
 
-  console.log(user);
   return (
     <div className="background bg-[rgba(0,0,0,0.1)]" onClick={onClosed}>
       <div
         id="frined-profile-content"
-        className={`relative flex flex-col float-right bg-white rounded-3xl w-[28rem] h-[24rem] items-center justify-center shadow-lg shadow-gray-300 z-10 right-[35%]`}
-        style={{ top: y - 50 }}
+        className={`relative flex flex-col float-left bg-white rounded-3xl w-[28rem] h-[24rem] items-center justify-center shadow-lg shadow-gray-300 z-10`}
+        style={{ top: y - 50, left: x + 20 }}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="profile-container">

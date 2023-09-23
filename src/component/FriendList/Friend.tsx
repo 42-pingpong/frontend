@@ -43,8 +43,8 @@ export const Friend = memo(function Friend(props: props) {
       {modal && (
         <FriendProfileModal
           user={data}
-          x={x - 1100}
-          y={y > 900 ? y - 300 : y}
+          x={x > 300 ? x - 550 : x}
+          y={y > 900 ? y - 100 : y}
           onClosed={() => setModal(false)}
         />
       )}
