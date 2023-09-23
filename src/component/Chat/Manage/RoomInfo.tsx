@@ -1,4 +1,3 @@
-import React from 'react';
 import { ChatRoomInfoDTO } from '../../../interfaces/Chatting-Format.dto';
 import { ChatList } from '../ChatList/ChatList';
 import useChatRoomPwManage from '../../../hooks/chat/useChatRoomPwManage';
@@ -29,7 +28,11 @@ export const RoomInfo = (props: props) => {
           props.roomInfo.levelOfPublicity !== 'Priv' && (
             <PassWordButton
               onClickFunc={() => setPassWordModal(true)}
-              text="비밀번호 변경"
+              text={
+                props.roomInfo.levelOfPublicity === 'Pub'
+                  ? '비밀번호 추가'
+                  : '비밀번호 변경'
+              }
             />
           )}
         {props.role === 'owner' &&
@@ -45,6 +48,7 @@ export const RoomInfo = (props: props) => {
           setModalOpen={setPassWordModal}
           setPassWord={setPassWord}
           changePassword={changePassword}
+          levelOfPublicity={props.roomInfo.levelOfPublicity}
         />
       )}
     </section>

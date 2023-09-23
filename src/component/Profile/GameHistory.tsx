@@ -8,21 +8,20 @@ import { userInfo } from '../../atom/user';
 
 export const GameHistory = () => {
   const [ret, setRet] = useState<{ data: GameHistoryDto[] }>({ data: [] });
-
   const user = useRecoilValue(userInfo);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axiosInstance.get(`/game/history/${user.id}`);
-        setRet({ data: res.data });
-      } catch (err) {
-        console.log('에러에러에러에러에러');
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const res = await axiosInstance.get(`/game/history/${user.id}`);
+      setRet({ data: res.data });
+    } catch (err) {
+      console.log('에러에러에러에러에러');
+    }
+  };
 
-    fetchData();
-  }, []);
+  useEffect(() => {
+    if (user.id !== -1) fetchData();
+  }, [user]);
 
   return (
     <div className="flex flex-col h-full">

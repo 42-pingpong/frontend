@@ -32,7 +32,6 @@ import {
 } from '../../atom/modal';
 import { GameSocket } from '../../sockets/GameSocket';
 import { GoPingPongModal } from './inChatModal/GoPingPongModal';
-import { Chat } from './Chat';
 import useMuteTimeSave from '../../hooks/chat/useMuteTimeSave';
 import useUnmute from '../../hooks/chat/useUnMute';
 import { GoPingPongModeSelectModal } from './inChatModal/GoPingPongModeSelectModal';
@@ -242,13 +241,16 @@ export const ChatSection = () => {
             <ChatList props={roomInfo} />
           </div>
         )}
-        <div className="flex w-full pt-[2%] h-full max-h-full justify-center items-center px-14 z-10">
+        <div className="flex w-full pt-[2%] h-full max-h-full justify-center items-center px-14">
           <div
             className="flex absolute flex-col w-[90%] h-[80%] px-2 overflow-y-auto"
             ref={scrollBottomRef}
           >
             {chat.map((item) => (
-              <ChattingBubble key={item.messageInfo.messageId} props={item} />
+              <ChattingBubble
+                key={item.messageInfo.messageId}
+                {...item.messageInfo}
+              />
             ))}
           </div>
         </div>

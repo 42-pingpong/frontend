@@ -25,6 +25,7 @@ export interface ChatRoomInfoDTO {
   mutedUsers: MutedUserDto[];
   bannedUsers: senderDTO[];
   joinedUser: senderDTO[];
+  curPassword?: string;
 }
 
 export interface MutedUserDto {
@@ -178,7 +179,7 @@ export interface fetchRequestDirectMessageDTO {
 /*
  * Common
  */
-interface MessageInfoDTO {
+export interface MessageInfoDTO {
   messageId: number;
   message: string;
   createdAt: string;

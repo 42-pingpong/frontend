@@ -10,6 +10,7 @@ import { GameSocket } from '../../../sockets/GameSocket';
 import { userInfo } from '../../../atom/user';
 import { useNavigate } from 'react-router-dom';
 import { ChatSocket } from '../../../sockets/ChatSocket';
+import { closeModal } from '../../../utils/modalClose';
 
 export const GoPingPongModal = () => {
   const [modal, setModal] = useRecoilState(goPingPongModalState);
@@ -37,10 +38,6 @@ export const GoPingPongModal = () => {
       setGoPingPongReject('');
     };
   }, []);
-
-  const closeModal = (e: any) => {
-    setModal(!modal);
-  };
 
   const submitPingPongResponse = (response: string) => {
     if (response === 'Y') {
@@ -77,7 +74,7 @@ export const GoPingPongModal = () => {
           <button
             id="modal-close-button"
             className="absolute top-3 right-3 p-0 text-gray-400 text-lg"
-            onClick={closeModal}
+            onClick={() => closeModal(modal, setModal)}
           >
             X
           </button>

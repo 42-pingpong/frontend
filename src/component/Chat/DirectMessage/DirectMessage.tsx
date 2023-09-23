@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { ServiceTitle } from '../../Main/ServiceTitle';
-import { DirectMessageBubble } from './DirectMessageBubble';
-import { DirectMessageRoomSign } from './DirectMessageRoomSign';
 import useDirectMessage from '../../../hooks/chat/useDirectMessage';
 import { useRecoilValue } from 'recoil';
-import { enemyIdState, playerNumberState } from '../../../atom/game';
+import { enemyIdState } from '../../../atom/game';
+import { ChattingBubble } from '../ChattingBubble';
 
 export const DirectMessage = () => {
   const param = useParams().id;
@@ -42,7 +41,10 @@ export const DirectMessage = () => {
               ref={scrollBottomRef}
             >
               {dm.map((item) => (
-                <DirectMessageBubble key={item.directMessageId} props={item} />
+                <ChattingBubble
+                  key={item.directMessageId}
+                  {...item.messageInfo}
+                />
               ))}
             </div>
           </div>

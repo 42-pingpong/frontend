@@ -45,13 +45,12 @@ export const AddFriendModal = () => {
     <div className="background bg-[rgba(0,0,0,0.2)]" onClick={closeModal}>
       <div
         id="chattingroom-content"
-        className="w-[22vw] h-[22vh] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[20vh]"
+        className="w-[22vw] h-[22vh] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[20vh] min-w-[300px]"
         onClick={(e) => e.stopPropagation()}
       >
-        <p className="py-[7%] px-[8%] font-sans not-italic font-[320]  text-[35px] leading-[41px] tracking-tighter text-[#5D777B]">
+        <p className="py-[7%] px-[8%] font-sans not-italic font-[320] text-[35px] leading-[41px] tracking-tighter text-[#5D777B]">
           Add Friend
         </p>
-
         <div className="relative h-[60%] grid">
           <div className="px-[8%] text-[#5D777B] text-2xl">
             <h1 className="pb-3 pl-8 font-light tracking-tight"> Member </h1>

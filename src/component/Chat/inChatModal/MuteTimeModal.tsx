@@ -3,6 +3,7 @@ import { muteModalState } from '../../../atom/modal';
 import { useState } from 'react';
 import { RequestMuteDto } from '../../../interfaces/Chatting-Format.dto';
 import { ChatSocket } from '../../../sockets/ChatSocket';
+import { closeModal } from '../../../utils/modalClose';
 
 interface Props {
   groupChatId: number;
@@ -14,10 +15,6 @@ export const MuteTimeModal = (props: Props) => {
   const [modal, setModal] = useRecoilState(muteModalState);
   const [timeUnit, setTimeUnit] = useState('');
   const [numberInput, setNumberInput] = useState('');
-
-  const closeModal = () => {
-    setModal(!modal);
-  };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -36,7 +33,7 @@ export const MuteTimeModal = (props: Props) => {
     <div
       aria-hidden={true}
       className="flex bg-[rgba(0,0,0,0.1)] items-center justify-center z-30 fixed top-0 left-0 w-full h-full"
-      onClick={closeModal}
+      onClick={() => closeModal(modal, setModal)}
     >
       <div
         id="mute-content"
@@ -86,7 +83,7 @@ export const MuteTimeModal = (props: Props) => {
         <button
           id="modal-close-button"
           className="absolute top-3 right-3 p-0 text-gray-400 text-lg "
-          onClick={closeModal}
+          onClick={() => closeModal(modal, setModal)}
         >
           X
         </button>
