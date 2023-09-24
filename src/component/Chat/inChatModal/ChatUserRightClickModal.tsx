@@ -26,6 +26,9 @@ export const ChatUserRightClickModal = (props: Props) => {
 
   const handleContentClick = (e: any) => {
     e.stopPropagation();
+    setTimeout(() => {
+      props.onClosed();
+    }, 200);
   };
 
   if (role === 'user')
