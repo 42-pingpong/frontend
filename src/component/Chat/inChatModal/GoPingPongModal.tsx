@@ -3,6 +3,7 @@ import {
   goPingPongDtoState,
   goPingPongModalState,
   goPingPongRejectState,
+  goPingPongRequestedDataState,
 } from '../../../atom/modal';
 import { useEffect, useState } from 'react';
 import { GameSocket } from '../../../sockets/GameSocket';
@@ -20,9 +21,12 @@ export const GoPingPongModal = () => {
   const [goPingPongReject, setGoPingPongReject] = useRecoilState(
     goPingPongRejectState
   );
+  const reqData = useRecoilValue(goPingPongRequestedDataState);
+  const gameMode =
+    reqData.gameMode === 'NORMAL' ? ' 일반 모드 ' : ' 어려움 모드 ';
 
   useEffect(() => {
-    if (pingPong.targetUserId === user.id) setIsTarget(true);
+    if (reqData.targetUserId === user.id) setIsTarget(true);
 
     GameSocket.on('go-pingpong', (roomId: number) => {
       navigation(`/game/${roomId}}`);
@@ -37,15 +41,15 @@ export const GoPingPongModal = () => {
 
   const submitPingPongResponse = (response: string) => {
     if (response === 'Y') {
-      console.log('go-pingpong-accept', pingPong);
       ChatSocket.emit('go-pingpong-accept', {
-        groupChatId: pingPong.groupChatId,
-        userId: pingPong.userId,
-        targetUserId: pingPong.targetUserId,
+        groupChatId: reqData.groupChatId,
+        userId: reqData.userId,
+        targetUserId: reqData.targetUserId,
+        gameMode: reqData.gameMode,
       });
       setModal(!modal);
     } else {
-      ChatSocket.emit('go-pingpong-reject', pingPong, response);
+      ChatSocket.emit('go-pingpong-reject', reqData, response);
     }
   };
 
@@ -91,11 +95,11 @@ export const GoPingPongModal = () => {
       >
         {isTarget ? (
           <p className="px-10 break-keep flexw-full h-20 items-center justify-center font-medium text-gray-500 text-lg">
-            {pingPong.userNickName} 님과 게임을 하시겠습니까?
+            {reqData.userNickName} 님과 {gameMode} 게임을 하시겠습니까?
           </p>
         ) : (
           <span className="flexw-full h-20 items-center justify-center font-medium text-gray-500 text-lg">
-            {pingPong.targetUserNickName} 님의 응답 대기중
+            {reqData.targetUserNickName} 님의 응답 대기중
           </span>
         )}
         <div className="flex w-[18rem] justify-between p-2"></div>

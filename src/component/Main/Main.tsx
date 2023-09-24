@@ -2,6 +2,7 @@ import { useRecoilValue } from 'recoil';
 import {
   addUserModalState,
   chattingModalState,
+  gameModeModalState,
   notificationModalState,
   profileModalState,
 } from '../../atom/modal';
@@ -13,12 +14,16 @@ import { AddFriendModal } from '../FriendList/AddFriendModal';
 import { FriendList } from '../FriendList/FriendList';
 import { NotificationModal } from '../Header/NotificationModal';
 import { ResetGameRecoilStatus } from '../Game/ResetGameRecoilStatus';
+import { GameModeModal } from '../Game/GameModeModal';
 
 export const Main = () => {
   const isProfileModalOpen = useRecoilValue(profileModalState);
   const isChattingModalOpen = useRecoilValue(chattingModalState);
   const isAddUserModalOpen = useRecoilValue(addUserModalState);
   const isNotificationModalOpen = useRecoilValue(notificationModalState);
+
+  const isGameModeModalOpen = useRecoilValue(gameModeModalState);
+
 
   return (
     <div className="flex p-32 items-center justify-center h-screen">
@@ -37,6 +42,7 @@ export const Main = () => {
       {isNotificationModalOpen && <NotificationModal />}
       {isChattingModalOpen && <CreateChattingRoomModal />}
       {isAddUserModalOpen && <AddFriendModal />}
+      {isGameModeModalOpen && <GameModeModal />}
       {<ResetGameRecoilStatus />}
     </div>
   );

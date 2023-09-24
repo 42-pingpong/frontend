@@ -52,6 +52,7 @@ export const goPingPongRejectState = atom<string>({
   default: '',
 });
 
+
 export const passwordModalState = atom<boolean>({
   key: 'passwordModalState',
   default: false,
@@ -64,5 +65,10 @@ export const clickedRoomIdState = atom({
 
 export const authenticationModalState = atom<boolean>({
   key: 'authenticationModalState',
+  default: false,
+});
+
+export const gameModeModalState = atom<boolean>({
+  key: 'gameModeModalState',
   default: false,
 });

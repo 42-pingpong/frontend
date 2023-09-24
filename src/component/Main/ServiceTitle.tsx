@@ -1,7 +1,11 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { newMatching, playerNumberState, roomIdState } from '../../atom/game';
-import { addUserModalState, chattingModalState } from '../../atom/modal';
+import {
+  addUserModalState,
+  chattingModalState,
+  gameModeModalState,
+} from '../../atom/modal';
 import { loginState, userInfo } from '../../atom/user';
 import { useNavigate } from 'react-router-dom';
 import { GameSocket } from '../../sockets/GameSocket';
@@ -21,6 +25,7 @@ export const ServiceTitle = memo((props: ServiceTitleProps) => {
   const [roomId, setRoomId] = useRecoilState(roomIdState);
   const login = useRecoilValue(loginState);
   const SERVER = process.env.REACT_APP_SERVER;
+  const [gameModeModal, setGameModeModal] = useRecoilState(gameModeModalState);
 
   const handleState = (roomName: number) => {
     setRoomId(roomName);
@@ -51,7 +56,7 @@ export const ServiceTitle = memo((props: ServiceTitleProps) => {
       return;
     }
     if (props.title === 'Game') {
-      setMatching(!matching), GameSocket.emit('enter-queue', user.id);
+      matching === false ? setGameModeModal(true) : setMatching(!matching);
     } else if (props.title === 'Chat') {
       setChatstate(!chatstate);
     } else if (props.title === 'Friends') {

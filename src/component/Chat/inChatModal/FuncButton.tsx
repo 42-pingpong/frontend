@@ -11,7 +11,12 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { currentChatInfoState } from '../../../atom/chat';
 import { userInfo } from '../../../atom/user';
 import { ChatSocket } from '../../../sockets/ChatSocket';
-import { goPingPongModalState, muteModalState } from '../../../atom/modal';
+import {
+  goPingPongModalState,
+  goPingPongModeSelectModalState,
+  goPingPongRequestedDataState,
+  muteModalState,
+} from '../../../atom/modal';
 import { GameSocket } from '../../../sockets/GameSocket';
 
 export const FuncButton = ({
@@ -25,7 +30,12 @@ export const FuncButton = ({
   const roomInfo = useRecoilValue(currentChatInfoState);
   const user = useRecoilValue(userInfo);
   const setMuteModal = useSetRecoilState(muteModalState);
-  const setGoPingPongModal = useSetRecoilState(goPingPongModalState);
+  const setGoPingPongModeSelectModal = useSetRecoilState(
+    goPingPongModeSelectModalState
+  );
+  const setGoPingPongRequestedData = useSetRecoilState(
+    goPingPongRequestedDataState
+  );
 
   const handelModalFuc = () => {
     switch (name) {
@@ -85,8 +95,10 @@ export const FuncButton = ({
           targetUserId: target.id,
           targetUserNickName: target.nickName,
         };
-        ChatSocket.emit('go-pingpong', reqData);
-        console.log('pp');
+        setGoPingPongModeSelectModal(true);
+        setGoPingPongRequestedData(reqData);
+
+        // setGoPingPongModal(true);
         break;
       }
       default:

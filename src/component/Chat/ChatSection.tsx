@@ -26,12 +26,16 @@ import {
   chattingProfileOnRightClickModalState,
   goPingPongDtoState,
   goPingPongModalState,
+  goPingPongModeSelectModalState,
   goPingPongRejectState,
+  goPingPongRequestedDataState,
 } from '../../atom/modal';
 import { GameSocket } from '../../sockets/GameSocket';
 import { GoPingPongModal } from './inChatModal/GoPingPongModal';
 import useMuteTimeSave from '../../hooks/chat/useMuteTimeSave';
 import useUnmute from '../../hooks/chat/useUnMute';
+import { GoPingPongModeSelectModal } from './inChatModal/GoPingPongModeSelectModal';
+import { paddleHeightState } from '../../atom/game';
 
 export const ChatSection = () => {
   const navigate = useNavigate();
@@ -52,6 +56,13 @@ export const ChatSection = () => {
   );
   const setGoPingPongReject = useSetRecoilState(goPingPongRejectState);
   const unMuteMe = useUnmute();
+  const isGoPingPongModeSelectModalOpen = useRecoilValue(
+    goPingPongModeSelectModalState
+  );
+  const [goPingPongRequestedData, setGoPingPongRequestedData] = useRecoilState(
+    goPingPongRequestedDataState
+  );
+  const setPaddleHeight = useSetRecoilState(paddleHeightState);
 
   useLayoutEffect(() => {
     ChatSocket.on('fetch-group-message', fetchMessageHandler);
@@ -143,26 +154,21 @@ export const ChatSection = () => {
 
   const handleGoPingPong = async (data: ResponseGoPingPongDto) => {
     if (data.userId !== user.id && data.targetUserId !== user.id) return;
+    const goPingPongData = {
+      groupChatId: data.groupChatId,
+      userId: data.userId,
+      targetUserId: data.targetUserId,
+      userNickName: data.userNickName,
+      targetUserNickName: data.targetUserNickName,
+      gameMode: data.gameMode,
+    };
     if (data.userId === user.id) {
       {
-        setPingPong(() => ({
-          groupChatId: data.groupChatId,
-          userId: data.userId,
-          targetUserId: data.targetUserId,
-          userNickName: data.userNickName,
-          targetUserNickName: data.targetUserNickName,
-        }));
+        setGoPingPongRequestedData(() => goPingPongData);
         setIsGoPingPongModalOpen(true);
       }
     } else if (data.targetUserId === user.id) {
-      console.log('target');
-      setPingPong(() => ({
-        groupChatId: data.groupChatId,
-        userId: data.userId,
-        targetUserId: data.targetUserId,
-        userNickName: data.userNickName,
-        targetUserNickName: data.targetUserNickName,
-      }));
+      setGoPingPongRequestedData(() => goPingPongData);
       setIsGoPingPongModalOpen(true);
     }
   };
@@ -170,8 +176,11 @@ export const ChatSection = () => {
   const handleGoPingPongAccept = (data: goPingPongDto) => {
     if (data.userId !== user.id && data.targetUserId !== user.id) return;
     user.id === data.userId
-      ? GameSocket.emit('go-pingpong', data, true, 1)
-      : GameSocket.emit('go-pingpong', data, false, 2);
+      ? GameSocket.emit('go-pingpong', data, true, 1, data.gameMode)
+      : GameSocket.emit('go-pingpong', data, false, 2, data.gameMode);
+    if (data.gameMode === 'HARD') setPaddleHeight(100);
+    else setPaddleHeight(130);
+
     setIsGoPingPongModalOpen(false);
     setTimeout(() => {
       100;
@@ -180,12 +189,6 @@ export const ChatSection = () => {
   };
 
   const handleGoPingPongReject = (response: any) => {
-    console.log(
-      'reject',
-      response[0].userId,
-      response[0].targetUserId,
-      user.id
-    );
     if (response[0].userId !== user.id && response[0].targetUserId !== user.id)
       return;
     if (response[1] === 'N') {
@@ -271,6 +274,7 @@ export const ChatSection = () => {
               src={require('../../public/whitePlane.png')}
               className=" mx-auto mt-2.5 w-7 h-7"
             />
+            {isGoPingPongModeSelectModalOpen && <GoPingPongModeSelectModal />}
             {isGoPingPongModalOpen && <GoPingPongModal />}
           </div>
         </div>

@@ -19,13 +19,12 @@ import {
   roomIdState,
   resetState,
   joinState,
-  playerNumberState,
+  paddleHeightState,
 } from '../../atom/game';
 import { GameSocket } from '../../sockets/GameSocket';
 import { userInfo } from '../../atom/user';
 
 export const PongGame = ({ props }: { props: number }) => {
-  const paddleHeight = 120;
   const paddleWidth = 25;
   const ballSize = 30;
 
@@ -62,6 +61,7 @@ export const PongGame = ({ props }: { props: number }) => {
   const [reset, setReset] = useRecoilState(resetState);
   const setJoin = useSetRecoilState(joinState);
   const [isLeft, setIsLeft] = useState(false);
+  const paddleHeight = useRecoilValue(paddleHeightState);
 
   useEffect(() => {
     setJoin(true);
@@ -262,14 +262,15 @@ export const PongGame = ({ props }: { props: number }) => {
         <div className="pong-game">
           <Ready />
           <div
-            className="absolute w-[25px] h-[140px] bg-[#97D2DD] rounded-[10px]"
-            style={{ top: player1Paddle }}
+            className="absolute w-[25px] bg-[#97D2DD] rounded-[10px]"
+            style={{ top: player1Paddle, height: paddleHeight }}
           ></div>
           <div
-            className="absolute w-[25px] h-[140px] bg-[#97D2DD] rounded-[10px]"
+            className="absolute w-[25px] bg-[#97D2DD] rounded-[10px]"
             style={{
               top: player2Paddle,
               left: containerWidth - paddleWidth,
+              height: paddleHeight,
             }}
           ></div>
           <div
@@ -287,14 +288,15 @@ export const PongGame = ({ props }: { props: number }) => {
         {end === true ? <End /> : null}
 
         <div
-          className="absolute w-[25px] h-[140px] bg-[#97D2DD] rounded-[10px]"
-          style={{ top: player1Paddle }}
+          className="absolute w-[25px] bg-[#97D2DD] rounded-[10px]"
+          style={{ top: player1Paddle, height: paddleHeight }}
         ></div>
         <div
-          className="absolute w-[25px] h-[140px] bg-[#97D2DD] rounded-[10px]"
+          className="absolute w-[25px] bg-[#97D2DD] rounded-[10px]"
           style={{
             top: player2Paddle,
             left: containerWidth - paddleWidth,
+            height: paddleHeight,
           }}
         ></div>
         <div
