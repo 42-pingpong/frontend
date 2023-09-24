@@ -24,7 +24,6 @@ export const Main = () => {
 
   const isGameModeModalOpen = useRecoilValue(gameModeModalState);
 
-
   return (
     <div className="flex p-32 items-center justify-center h-screen">
       <div className="grid grid-row-3 xl:grid-cols-3 xl:grid-rows-5 h-full gap-x-20 gap-y-10 max-w-[1800px] w-[100vw]">
