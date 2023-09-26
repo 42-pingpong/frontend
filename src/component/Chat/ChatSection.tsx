@@ -50,7 +50,6 @@ export const ChatSection = () => {
   const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
   const [isGoPingPongModalOpen, setIsGoPingPongModalOpen] =
     useRecoilState(goPingPongModalState);
-  const setPingPong = useSetRecoilState(goPingPongDtoState); // groupChatId, userId, targetUserId
   const setRightClickModal = useSetRecoilState(
     chattingProfileOnRightClickModalState
   );

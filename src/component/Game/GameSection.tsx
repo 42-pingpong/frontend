@@ -2,8 +2,7 @@ import { ServiceTitle } from '../Main/ServiceTitle';
 import { Matchpoint } from './Matchpoint';
 import { useRecoilValue } from 'recoil';
 import { playerNumberState } from '../../atom/game';
-import { PongGame } from './PongGame/PongGame';
-import { useEffect } from 'react';
+import { PongGame } from './PongGame/PongGameRender';
 
 export const GameSection = () => {
   const playerNum = useRecoilValue(playerNumberState);
