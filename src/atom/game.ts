@@ -114,3 +114,13 @@ export const paddleHeightState = atom({
   key: 'paddleHeight',
   default: 130,
 });
+
+export const isLeftState = atom({
+  key: 'isLeft',
+  default: false,
+});
+
+export const disconnectState = atom({
+  key: 'disconnect',
+  default: false,
+});

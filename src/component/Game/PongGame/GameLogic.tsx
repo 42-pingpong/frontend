@@ -1,30 +1,33 @@
-import React, { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
-  ballXState,
-  ballYState,
   ballSpeedXState,
   ballSpeedYState,
-  player1ScoreState,
-  player2ScoreState,
-  player2PaddleState,
-  player1PaddleState,
-  endState,
-  player1NameState,
-  player2NameState,
-  startState,
+  ballXState,
+  ballYState,
+  disconnectState,
   displayXState,
   displayYState,
-  readyState,
-  roomIdState,
-  resetState,
+  endState,
+  isLeftState,
   joinState,
   paddleHeightState,
-} from '../../atom/game';
-import { GameSocket } from '../../sockets/GameSocket';
-import { userInfo } from '../../atom/user';
+  player1NameState,
+  player1PaddleState,
+  player1ScoreState,
+  player2NameState,
+  player2PaddleState,
+  player2ScoreState,
+  readyState,
+  resetState,
+  roomIdState,
+  startState,
+} from '../../../atom/game';
+import { useEffect, useState } from 'react';
+import { userInfo } from '../../../atom/user';
+import { GameSocket } from '../../../sockets/GameSocket';
+import { useParams } from 'react-router-dom';
 
-export const PongGame = ({ props }: { props: number }) => {
+export const GameLogic = ({ props }: { props: number }) => {
   const paddleWidth = 25;
   const ballSize = 30;
 
@@ -60,8 +63,9 @@ export const PongGame = ({ props }: { props: number }) => {
 
   const [reset, setReset] = useRecoilState(resetState);
   const setJoin = useSetRecoilState(joinState);
-  const [isLeft, setIsLeft] = useState(false);
+  const [isLeft, setIsLeft] = useRecoilState(isLeftState);
   const paddleHeight = useRecoilValue(paddleHeightState);
+  const [disconnect, setDisconnect] = useRecoilState(disconnectState);
 
   useEffect(() => {
     setJoin(true);
@@ -102,6 +106,19 @@ export const PongGame = ({ props }: { props: number }) => {
       setEnd(true);
       setStart(false);
       setIsLeft(true);
+      setDisconnect(true);
+    });
+
+    GameSocket.on('game-disconnect', (id: number) => {
+      setDisconnect(true);
+      if (user.id === id) {
+        const score = props === 1 ? player1Score : player2Score;
+        GameSocket.emit('disconnet-win', {
+          userId: id,
+          gameId: roomId,
+          score: score,
+        });
+      }
     });
 
     return () => {
@@ -112,6 +129,7 @@ export const PongGame = ({ props }: { props: number }) => {
       GameSocket.off('ballY');
       GameSocket.off('score');
       GameSocket.off('end-room-out');
+      GameSocket.off('game-disconncet');
       setReset(!reset);
     };
   }, []);
@@ -222,88 +240,5 @@ export const PongGame = ({ props }: { props: number }) => {
     handleBallCollisions();
   }, [ballX, ballY]);
 
-  const Ready = () => {
-    return (
-      <div className="justify-center flex mt-[200px]">
-        {ready === false ? (
-          <span
-            className="text-gray-500 text-bold text-[200px]"
-            onClick={() => GameSocket.emit('ready')}
-          >
-            Ready
-          </span>
-        ) : (
-          <span
-            className="text-[#97D2DD] text-bold text-[200px]"
-            onClick={() => GameSocket.emit('ready')}
-          >
-            Ready
-          </span>
-        )}
-      </div>
-    );
-  };
-
-  const End = () => {
-    const winner = player2Score > player1Score ? player2Name : player1Name;
-
-    return (
-      <div className="justify-center flex mt-[300px]">
-        <span className="text-gray-500 text-bold text-[100px]">
-          {isLeft === true ? user.nickName : winner} win !!
-        </span>
-      </div>
-    );
-  };
-
-  if (start === false && end === false) {
-    return (
-      <div className="pong-game-container">
-        <div className="pong-game">
-          <Ready />
-          <div
-            className="absolute w-[25px] bg-[#97D2DD] rounded-[10px]"
-            style={{ top: player1Paddle, height: paddleHeight }}
-          ></div>
-          <div
-            className="absolute w-[25px] bg-[#97D2DD] rounded-[10px]"
-            style={{
-              top: player2Paddle,
-              left: containerWidth - paddleWidth,
-              height: paddleHeight,
-            }}
-          ></div>
-          <div
-            className="absolute w-[30px] h-[30px] bg-[#727DE3] rounded-[50%]"
-            style={{ top: displayY, left: displayX }}
-          ></div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="pong-game-container">
-      <div className="pong-game">
-        {end === true ? <End /> : null}
-
-        <div
-          className="absolute w-[25px] bg-[#97D2DD] rounded-[10px]"
-          style={{ top: player1Paddle, height: paddleHeight }}
-        ></div>
-        <div
-          className="absolute w-[25px] bg-[#97D2DD] rounded-[10px]"
-          style={{
-            top: player2Paddle,
-            left: containerWidth - paddleWidth,
-            height: paddleHeight,
-          }}
-        ></div>
-        <div
-          className="absolute w-[30px] h-[30px] bg-[#727DE3] rounded-[50%]"
-          style={{ top: displayY, left: displayX }}
-        ></div>
-      </div>
-    </div>
-  );
+  return null;
 };
