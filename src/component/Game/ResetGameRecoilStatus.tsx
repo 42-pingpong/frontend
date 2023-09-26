@@ -63,7 +63,6 @@ export const ResetGameRecoilStatus = () => {
 
   useEffect(() => {
     if (join === true && end === false) {
-      console;
       playerNumber === 1
         ? GameSocket.emit('end', {
             userId: user.id,

@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import {
   player1PaddleState,
@@ -30,6 +29,7 @@ export const PongGame = ({ props }: { props: number }) => {
 
   const paddleHeight = useRecoilValue(paddleHeightState);
   const disconnect = useRecoilValue(disconnectState);
+
   GameLogic({ props });
 
   if (start === false && end === false) {

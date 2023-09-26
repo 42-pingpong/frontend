@@ -11,10 +11,8 @@ import {
   isLeftState,
   joinState,
   paddleHeightState,
-  player1NameState,
   player1PaddleState,
   player1ScoreState,
-  player2NameState,
   player2PaddleState,
   player2ScoreState,
   readyState,
@@ -25,7 +23,6 @@ import {
 import { useEffect, useState } from 'react';
 import { userInfo } from '../../../atom/user';
 import { GameSocket } from '../../../sockets/GameSocket';
-import { useParams } from 'react-router-dom';
 
 export const GameLogic = ({ props }: { props: number }) => {
   const paddleWidth = 25;
@@ -51,21 +48,18 @@ export const GameLogic = ({ props }: { props: number }) => {
   const [start, setStart] = useRecoilState(startState);
   const [end, setEnd] = useRecoilState(endState);
 
-  const player1Name = useRecoilValue(player1NameState);
-  const player2Name = useRecoilValue(player2NameState);
-
-  const [displayX, setDisplayX] = useRecoilState(displayXState);
-  const [displayY, setDisplayY] = useRecoilState(displayYState);
-  const [ready, setReady] = useRecoilState(readyState);
+  const setDisplayX = useSetRecoilState(displayXState);
+  const setDisplayY = useSetRecoilState(displayYState);
+  const setReady = useSetRecoilState(readyState);
 
   const user = useRecoilValue(userInfo);
   const roomId = useRecoilValue(roomIdState);
 
   const [reset, setReset] = useRecoilState(resetState);
   const setJoin = useSetRecoilState(joinState);
-  const [isLeft, setIsLeft] = useRecoilState(isLeftState);
+  const setIsLeft = useSetRecoilState(isLeftState);
   const paddleHeight = useRecoilValue(paddleHeightState);
-  const [disconnect, setDisconnect] = useRecoilState(disconnectState);
+  const setDisconnect = useSetRecoilState(disconnectState);
 
   useEffect(() => {
     setJoin(true);
