@@ -1,8 +1,8 @@
 import { ServiceTitle } from '../Main/ServiceTitle';
 import { Matchpoint } from './Matchpoint';
-import { PongGame } from './PongGame';
 import { useRecoilValue } from 'recoil';
 import { playerNumberState } from '../../atom/game';
+import { PongGame } from './PongGame/PongGameRender';
 
 export const GameSection = () => {
   const playerNum = useRecoilValue(playerNumberState);

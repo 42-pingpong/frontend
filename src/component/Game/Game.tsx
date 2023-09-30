@@ -1,10 +1,5 @@
-import { useEffect } from 'react';
-import { ChatSection } from '../Chat/ChatSection';
 import { DirectMessage } from '../Chat/DirectMessage/DirectMessage';
 import { GameSection } from './GameSection';
-import { GameSocket } from '../../sockets/GameSocket';
-import { useRecoilValue } from 'recoil';
-import { playerNumberState } from '../../atom/game';
 
 export const Game = () => {
   return (

@@ -1,6 +1,6 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { authenticationModalState } from '../../atom/modal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { authenticationState, userInfo } from '../../atom/user';
 import axiosInstance from '../../api/axios';
 
@@ -47,19 +47,11 @@ export const AuthenticationModal = () => {
   };
 
   const handleAuthenticationSubmit = async (input: string) => {
-    console.log(input);
     // back db에서 꺼내와서 비교하면 될듯여
     // 그러면 ,,, 유저인포에 인증받았는지도 추가해야할듯??
     const res = await axiosInstance.get(`/mail/code/${user[0].id}`);
-    if (validationCode === '') setValidationCode(res.data.toString());
-
-    console.log(validationCode, input);
-
-    if (validationCode === input) {
-      setAuthentication(true);
-      setModal(false);
-    } else {
-      setRetry(true);
+    if (validationCode === '') {
+      setValidationCode(res.data.toString());
     }
     /**
      * 1. input과 db에 저장된 인증코드를 비교한다.
@@ -68,6 +60,16 @@ export const AuthenticationModal = () => {
      * 4. 인증받은 유저만 게임방에 입장할 수 있게 한다.
      */
   };
+
+  useEffect(() => {
+    if (validationCode === '') return;
+    if (validationCode === input) {
+      setAuthentication(true);
+      setModal(false);
+    } else {
+      setRetry(true);
+    }
+  }, [validationCode]);
 
   return (
     <div

@@ -41,7 +41,6 @@ export const ServiceTitle = memo((props: ServiceTitleProps) => {
       } else {
         setPlayerNum(2);
       }
-      console.log('playerNum', playerNum);
     });
     return () => {
       GameSocket.off('join');
