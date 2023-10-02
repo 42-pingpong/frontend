@@ -185,14 +185,14 @@ export const CreateChattingRoomModal = () => {
       {userList.length != 0 && memberFocus && (
         <SearchMemberModal
           userList={userList}
-          topPositon={46}
+          topPosition={46}
           modalName={'search members'}
         />
       )}
       {chatMembers.length != 0 && memberFocus && (
         <SearchMemberModal
           userList={chatMembers}
-          topPositon={11}
+          topPosition={11}
           modalName={'invited members'}
         />
       )}

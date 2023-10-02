@@ -10,11 +10,12 @@ import { isUserDuplicated } from '../../../../utils/createChatUtils';
 
 interface Props {
   userList: UserDto[];
-  topPositon: number;
+  topPosition: number;
   modalName: string;
 }
 export const SearchMemberModal = memo((props: Props) => {
-  const { userList, topPositon, modalName } = props;
+  console.log(props);
+  const { userList, topPosition, modalName } = props;
   const [formVlaue, setFormValue] = useRecoilState(createChatRoomState);
   const setMembers = useSetRecoilState(chatMemberListState);
 
@@ -36,9 +37,8 @@ export const SearchMemberModal = memo((props: Props) => {
 
   return (
     <div
-      className={`flex absolute flex-col top-[${topPositon}vh] left-[68vw]
-       w-[17vw] h-[30vh] shadow-xl px-12 pb-10 pt-5 bg-[#F8F8F8] 
-      rounded-[30px] mx-auto items-center justify-center z-10`}
+      className="flex absolute flex-col left-[68vw] w-[17vw] h-[30vh] shadow-xl px-12 pb-10 pt-5 bg-[#F8F8F8] rounded-[30px] mx-auto items-center justify-center z-10"
+      style={{ top: `${topPosition}vh` }}
       onClick={(e) => e.stopPropagation()}
     >
       <span className="flex justify-center w-full items-center font-bold text-3xl text-borderBlue">
