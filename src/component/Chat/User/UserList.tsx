@@ -38,7 +38,7 @@ export const UserList = ({
   };
 
   return (
-    <div id="friends-section" className="flex-col flex h-full w-full px-10">
+    <div id="friends-section" className="flex-col flex h-full w-full 2xl:px-10">
       <div className="flex">
         <ServiceTitle title="User" nonAddButton={true} />
       </div>
@@ -48,7 +48,7 @@ export const UserList = ({
           <StatusIcon props={{ status: 'offline', color: 'bg-red-400' }} />
           <StatusIcon props={{ status: 'ingame', color: 'bg-blue-400' }} />
         </div>
-        <div className="flex flex-col w-full h-[22%] mt-3 mb-2">
+        <div className="flex flex-col w-full h-[22%] 2xl:mt-3 mb-2">
           <span className="font-semibold text-borderBlue text-lg">owner</span>
           {owner && (
             <Friend data={owner}>

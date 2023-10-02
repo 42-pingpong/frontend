@@ -105,12 +105,16 @@ export const Chat = () => {
     return <Loading />;
   } else
     return (
-      <div className="h-screen bg-slate-100 p-20 justify-center flex">
-        <div className="pt-[2%] grid grid-cols-3 grid-rows-6 gap-20 w-full h-[80vh] max-w-[1800px]">
-          <div className="col-span-2 row-span-6">
+      <div className="flex h-screen bg-slate-100 p-20 justify-center">
+        <div
+          className="grid grid-cols-1 gap-10
+          2xl:grid-cols-3 2xl:grid-rows-6 2xl:gap-20 2xl:h-[80vh]
+          h-full max-w-[1800px] w-screen pt-[2%] min-w-[800px]"
+        >
+          <div className="2xl:col-span-2 2xl:row-span-6 min-h-[800px]">
             <ChatSection />
           </div>
-          <div className="col-span-1 row-span-6">
+          <div className="2xl:row-span-6 min-h-[800px]">
             <UserSection bottomIconVisible={true} />
           </div>
         </div>
