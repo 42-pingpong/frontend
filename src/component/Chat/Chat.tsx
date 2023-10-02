@@ -52,7 +52,7 @@ export const Chat = () => {
   };
 
   const handleError = (data: any) => {
-    if (data === 'Request failed with status code 403') {
+    if (data.statusCode === 403) {
       alert('채팅방에 입장할 수 없습니다.');
       navigate('/');
     }
