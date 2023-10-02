@@ -49,16 +49,8 @@ export const AuthenticationModal = () => {
   const handleAuthenticationSubmit = async (input: string) => {
     // back db에서 꺼내와서 비교하면 될듯여
     // 그러면 ,,, 유저인포에 인증받았는지도 추가해야할듯??
-    const res = await axiosInstance.get(`/mail/code/${user[0].id}`);
-    if (validationCode === '') {
-      setValidationCode(res.data.toString());
-    }
-    /**
-     * 1. input과 db에 저장된 인증코드를 비교한다.
-     * 2. 일치하면 유저인포에 인증받았다고 추가한다.
-     * 3. 일치하지 않으면 다시 입력하라는 메시지를 띄운다.
-     * 4. 인증받은 유저만 게임방에 입장할 수 있게 한다.
-     */
+    const res = await axiosInstance.patch(`/mail/code/${input}`);
+    if (res?.data?.isEmailVerified) setAuthentication(true);
   };
 
   useEffect(() => {

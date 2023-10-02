@@ -21,6 +21,7 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
     selfIntroduction: '',
     status: '',
     profile: '',
+    isEmailVerified: false,
   });
   const setProfileEdit = useSetRecoilState(profileEditState);
   const isAuthenticated = useRecoilValue(authenticationState);
@@ -59,7 +60,7 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
             <span className="w-full text-[2.8rem] font-bold text-center mb-3 text-gray-500">
               {user.nickName}
             </span>
-            {isAuthenticated ? null : (
+            {user.isEmailVerified ? null : (
               <div>
                 <button
                   className="flex w-[50%] h-10 justify-center items-center bg-progressBlue mx-auto rounded-full shadow-xl"
