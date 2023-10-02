@@ -37,23 +37,23 @@ export const ChatManage = () => {
   }, [roomInfo]);
 
   return (
-    <div className="flex h-screen w-full bg-slate-200 pb-20 pt-10 px-16 justify-center items-center">
-      <section className="flex flex-col h-full w-full max-w-[1800px]">
+    <div className="flex h-screen w-full px-16 justify-center items-center">
+      <section className="flex flex-col h-full w-full max-w-[1800px] min-w-[600px]">
         <div className="flex w-full h-[20vh] items-center mb-5">
           <RoomInfo role={role} roomInfo={roomInfo} />
         </div>
-        <div className="grid w-full h-full grid-cols-1 xl:grid-cols-3 gap-10">
-          <div className="flex w-full justify-center">
+        <div className="grid w-full h-full grid-cols-1 xl:grid-cols-3">
+          <div className="flex w-full justify-center min-h-[800px]">
             <UserList
               owner={roomInfo.owner}
               admin={roomInfo.admin}
               joinedUser={roomInfo.joinedUser}
             />
           </div>
-          <div className="flex w-full justify-center">
+          <div className="flex w-full justify-center min-h-[500px]">
             <MuteList list={muteList} roomId={roomId as string} />
           </div>
-          <div className="flex w-full justify-center">
+          <div className="flex w-full justify-center min-h-[500px]">
             <BanList list={banList} roomId={roomId as string} />
           </div>
         </div>

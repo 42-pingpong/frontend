@@ -15,15 +15,15 @@ export const Profile = () => {
 
   return (
     <div className="flex h-screen p-32 items-center justify-center">
-      <div className="grid  grid-cols-1 lg:grid-cols-5 gap-x-32 h-full max-w-[1800px] w-screen">
-        <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 2xl:grid-cols-5 gap-x-32 h-full max-w-[1800px] w-screen">
+        <div className="2xl:col-span-2 min-h-[800px]">
           {profileEdit && params.nickName === undefined ? (
             <ProfileEdit />
           ) : (
             <MyProfile nickName={params.nickName} />
           )}
         </div>
-        <div className="lg:col-span-3">
+        <div className="2xl:col-span-3 min-h-[800px]">
           <GameHistory />
         </div>
       </div>

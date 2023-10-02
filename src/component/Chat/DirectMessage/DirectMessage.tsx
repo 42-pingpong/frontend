@@ -21,10 +21,10 @@ export const DirectMessage = () => {
   }, [dm]);
 
   return (
-    <div className="flex w-full h-full items-center justify-center">
+    <div className="flex w-full h-screen items-center justify-center">
       <div
         id="dm-section"
-        className="flex flex-col h-full w-[1800px] max-w-[1800px] py-20 px-40 mt-[3rem]"
+        className="flex flex-col h-full w-full min-w-[800px] max-w-[1800px] py-20 px-40 mt-[3rem]"
       >
         <div className="flex">
           <ServiceTitle title="Direct Message" nonAddButton={true} />
