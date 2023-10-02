@@ -10,6 +10,9 @@ import useUnMute from '../../../hooks/chat/useUnMute';
 import { useSetRole } from '../../../hooks/chat/useSetRole';
 import useFetchChatManageInfo from '../../../hooks/chat/useFetchChatManageInfo';
 import { UserList } from './UserList';
+import { NotificationModal } from '../../Header/NotificationModal';
+import { ProfileModal } from '../../Header/ProfileModal';
+import { notificationModalState, profileModalState } from '../../../atom/modal';
 
 export const ChatManage = () => {
   const roomId = useParams().roomId;
@@ -22,6 +25,8 @@ export const ChatManage = () => {
     setBanList,
     setMuteList
   );
+  const isNotificationModalOpen = useRecoilValue(notificationModalState);
+  const isProfileModalOpen = useRecoilValue(profileModalState);
 
   useEffect(() => {
     if (roomInfo === undefined || user.id === -1) return;
@@ -53,6 +58,8 @@ export const ChatManage = () => {
           </div>
         </div>
       </section>
+      {isProfileModalOpen && <ProfileModal />}
+      {isNotificationModalOpen && <NotificationModal />}
     </div>
   );
 };

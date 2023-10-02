@@ -94,12 +94,11 @@ export const CreateChattingRoomModal = () => {
       alert('최대 참여 인원을 입력해주세요.');
       return;
     }
-    if (chatMembers.length === 0) {
-      ChatSocket.emit('create-room', formValue, (res: ChatRoomDTO) => {
-        setChatRoomList((prev) => [...prev, res]);
-      });
-      setChattingState(!chattingState);
-    }
+
+    ChatSocket.emit('create-room', formValue, (res: ChatRoomDTO) => {
+      setChatRoomList((prev) => [...prev, res]);
+    });
+    setChattingState(!chattingState);
   };
 
   const handlePrivateSubmit = () => {
@@ -186,14 +185,14 @@ export const CreateChattingRoomModal = () => {
       {userList.length != 0 && memberFocus && (
         <SearchMemberModal
           userList={userList}
-          topPositon={46}
+          topPosition={46}
           modalName={'search members'}
         />
       )}
       {chatMembers.length != 0 && memberFocus && (
         <SearchMemberModal
           userList={chatMembers}
-          topPositon={11}
+          topPosition={11}
           modalName={'invited members'}
         />
       )}

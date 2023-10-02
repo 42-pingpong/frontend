@@ -1,11 +1,7 @@
-import React, { useEffect } from 'react';
 import { ServiceTitle } from '../../Main/ServiceTitle';
 import { ChatList } from './ChatList';
 import './styles.css';
-import { useRecoilState } from 'recoil';
-import { chatRoomState } from '../../../atom/chat';
-import { ChatSocket } from '../../../sockets/ChatSocket';
-import { ChatRoomDTO } from '../../../interfaces/Chatting-Format.dto';
+
 import { useGroupChatList } from '../../../hooks/chat/useGroupChatList';
 
 export const ChatRoom = () => {

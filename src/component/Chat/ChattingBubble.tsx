@@ -4,7 +4,7 @@ import {
   ResponseGroupChatDTO,
 } from '../../interfaces/Chatting-Format.dto';
 import { ChatUserRightClickModal } from './inChatModal/ChatUserRightClickModal';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { userInfo } from '../../atom/user';
 import { memo, useState } from 'react';
 import React from 'react';
@@ -13,6 +13,7 @@ export const ChattingBubble = memo((props: MessageInfoDTO) => {
   const user = useRecoilValue(userInfo);
   const sender = props.sender.id === user.id ? 'me' : 'you';
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [profileRightClickModal, setProfileRightClickModal] = useState(false);
   const [x, setX] = useState(0);
@@ -34,7 +35,11 @@ export const ChattingBubble = memo((props: MessageInfoDTO) => {
     <div className="flex">
       <div
         className="w-14 h-14 rounded-full border-2 flex mb-[2.5%]"
-        onContextMenu={onRightClickHandler}
+        onContextMenu={
+          location.pathname.split('/')[1] === 'chat'
+            ? onRightClickHandler
+            : undefined
+        }
         onClick={onLeftClickHandler}
       >
         <img src={props.sender.profile} className="flex rounded-full" />

@@ -6,8 +6,8 @@ const Logout = () => {
   const handleLogout = async () => {
     const res = await axiosInstance('/auth/logout');
     localStorage.removeItem('token');
-    //로그아웃시 새로고침으로 모든 페이지 상태 초기화
-    window.location.reload();
+    //로그아웃시 홈으로 이동 ( 어차피 저희 서비스 무조건 로그인 해야 이용되니까..)
+    window.location.href = '/';
   };
 
   return (
