@@ -94,7 +94,7 @@ export const CreateChattingRoomModal = () => {
       alert('최대 참여 인원을 입력해주세요.');
       return;
     }
-    if (formValue.levelOfPublicity === 'Prot' && chatMembers.length === 0) {
+    if (formValue.levelOfPublicity !== 'Priv' && chatMembers.length === 0) {
       ChatSocket.emit('create-room', formValue, (res: ChatRoomDTO) => {
         setChatRoomList((prev) => [...prev, res]);
       });

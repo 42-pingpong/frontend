@@ -69,10 +69,10 @@ export const FriendList = () => {
       setFriendList(data);
     };
 
-    if (isLogin) {
+    if (isLogin && userInfoState.id !== -1) {
       fetchFriendListAndSetState();
     }
-  }, [isLogin]);
+  }, [isLogin, userInfoState]);
 
   const handleChangeFriendStatus = (data: UserDto) => {
     setFriendList((prevList) =>
