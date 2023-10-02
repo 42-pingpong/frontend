@@ -7,4 +7,5 @@ export interface UserDto {
   status?: string;
   fullName?: string;
   selfIntroduction?: string;
+  isEmailVerified?: boolean;
 }
