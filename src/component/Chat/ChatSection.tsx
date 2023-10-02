@@ -245,11 +245,8 @@ export const ChatSection = () => {
             className="flex absolute flex-col w-[90%] h-[80%] px-2 overflow-y-auto"
             ref={scrollBottomRef}
           >
-            {chat.map((item) => (
-              <ChattingBubble
-                key={item.messageInfo.messageId}
-                {...item.messageInfo}
-              />
+            {chat.map((item, idx) => (
+              <ChattingBubble key={idx} {...item.messageInfo} />
             ))}
           </div>
         </div>
