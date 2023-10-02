@@ -19,11 +19,11 @@ export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
 
   useEffect(() => {
     ChatSocket.on('join-room', handleJoinChatRoom);
-    ChatSocket.on('error', handleJoinChatRoomError);
+    ChatSocket.on('password-error', handleJoinChatRoomError);
 
     return () => {
       ChatSocket.off('join-room', handleJoinChatRoom);
-      ChatSocket.off('error', handleJoinChatRoomError);
+      ChatSocket.off('password-error', handleJoinChatRoomError);
     };
   }, []);
 
@@ -33,9 +33,7 @@ export const PasswordModal = ({ groupChatId }: { groupChatId: string }) => {
   };
 
   const handleJoinChatRoomError = (data: any) => {
-    console.log(data);
-    //alert('비밀번호가 틀렸습니다.');
-    // Chat 컴포넌트에 있는 error event에 걸려서 alter두개뜸..
+    alert('비밀번호가 틀렸습니다.');
     inputPasswordRef.current = '';
   };
 
