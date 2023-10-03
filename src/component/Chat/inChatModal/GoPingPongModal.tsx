@@ -27,6 +27,7 @@ export const GoPingPongModal = () => {
 
   useEffect(() => {
     if (reqData.targetUserId === user.id) setIsTarget(true);
+    setGoPingPongReject('');
 
     GameSocket.on('go-pingpong', (roomId: number) => {
       navigation(`/game/${roomId}}`);
@@ -35,7 +36,6 @@ export const GoPingPongModal = () => {
 
     return () => {
       GameSocket.off('go-pingpong');
-      setGoPingPongReject('');
     };
   }, []);
 
@@ -50,11 +50,12 @@ export const GoPingPongModal = () => {
       setModal(!modal);
     } else {
       ChatSocket.emit('go-pingpong-reject', reqData, response);
+      setModal(false);
     }
   };
 
   // 거절당했을 때 따로 렌더링
-  if (goPingPongReject) {
+  if (goPingPongReject != '') {
     return (
       <div
         aria-hidden={true}

@@ -7,7 +7,7 @@ import {
   enemyIdState,
 } from '../../atom/game';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { GameSocket } from '../../sockets/GameSocket';
 import { userInfo } from '../../atom/user';
 
@@ -18,13 +18,15 @@ export const Matchpoint = () => {
   const [player2Name, setPlayer2Name] = useRecoilState(player2NameState);
   const setEnemyId = useSetRecoilState(enemyIdState);
   const user = useRecoilValue(userInfo);
+  const [p1Name, setP1] = useState('');
+  const [p2Name, setP2] = useState('');
 
   useEffect(() => {
     GameSocket.emit('join', user.id);
 
     GameSocket.on('user-name', (p1: string, p2: string) => {
-      setPlayer1Name(p1);
-      setPlayer2Name(p2);
+      setP1(p1);
+      setP2(p2);
     });
 
     GameSocket.on('user-id', (enemyId: number) => {
@@ -40,11 +42,17 @@ export const Matchpoint = () => {
     });
 
     return () => {
+      GameSocket.off('user-id');
       GameSocket.off('user-name');
       GameSocket.off('player1Score');
       GameSocket.off('player2Score');
     };
   }, []);
+
+  useEffect(() => {
+    setPlayer1Name(p1Name);
+    setPlayer2Name(p2Name);
+  }, [p1Name, p2Name, setP1, setP2]);
 
   return (
     <div className="relative md:h-20 px-auto  h-14 bg-sky p-2 rounded-full grid grid-cols-3 shadow-md shadow-gray-300 justify-between items-center">
