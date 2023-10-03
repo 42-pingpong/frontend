@@ -60,20 +60,22 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
             <span className="w-full text-[2.8rem] font-bold text-center mb-3 text-gray-500">
               {user.nickName}
             </span>
-            {user.isEmailVerified ? null : (
-              <div>
-                <button
-                  className="flex w-[50%] h-10 justify-center items-center bg-progressBlue mx-auto rounded-full shadow-xl"
-                  onClick={() => {
-                    setAuthenticationModal(true);
-                  }}
-                >
-                  <span className="text-[1.2rem] font-semibold text-white">
-                    Authorize
-                  </span>
-                </button>
-              </div>
-            )}
+            {user.isEmailVerified
+              ? null
+              : nickName === undefined && (
+                  <div>
+                    <button
+                      className="flex w-[50%] h-10 justify-center items-center bg-progressBlue mx-auto rounded-full shadow-xl"
+                      onClick={() => {
+                        setAuthenticationModal(true);
+                      }}
+                    >
+                      <span className="text-[1.2rem] font-semibold text-white">
+                        Authorize
+                      </span>
+                    </button>
+                  </div>
+                )}
             {authenticationModal && <AuthenticationModal />}
           </div>
         </div>
