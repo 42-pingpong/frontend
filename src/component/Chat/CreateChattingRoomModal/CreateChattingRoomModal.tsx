@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { chattingModalState } from '../../../atom/modal';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from 'recoil';
 import { ChatSocket } from '../../../sockets/ChatSocket';
 import { userInfo } from '../../../atom/user';
 import axiosInstance from '../../../api/axios';
@@ -27,11 +32,24 @@ export const CreateChattingRoomModal = () => {
   const [memberFocus, setMemberFocus] = useState(false);
   const setChatRoomList = useSetRecoilState(chatRoomState);
   const [formValue, setFormValue] = useRecoilState(createChatRoomState);
-  const chatMembers = useRecoilValue(chatMemberListState);
+  const resetFormValue = useResetRecoilState(createChatRoomState);
+  const [chatMembers, setChatMembers] = useRecoilState(chatMemberListState);
 
   useEffect(() => {
     setFormValue({ ...formValue, ownerId: user.id });
   }, []);
+
+  const handleReset = () => {
+    setChatMembers([]);
+    setUserList([]);
+    setMemberFocus(false);
+  };
+
+  const handleClose = () => {
+    closeModal(chattingState, setChattingState);
+    resetFormValue();
+    handleReset();
+  };
 
   const handleRoomtype = (e: any) => {
     let roomtype: string;
@@ -94,11 +112,19 @@ export const CreateChattingRoomModal = () => {
       alert('최대 참여 인원을 입력해주세요.');
       return;
     }
-
+    if (
+      formValue.participants &&
+      formValue.participants.length >= formValue.maxParticipants
+    ) {
+      alert('최대 참여 인원을 초과했습니다.');
+      return;
+    }
     ChatSocket.emit('create-room', formValue, (res: ChatRoomDTO) => {
       setChatRoomList((prev) => [...prev, res]);
     });
     setChattingState(!chattingState);
+
+    resetFormValue();
   };
 
   const handlePrivateSubmit = () => {
@@ -117,10 +143,7 @@ export const CreateChattingRoomModal = () => {
   };
 
   return (
-    <div
-      className="background bg-[rgba(0,0,0,0.2)]"
-      onClick={() => closeModal(chattingState, setChattingState)}
-    >
+    <div className="background bg-[rgba(0,0,0,0.2)]" onClick={handleClose}>
       <div
         id="chattingroom-content"
         className="min-w-[500px] w-[30vw] h-[65vh] min-h-[800px] shadow-xl bg-[#F8F8F8] rounded-[30px] mx-auto align-middle justify-center relative z-10 mt-[10vh] grid grid-cols-1 grid-rows-4"
@@ -130,7 +153,10 @@ export const CreateChattingRoomModal = () => {
           <p className="py-[7%] px-[8%]  font-sans font-[320]  text-[35px] leading-[41px] tracking-tighter text-[#5D777B] pb-10">
             Create Chatting Room
           </p>
-          <RoomTypeRadio handleRoomtype={handleRoomtype} />
+          <RoomTypeRadio
+            handleRoomtype={handleRoomtype}
+            handleReset={handleReset}
+          />
         </div>
         <div className="relative row-span-3 grid gap-10">
           <div className="px-[8%] text-[#5D777B] text-2xl ">
@@ -177,7 +203,7 @@ export const CreateChattingRoomModal = () => {
         <button
           id="modal-close-button"
           className="absolute top-3 right-7 p-0 text-gray-400 text-lg"
-          onClick={() => closeModal(chattingState, setChattingState)}
+          onClick={handleClose}
         >
           X
         </button>
