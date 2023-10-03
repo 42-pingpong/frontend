@@ -7,6 +7,8 @@ export default function useChatRoomPwManage() {
   const [passWord, setPassWord] = useState<string>('');
   const [passWordModal, setPassWordModal] = useState<boolean>(false);
   const [roomInfo, setRoomInfo] = useRecoilState(currentChatInfoState);
+  const [changeRoomTitleModal, setChangeRoomTitleModal] = useState(false);
+  const [title, setTitle] = useState<string>('');
 
   const changePassword = async () => {
     if (passWord.length < 1) {
@@ -55,11 +57,32 @@ export default function useChatRoomPwManage() {
     }
   };
 
+  const changeRoomTitle = async () => {
+    const updateRoomInfo = {
+      chatName: title,
+    };
+
+    const res = await axiosInstance.patch(
+      `/chat/groupChat/${roomInfo.groupChatId}`,
+      updateRoomInfo
+    );
+
+    if (res.status === 200 || res.status === 201) {
+      setRoomInfo({ ...roomInfo, chatName: title });
+      alert('방 제목이 변경되었습니다.');
+    }
+  };
+
   return {
     changePassword,
     deletePassword,
     setPassWord,
     passWordModal,
     setPassWordModal,
+
+    changeRoomTitle,
+    changeRoomTitleModal,
+    setChangeRoomTitleModal,
+    setTitle,
   };
 }

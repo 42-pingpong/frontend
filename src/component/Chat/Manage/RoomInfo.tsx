@@ -1,8 +1,9 @@
 import { ChatRoomInfoDTO } from '../../../interfaces/Chatting-Format.dto';
 import { ChatList } from '../ChatList/ChatList';
 import useChatRoomPwManage from '../../../hooks/chat/useChatRoomPwManage';
-import { PassWordChangeModal } from './PassWordChangeModal';
-import { PassWordButton } from './PassWordButton';
+import { InputChangeModal } from './InputChangeModal';
+import { ManageButton } from './ManageButton';
+import { changeType } from './InputChangeModal';
 
 interface props {
   role: string;
@@ -16,6 +17,11 @@ export const RoomInfo = (props: props) => {
     setPassWord,
     passWordModal,
     setPassWordModal,
+
+    setTitle,
+    changeRoomTitle,
+    changeRoomTitleModal,
+    setChangeRoomTitleModal,
   } = useChatRoomPwManage();
 
   return (
@@ -23,32 +29,50 @@ export const RoomInfo = (props: props) => {
       <div className="flex w-[40%] min-w-min-[500vw] h-full">
         <ChatList props={props.roomInfo} />
       </div>
-      <div className="flex absolute left-[70vw] w-[220px] justify-between">
+      <div className="flex absolute left-[65vw]">
         {props.role === 'owner' &&
           props.roomInfo.levelOfPublicity !== 'Priv' && (
-            <PassWordButton
-              onClickFunc={() => setPassWordModal(true)}
-              text={
-                props.roomInfo.levelOfPublicity === 'Pub'
-                  ? '비밀번호 추가'
-                  : '비밀번호 변경'
-              }
-            />
+            <>
+              <ManageButton
+                onClickFunc={() => setChangeRoomTitleModal(true)}
+                text={'방 이름 변경'}
+              />
+              <ManageButton
+                onClickFunc={() => setPassWordModal(true)}
+                text={
+                  props.roomInfo.levelOfPublicity === 'Pub'
+                    ? '비밀번호 추가'
+                    : '비밀번호 변경'
+                }
+              />
+            </>
           )}
         {props.role === 'owner' &&
           props.roomInfo.levelOfPublicity === 'Prot' && (
-            <PassWordButton
+            <ManageButton
               onClickFunc={() => deletePassword()}
               text="비밀번호 삭제"
             />
           )}
       </div>
       {passWordModal && (
-        <PassWordChangeModal
+        <InputChangeModal
           setModalOpen={setPassWordModal}
-          setPassWord={setPassWord}
-          changePassword={changePassword}
-          levelOfPublicity={props.roomInfo.levelOfPublicity}
+          setInput={setPassWord}
+          changeInput={changePassword}
+          changeType={
+            props.roomInfo.levelOfPublicity === 'Pub'
+              ? changeType.PW_ADD
+              : changeType.PW_CHANGE
+          }
+        />
+      )}
+      {changeRoomTitleModal && (
+        <InputChangeModal
+          setModalOpen={setChangeRoomTitleModal}
+          setInput={setTitle}
+          changeInput={changeRoomTitle}
+          changeType={changeType.TITLE_CHANGE}
         />
       )}
     </section>
