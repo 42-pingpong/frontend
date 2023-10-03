@@ -43,7 +43,10 @@ export const ChattingBubble = memo((props: MessageInfoDTO) => {
         }
         onClick={onLeftClickHandler}
       >
-        <img src={props.sender.profile} className="flex rounded-full" />
+        <img
+          src={props.sender.profile}
+          className="flex rounded-full w-14 h-14"
+        />
       </div>
       <div className="text-xl mb-[2.5%] px-5 py-2 rounded-[50px] shadow-md max-w-[50%] bg-[#D9D9D9] justify-center mx-[1.5%] flex">
         <span className="mt-1 mx-1 inline-block">{props.message}</span>
@@ -73,7 +76,10 @@ export const ChattingBubble = memo((props: MessageInfoDTO) => {
         className="w-14 h-14 rounded-full border-2 flex mb-[2.5%] "
         onClick={onLeftClickHandler}
       >
-        <img src={props.sender.profile} className="flex rounded-full" />
+        <img
+          src={props.sender.profile}
+          className="flex rounded-full w-14 h-14"
+        />
       </div>
     </div>
   );
