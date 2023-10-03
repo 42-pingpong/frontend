@@ -1,18 +1,24 @@
 import React from 'react';
 import { closeModal } from '../../../utils/modalClose';
 
-interface props {
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setPassWord: React.Dispatch<React.SetStateAction<string>>;
-  changePassword: () => void;
-  levelOfPublicity: string;
+export const enum changeType {
+  PW_ADD,
+  PW_CHANGE,
+  TITLE_CHANGE,
 }
 
-export const PassWordChangeModal = (props: props) => {
-  const { setModalOpen, setPassWord, changePassword, levelOfPublicity } = props;
+interface props {
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setInput: React.Dispatch<React.SetStateAction<string>>;
+  changeInput: () => void;
+  changeType: changeType;
+}
 
-  const handlePassWordInput = (e: any) => {
-    setPassWord(e.target.value);
+export const InputChangeModal = (props: props) => {
+  const { setModalOpen, setInput, changeInput } = props;
+
+  const handleInput = (e: any) => {
+    setInput(e.target.value);
   };
 
   const textArray = [
@@ -26,9 +32,14 @@ export const PassWordChangeModal = (props: props) => {
       placeholder: '변경할 비밀번호를 입력해주세요.',
       button: '변경',
     },
+    {
+      title: '방 제목 변경',
+      placeholder: '변경할 방 제목을 입력해주세요.',
+      button: '변경',
+    },
   ];
 
-  const text = levelOfPublicity === 'Pub' ? textArray[0] : textArray[1];
+  const text = textArray[props.changeType];
 
   return (
     <div
@@ -45,16 +56,16 @@ export const PassWordChangeModal = (props: props) => {
         <input
           type="text"
           placeholder={text.placeholder}
-          onChange={handlePassWordInput}
+          onChange={handleInput}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              changePassword();
+              changeInput();
             }
           }}
           className="w-[80%] h-[3rem] rounded-3xl bg-[#ebebeb] outline-none text-center shadow-md"
         />
         <button
-          onClick={changePassword}
+          onClick={() => (changeInput(), closeModal(true, setModalOpen))}
           className="w-16 h-8 bg-progressBlue rounded-full text-white mt-6"
         >
           {text.button}
