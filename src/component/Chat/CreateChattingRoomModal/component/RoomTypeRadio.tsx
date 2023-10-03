@@ -2,11 +2,17 @@ import React from 'react';
 
 interface Props {
   handleRoomtype: (e: any) => void;
+  handleReset: () => void;
 }
 
 export const RoomTypeRadio = (props: Props) => {
   const roomtypeList = ['Public', 'Protected', 'Private'];
-  const { handleRoomtype } = props;
+  const { handleRoomtype, handleReset } = props;
+
+  const handleOnChange = (e: any) => {
+    handleRoomtype(e);
+    handleReset();
+  };
 
   return (
     <div className="pb-[6%] px-[8%] flex justify-center space-x-[5vw] text-[#5D777B] text-2xl font-light tracking-tight">
@@ -18,7 +24,7 @@ export const RoomTypeRadio = (props: Props) => {
               type="radio"
               id={item}
               className="flex checked:bg-sky"
-              onClick={(e) => handleRoomtype(e)}
+              onClick={handleOnChange}
             />
             <span className="flex pl-2">{item}</span>
           </div>

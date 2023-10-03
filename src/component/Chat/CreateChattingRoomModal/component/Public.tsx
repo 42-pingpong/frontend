@@ -16,7 +16,7 @@ export const Public = (props: Props) => {
         <input
           name="maxParticipants"
           type="number"
-          min={2}
+          min={1}
           max={10}
           placeholder="You can invite up to 10 people"
           className="px-5 align-middle justify-center rounded-[50px] shadow-lg w-[100%] h-[3rem] font-light"
