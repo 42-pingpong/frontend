@@ -1,20 +1,21 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-  MessageInfoDTO,
-  ResponseGroupChatDTO,
-} from '../../interfaces/Chatting-Format.dto';
+import { useRecoilValue } from 'recoil';
+import { MessageInfoDTO } from '../../interfaces/Chatting-Format.dto';
 import { ChatUserRightClickModal } from './inChatModal/ChatUserRightClickModal';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { userInfo } from '../../atom/user';
-import { memo, useState } from 'react';
-import React from 'react';
+import React, { memo, useState } from 'react';
+import { muteModalState } from '../../atom/modal';
+import { MuteTimeModal } from './inChatModal/MuteTimeModal';
+import { currentChatInfoState } from '../../atom/chat';
 
 export const ChattingBubble = memo((props: MessageInfoDTO) => {
   const user = useRecoilValue(userInfo);
   const sender = props.sender.id === user.id ? 'me' : 'you';
   const navigate = useNavigate();
   const location = useLocation();
+  const roomInfo = useRecoilValue(currentChatInfoState);
 
+  const isMuteModalOpen = useRecoilValue(muteModalState);
   const [profileRightClickModal, setProfileRightClickModal] = useState(false);
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
@@ -55,6 +56,13 @@ export const ChattingBubble = memo((props: MessageInfoDTO) => {
           onClosed={() => setProfileRightClickModal(false)}
         />
       )}
+      {isMuteModalOpen && (
+        <MuteTimeModal
+          groupChatId={roomInfo.groupChatId}
+          userId={props.sender.id}
+          requestUserId={user.id}
+        />
+      )}
     </div>
   ) : (
     <div className="flex">
@@ -63,7 +71,6 @@ export const ChattingBubble = memo((props: MessageInfoDTO) => {
       </div>
       <div
         className="w-14 h-14 rounded-full border-2 flex mb-[2.5%] "
-        onContextMenu={onRightClickHandler}
         onClick={onLeftClickHandler}
       >
         <img src={props.sender.profile} className="flex rounded-full" />

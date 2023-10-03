@@ -16,7 +16,7 @@ export const NotificationModal = () => {
   return (
     <div
       aria-hidden={true}
-      className="background"
+      className="background z-50"
       onClick={() => closeModal(isModalOpen, setIsModalOpen)}
     >
       <div

@@ -24,7 +24,7 @@ export const ProfileModal = () => {
     // 그래서.. 스크롤을 내려도 고정된다..
     <div
       aria-hidden={true}
-      className="background"
+      className="background z-50"
       onClick={() => closeModal(isModalOpen, setIsModalOpen)}
     >
       <div

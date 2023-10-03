@@ -1,10 +1,8 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { muteModalState } from '../../../atom/modal';
+import { useRecoilValue } from 'recoil';
 import { FuncButton } from './FuncButton';
-import { currentChatInfoState, roleState } from '../../../atom/chat';
+import { roleState } from '../../../atom/chat';
 import { userInfo } from '../../../atom/user';
 import { senderDTO } from '../../../interfaces/Chatting-Format.dto';
-import { MuteTimeModal } from './MuteTimeModal';
 
 interface Props {
   user: senderDTO;
@@ -15,9 +13,7 @@ interface Props {
 
 export const ChatUserRightClickModal = (props: Props) => {
   const user = useRecoilValue(userInfo);
-  const roomInfo = useRecoilValue(currentChatInfoState);
   const role = useRecoilValue(roleState);
-  const isMuteModalOpen = useRecoilValue(muteModalState);
 
   if (user.id === props.user.id) {
     props.onClosed();
@@ -67,13 +63,6 @@ export const ChatUserRightClickModal = (props: Props) => {
           <FuncButton name={'Mute'} target={props.user} />
           <FuncButton name={'Block'} target={props.user} />
           <FuncButton name={'Go PingPong'} target={props.user} />
-          {isMuteModalOpen && (
-            <MuteTimeModal
-              groupChatId={roomInfo.groupChatId}
-              userId={props.user.id}
-              requestUserId={user.id}
-            />
-          )}
         </div>
       </div>
     );
