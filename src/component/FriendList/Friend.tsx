@@ -24,7 +24,7 @@ export const Friend = memo(function Friend(props: props) {
             setModal(true);
           }}
         >
-          <img src={data.profile} className="flex rounded-full" />
+          <img src={data.profile} className="flex rounded-full w-14 h-14" />
         </div>
         <div className={`${children ? 'w-[35%]' : 'w-[70%]'}`}>
           <span className="text-gray-500 text-xl">{data.nickName}</span>

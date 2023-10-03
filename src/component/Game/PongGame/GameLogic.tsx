@@ -11,8 +11,10 @@ import {
   isLeftState,
   joinState,
   paddleHeightState,
+  player1NameState,
   player1PaddleState,
   player1ScoreState,
+  player2NameState,
   player2PaddleState,
   player2ScoreState,
   readyState,
@@ -30,7 +32,7 @@ export const GameLogic = ({ props }: { props: number }) => {
 
   const containerWidth = 1400;
   const containerHeight = 830;
-  const WINSCORE = 0;
+  const WINSCORE = 2;
 
   const [player1Paddle, setPlayer1Paddle] = useRecoilState(player1PaddleState);
   const [player2Paddle, setPlayer2Paddle] = useRecoilState(player2PaddleState);
@@ -60,12 +62,19 @@ export const GameLogic = ({ props }: { props: number }) => {
   const setIsLeft = useSetRecoilState(isLeftState);
   const paddleHeight = useRecoilValue(paddleHeightState);
   const setDisconnect = useSetRecoilState(disconnectState);
+  const setPlayer1Name = useSetRecoilState(player1NameState);
+  const setPlayer2Name = useSetRecoilState(player2NameState);
 
   useEffect(() => {
     setJoin(true);
 
     GameSocket.on('ready', (start: boolean) => {
       setReady(start);
+    });
+
+    GameSocket.on('user-name', (p1: string, p2: string) => {
+      setPlayer1Name(p1);
+      setPlayer2Name(p2);
     });
 
     GameSocket.on('start', (start: boolean) => {
@@ -117,6 +126,7 @@ export const GameLogic = ({ props }: { props: number }) => {
 
     return () => {
       GameSocket.off('ready');
+      GameSocket.off('user-name');
       GameSocket.off('start');
       GameSocket.off('move');
       GameSocket.off('ballX');

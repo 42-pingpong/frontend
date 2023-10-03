@@ -13,6 +13,7 @@ import {
   ResponseGoPingPongDto,
   goPingPongDto,
   ResponseUnBanDto,
+  ChatRoomInfoDTO,
 } from '../../interfaces/Chatting-Format.dto';
 import {
   useRecoilState,
@@ -74,6 +75,7 @@ export const ChatSection = () => {
     ChatSocket.on('go-pingpong-accept', handleGoPingPongAccept);
     ChatSocket.on('go-pingpong-reject', handleGoPingPongReject);
     ChatSocket.on('unmute-user', handleUnMuteMe);
+    ChatSocket.on('leave-room', handleLeaveRoom);
 
     if (chat.length === 0)
       ChatSocket.emit('fetch-group-message', requestFetchLog);
@@ -88,6 +90,7 @@ export const ChatSection = () => {
       ChatSocket.off('go-pingpong', handleGoPingPong);
       ChatSocket.off('go-pingpong-accept', handleGoPingPongAccept);
       ChatSocket.off('go-pingpong-rejcet', handleGoPingPongReject);
+      ChatSocket.off('leave-room', handleLeaveRoom);
       ChatSocket.on('unmute-user', handleUnMuteMe);
     };
   }, [roomInfo]);
@@ -97,6 +100,14 @@ export const ChatSection = () => {
       scrollBottomRef.current.scrollTop = scrollBottomRef.current.scrollHeight;
     }
   }, [chat]);
+
+  const handleLeaveRoom = (data: ChatRoomInfoDTO) => {
+    setRoomInfo((prev) => ({
+      ...prev,
+      joinedUser: [...data.joinedUser],
+      admin: [...data.admin],
+    }));
+  };
 
   const handleUnMuteMe = (data: ResponseUnBanDto) => {
     if (user.id === data.userId) {

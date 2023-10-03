@@ -29,7 +29,7 @@ export default function useFetchChatUsers() {
       });
 
       const admins: UserDto[] = await Promise.all(adminPromises);
-      if (admins.length === 0 || admins === undefined) return;
+      if (admins === undefined) return;
       setAdmin(admins);
     } catch (error) {
       console.error(error);
@@ -44,7 +44,7 @@ export default function useFetchChatUsers() {
       });
 
       const joinedUsers: UserDto[] = await Promise.all(joinedUserPromises);
-      if (joinedUsers.length === 0 || joinedUsers === undefined) return;
+      if (joinedUsers === undefined) return;
       setJoinedUser(joinedUsers);
     } catch (error) {
       console.error(error);
