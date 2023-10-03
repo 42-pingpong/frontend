@@ -106,7 +106,6 @@ export const GameLogic = ({ props }: { props: number }) => {
     });
 
     GameSocket.on('end-room-out', (winner: boolean) => {
-      console.log('end', player1Score, player2Score, WINSCORE);
       setEnd(true);
       setStart(false);
       setIsLeft(true);
@@ -221,12 +220,10 @@ export const GameLogic = ({ props }: { props: number }) => {
     if (player2Score > WINSCORE || player1Score > WINSCORE) {
       setStart(false);
       setEnd(true);
-      console.log('end', player1Score, player2Score, WINSCORE);
     }
   }, [loop]);
 
   useEffect(() => {
-    console.log('end', end);
     if (end === true) {
       props === 1
         ? GameSocket.emit('end', {
