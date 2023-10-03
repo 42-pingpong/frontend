@@ -55,7 +55,7 @@ export const ServiceTitle = memo((props: ServiceTitleProps) => {
       return;
     }
     if (props.title === 'Game') {
-      matching === false ? setGameModeModal(true) : setMatching(!matching);
+      matching === false ? setGameModeModal(true) : setMatching(!matching), GameSocket.emit('matching-cancel');
     } else if (props.title === 'Chat') {
       setChatstate(!chatstate);
     } else if (props.title === 'Friends') {
