@@ -32,7 +32,7 @@ export const GameLogic = ({ props }: { props: number }) => {
 
   const containerWidth = 1400;
   const containerHeight = 830;
-  const WINSCORE = 4;
+  const WINSCORE = 2;
 
   const [player1Paddle, setPlayer1Paddle] = useRecoilState(player1PaddleState);
   const [player2Paddle, setPlayer2Paddle] = useRecoilState(player2PaddleState);
