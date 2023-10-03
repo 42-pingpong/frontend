@@ -20,7 +20,9 @@ export const Profile = () => {
           {profileEdit && params.nickName === undefined ? (
             <ProfileEdit />
           ) : (
-            <MyProfile nickName={params.nickName} />
+            <MyProfile
+              nickName={params ? params.nickName?.slice(1) : undefined}
+            />
           )}
         </div>
         <div className="2xl:col-span-3 min-h-[800px]">
