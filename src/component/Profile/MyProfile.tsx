@@ -9,6 +9,7 @@ import { authenticationModalState } from '../../atom/modal';
 import { AuthenticationModal } from './Authentication';
 import { Profile } from './Profile';
 import { ProfileInfoTitle } from './ProfileInfoTitle';
+import { AuthenticationToggle } from './AuthenticationToggle';
 
 export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
   const me = useRecoilValue(userInfo);
@@ -63,17 +64,11 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
             {user.isEmailVerified
               ? null
               : nickName === undefined && (
-                  <div>
-                    <button
-                      className="flex w-[50%] h-10 justify-center items-center bg-progressBlue mx-auto rounded-full shadow-xl"
-                      onClick={() => {
-                        setAuthenticationModal(true);
-                      }}
-                    >
-                      <span className="text-[1.2rem] font-semibold text-white">
-                        Authorize
-                      </span>
-                    </button>
+                  <div className="flex justify-center items-center space-x-3">
+                    <span className="text-gray-500 text-xl">
+                      메일로 로그인 2차인증 하기
+                    </span>
+                    <AuthenticationToggle />
                   </div>
                 )}
             {authenticationModal && <AuthenticationModal />}
