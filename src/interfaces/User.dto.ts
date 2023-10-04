@@ -7,5 +7,7 @@ export interface UserDto {
   status?: string;
   fullName?: string;
   selfIntroduction?: string;
-  isEmailVerified?: boolean;
+  is2FAEnabled?: boolean;
+  is2FAVerified?: boolean;
+  TFAVerifyDueDate?: Date;
 }

@@ -22,7 +22,8 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
     selfIntroduction: '',
     status: '',
     profile: '',
-    isEmailVerified: false,
+    is2FAEnabled: false,
+    is2FAVerified: false,
   });
   const setProfileEdit = useSetRecoilState(profileEditState);
   const isAuthenticated = useRecoilValue(authenticationState);
@@ -61,16 +62,14 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
             <span className="w-full text-[2.8rem] font-bold text-center mb-3 text-gray-500">
               {user.nickName}
             </span>
-            {user.isEmailVerified
-              ? null
-              : nickName === undefined && (
-                  <div className="flex justify-center items-center space-x-3">
-                    <span className="text-gray-500 text-xl">
-                      메일로 로그인 2차인증 하기
-                    </span>
-                    <AuthenticationToggle />
-                  </div>
-                )}
+            {nickName === undefined && (
+              <div className="flex justify-center items-center space-x-3">
+                <span className="text-gray-500 text-xl">
+                  메일로 로그인 2차인증 하기
+                </span>
+                <AuthenticationToggle />
+              </div>
+            )}
             {authenticationModal && <AuthenticationModal />}
           </div>
         </div>

@@ -18,6 +18,9 @@ export const userInfo = atom<UserDto>({
     selfIntroduction: '',
     level: 0,
     status: '',
+    is2FAEnabled: false,
+    is2FAVerified: false,
+    TFAVerifyDueDate: undefined,
   },
 });
 
