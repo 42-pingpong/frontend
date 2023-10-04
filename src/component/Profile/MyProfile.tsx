@@ -1,15 +1,11 @@
 import { ServiceTitle } from '../Main/ServiceTitle';
-import { authenticationState, userInfo } from '../../atom/user';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { userInfo } from '../../atom/user';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { profileEditState } from '../../atom/profile';
 import { UserDto } from '../../interfaces/User.dto';
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../api/axios';
-import { authenticationModalState } from '../../atom/modal';
-import { AuthenticationModal } from './Authentication';
-import { Profile } from './Profile';
 import { ProfileInfoTitle } from './ProfileInfoTitle';
-import { AuthenticationToggle } from './AuthenticationToggle';
 
 export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
   const me = useRecoilValue(userInfo);
@@ -23,12 +19,9 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
     status: '',
     profile: '',
     isEmailVerified: false,
+    is2FAEnabled: false,
   });
   const setProfileEdit = useSetRecoilState(profileEditState);
-  const isAuthenticated = useRecoilValue(authenticationState);
-  const [authenticationModal, setAuthenticationModal] = useRecoilState(
-    authenticationModalState
-  );
 
   const fetchUser = async () => {
     const res = await axiosInstance.get(`/user/search?nickName=${nickName}`);
@@ -65,17 +58,6 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
             <span className="w-full text-[2.8rem] font-bold text-center mb-3 text-gray-500">
               {user.nickName}
             </span>
-            {user.isEmailVerified
-              ? null
-              : nickName === undefined && (
-                  <div className="flex justify-center items-center space-x-3">
-                    <span className="text-gray-500 text-xl">
-                      메일로 로그인 2차인증 하기
-                    </span>
-                    <AuthenticationToggle />
-                  </div>
-                )}
-            {authenticationModal && <AuthenticationModal />}
           </div>
         </div>
         <div className="flex flex-grow flex-col mt-5 px-3">

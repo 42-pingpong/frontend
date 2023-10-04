@@ -4,6 +4,8 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userInfo } from '../../atom/user';
 import { profileEditState } from '../../atom/profile';
 import axiosInstance from '../../api/axios';
+import { AuthenticationToggle } from './AuthenticationToggle';
+import { AuthenticationModal } from './Authentication';
 
 export const ProfileEdit = () => {
   const [user, setUser] = useRecoilState(userInfo);
@@ -140,7 +142,7 @@ export const ProfileEdit = () => {
                 />
               </div>
             </div>
-            <div className="flex w-32 flex-grow flex-col h-full pl-2 justify-center items-center">
+            <div className="flex w-full flex-col h-full pl-2 justify-center items-center">
               <input
                 type="text"
                 name="nickName"
@@ -148,6 +150,12 @@ export const ProfileEdit = () => {
                 placeholder={user.nickName}
                 onChange={inputChangeHandler}
                 className="w-full text-[2.8rem] font-semibold text-center mb-3 text-gray-500 border-none outline-none rounded-full"
+              />
+              <span className="text-gray-500 text-xl">
+                메일로 로그인 2차인증 활성화하기
+              </span>
+              <AuthenticationToggle
+                currentState={user.is2FAEnabled ? true : false}
               />
             </div>
           </div>

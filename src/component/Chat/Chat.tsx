@@ -59,6 +59,7 @@ export const Chat = () => {
   };
 
   const handleJoinChatRoom = (data: ChatRoomInfoDTO) => {
+    console.log(data);
     setRoomInfo(data);
     setLoading(false);
   };
@@ -70,6 +71,7 @@ export const Chat = () => {
     }
 
     ChatSocket.on('join-room', handleJoinChatRoom);
+    ChatSocket.on('leave-room', handleJoinChatRoom);
     ChatSocket.on('error', handleError);
 
     switch (params.levelOfPublicity) {
