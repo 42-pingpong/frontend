@@ -2,7 +2,7 @@ import { notificationModalState, profileModalState } from '../../atom/modal';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { friendListState, loginState, userInfo } from '../../atom/user';
 import { StatusSocket } from '../../sockets/StatusSocket';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { notiResponseState, notificationState } from '../../atom/notification';
 import {
   CheckedAlarmDto,
@@ -23,8 +23,8 @@ const Profile = () => {
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useRecoilState(
     notificationModalState
   );
-  const [notiResultList, setNotiResultList] = useRecoilState(notiResponseState);
-  const [FriendList, setFriendList] = useRecoilState(friendListState);
+  const setNotiResultList = useSetRecoilState(notiResponseState);
+  const setFriendList = useSetRecoilState(friendListState);
   const prevNotificationList = useRef<ResponseNotificationDto[]>([]);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const Profile = () => {
         GameSocket.disconnect();
       };
     }
-  }, [userInfoObj, isLoggedIn]);
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (
@@ -78,9 +78,9 @@ const Profile = () => {
     const dataArray = Array.isArray(data) ? data : [data];
     if (dataArray.length === 0 || dataArray[0] === null) return;
 
-    const filteredDataArray = dataArray.filter(
-      (item) => item.isAccepted !== 'Y'
-    );
+    const filteredDataArray = dataArray
+      .filter((item) => item.isAccepted !== 'Y')
+      .filter((item) => !isUserDuplicated(item.requestId));
     if (filteredDataArray.length === 0) return;
 
     console.log(dataArray);
