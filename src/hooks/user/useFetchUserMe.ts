@@ -9,18 +9,19 @@ export default function useFetchUserMe() {
   const token = localStorage.getItem('token');
   const [login, setLogin] = useRecoilState(loginState);
 
+  const fetchUser = async () => {
+    const res = await axiosInstance.get<UserDto>('/user/me');
+    console.log(res.data);
+
+    setLogin(true);
+    setUser(res.data);
+  };
+
   useEffect(() => {
     if (token) {
       fetchUser();
     }
   }, [token]);
-
-  const fetchUser = async () => {
-    const res = await axiosInstance.get<UserDto>('user/me');
-
-    setLogin(true);
-    setUser(res.data);
-  };
 
   return login;
 }

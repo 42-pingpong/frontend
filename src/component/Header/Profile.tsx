@@ -51,7 +51,7 @@ const Profile = () => {
         GameSocket.disconnect();
       };
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, userInfoObj.id]);
 
   useEffect(() => {
     if (
