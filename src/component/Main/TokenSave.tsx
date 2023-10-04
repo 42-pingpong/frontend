@@ -15,7 +15,7 @@ export const TokenSave = () => {
       setIsLoggedIn(true);
     }
 
-    navigate('/', { replace: true });
+    navigate('/profile', { replace: true });
   }, []);
 
   return null;
