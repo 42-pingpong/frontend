@@ -1,9 +1,15 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useNavigation, useSearchParams } from 'react-router-dom';
 
 export const Fa = () => {
   const [minutes, setMinutes] = useState(2);
   const [seconds, setSeconds] = useState(0);
-  const [inputValue, setInputValue] = useState('');
+  const [inputCode, setInputCode] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const token = searchParams.get('tmp');
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,7 +31,31 @@ export const Fa = () => {
   }, [minutes, seconds]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    if (parseInt(e.target.value).toString() !== 'NaN') {
+      setInputCode(e.target.value);
+    } else {
+      setErrorMessage('숫자만 입력해주세요.');
+    }
+  };
+
+  const handleInputSubmit = async () => {
+    console.log(token);
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_SERVER}/auth/login/${inputCode}/2fa`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
+      console.log(res);
+      navigate(`/token?accessToken=${res.data.accessToken}`);
+    } catch (error: any) {
+      console.log(error);
+      // setErrorMessage(error);
+    }
   };
 
   return (
@@ -39,11 +69,18 @@ export const Fa = () => {
         <input
           type="text"
           placeholder="이메일 인증번호를 입력해주세요."
-          value={inputValue}
+          value={inputCode}
           onChange={handleInputChange}
           className="border rounded w-full py-2 px-3"
         />
+        <button
+          className="flex w-full h-full justify-center items-center bg-progressBlue rounded-full shadow-xl"
+          onClick={handleInputSubmit}
+        >
+          인증하기
+        </button>
       </div>
+      <div className="text-left mt-4 text-red-600 ">{errorMessage}</div>
     </div>
   );
 };

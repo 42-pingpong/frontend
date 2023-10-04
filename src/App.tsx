@@ -26,7 +26,7 @@ function App() {
           <Route path="/game/:id" element={<Game />} />
           <Route path="/profile/:nickName?" element={<Profile />} />
           <Route path="/chat-manage/:roomId" element={<ChatManage />} />
-          <Route path="/2fa/:userId" element={<Fa />} />
+          <Route path="/2fa" element={<Fa />} />
         </Routes>
       </BrowserRouter>
       {/* </RecoilRoot> */}
