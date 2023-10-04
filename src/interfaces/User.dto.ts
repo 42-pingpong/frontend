@@ -8,4 +8,5 @@ export interface UserDto {
   fullName?: string;
   selfIntroduction?: string;
   isEmailVerified?: boolean;
+  is2FAEnabled?: boolean;
 }

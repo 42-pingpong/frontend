@@ -9,6 +9,7 @@ import { TokenSave } from './component/Main/TokenSave';
 import { Profile } from './component/Profile/Profile';
 import { DirectMessage } from './component/Chat/DirectMessage/DirectMessage';
 import { ChatManage } from './component/Chat/Manage/ChatManage';
+import { Fa } from './component/2Fa/2Fa';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/game/:id" element={<Game />} />
           <Route path="/profile/:nickName?" element={<Profile />} />
           <Route path="/chat-manage/:roomId" element={<ChatManage />} />
+          <Route path="/2fa" element={<Fa />} />
         </Routes>
       </BrowserRouter>
       {/* </RecoilRoot> */}
