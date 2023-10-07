@@ -20,8 +20,14 @@ export const ProfileEdit = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('submit');
+    if (nickNameRef.current === '') {
+      nickNameRef.current = user.nickName;
+    }
 
+    if (nickNameRef.current.indexOf(' ') !== -1) {
+      alert('닉네임을 입력해주세요.');
+      return;
+    }
     try {
       if (formData?.get('image')) {
         const res = await axiosInstance.post('/upload', formData);

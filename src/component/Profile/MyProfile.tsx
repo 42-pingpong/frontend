@@ -23,13 +23,15 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
   });
   const setProfileEdit = useSetRecoilState(profileEditState);
 
+  console.log(nickName);
   const fetchUser = async () => {
     const res = await axiosInstance.get(`/user/search?nickName=${nickName}`);
     if (res.data[0] === undefined) {
       alert('유저를 찾을 수 없습니다.');
       window.location.href = '/';
     }
-    setUser(res.data[0]);
+    const user = res.data.find((user: UserDto) => user.nickName === nickName);
+    setUser(user);
   };
 
   useEffect(() => {

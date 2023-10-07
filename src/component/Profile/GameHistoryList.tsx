@@ -3,10 +3,15 @@ import { GameHistoryDto } from '../../interfaces/Game-HIstory.dto';
 import { userInfo } from '../../atom/user';
 import { useRecoilValue } from 'recoil';
 
-export const GameHistoryList = ({ props }: { props: GameHistoryDto }) => {
-  const user = useRecoilValue(userInfo);
-  const myInfo = props.gameScores.find((item) => item.user.id === user.id);
-  const otherInfo = props.gameScores.find((item) => item.user.id !== user.id);
+export const GameHistoryList = ({
+  props,
+  id,
+}: {
+  props: GameHistoryDto;
+  id: number;
+}) => {
+  const myInfo = props.gameScores.find((item) => item.user.id === id);
+  const otherInfo = props.gameScores.find((item) => item.user.id !== id);
 
   if (!myInfo || !otherInfo) {
     return null;

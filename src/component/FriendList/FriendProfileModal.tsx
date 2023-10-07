@@ -22,7 +22,7 @@ export const FriendProfileModal = (props: FriendProfileModalProps) => {
 
   const navigateToProfile = (nickName: string) => {
     // 네비게이터가 라우팅 해주는 것 같아서 일단 이렇게 넣어뒀어여
-    navigation(`profile/:${nickName}`);
+    navigation(`/profile/${nickName}`);
     onClosed();
   };
 

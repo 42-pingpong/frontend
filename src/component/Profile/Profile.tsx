@@ -12,6 +12,8 @@ export const Profile = () => {
   const isProfileModalOpen = useRecoilValue(profileModalState);
   const profileEdit = useRecoilValue(profileEditState);
   const params = useParams();
+  const nickName =
+    params.nickName?.[0] === ':' ? params.nickName?.slice(1) : params.nickName;
 
   return (
     <div className="flex h-screen p-32 items-center justify-center">
@@ -20,13 +22,11 @@ export const Profile = () => {
           {profileEdit && params.nickName === undefined ? (
             <ProfileEdit />
           ) : (
-            <MyProfile
-              nickName={params ? params.nickName?.slice(1) : undefined}
-            />
+            <MyProfile nickName={nickName} />
           )}
         </div>
         <div className="2xl:col-span-3 min-h-[800px]">
-          <GameHistory />
+          <GameHistory nickName={nickName} />
         </div>
       </div>
       {isProfileModalOpen && <ProfileModal />}
