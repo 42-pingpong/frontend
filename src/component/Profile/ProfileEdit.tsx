@@ -5,11 +5,10 @@ import { userInfo } from '../../atom/user';
 import { profileEditState } from '../../atom/profile';
 import axiosInstance from '../../api/axios';
 import { AuthenticationToggle } from './AuthenticationToggle';
-import { AuthenticationModal } from './Authentication';
 
 export const ProfileEdit = () => {
   const [user, setUser] = useRecoilState(userInfo);
-  const [profileImage, setProfileImage] = useState(user.profile);
+  const [profileImage, setProfileImage] = useState('');
   const [formData, setFormData] = useState<FormData | null>(null);
   const setProfileEdit = useSetRecoilState(profileEditState);
 
@@ -24,7 +23,7 @@ export const ProfileEdit = () => {
       nickNameRef.current = user.nickName;
     }
 
-    if (nickNameRef.current.indexOf(' ') !== -1) {
+    if (nickNameRef.current.indexOf(' ') === 1) {
       alert('닉네임을 입력해주세요.');
       return;
     }
@@ -39,26 +38,24 @@ export const ProfileEdit = () => {
         profileImageRef.current !== user.profile
       ) {
         const newProfile = {
-          ...(profileImageRef.current !== user.profile && {
-            profile: profileImageRef.current,
-          }),
+          profile:
+            profileImageRef.current === '' || undefined || null
+              ? user.profile
+              : profileImageRef.current,
           ...(nickNameRef.current !== user.nickName && {
             nickName: nickNameRef.current,
           }),
-          ...(selfIntroductionRef.current !== user.selfIntroduction && {
-            selfIntroduction: selfIntroductionRef.current,
-          }),
+          selfIntroduction: selfIntroductionRef.current,
         };
 
         const res = await axiosInstance.patch(`/user/${user.id}`, newProfile);
 
         if (res.status === 200) {
-          setUser((prevUser) => ({
-            ...prevUser,
-            nickName: nickNameRef.current,
-            selfIntroduction: selfIntroductionRef.current,
-            profile: profileImageRef.current,
-          }));
+          const fetchUser = async () => {
+            const res = await axiosInstance.get(`/user/me`);
+            setUser(res.data);
+          };
+          fetchUser();
         }
       }
     } catch (error: any) {
@@ -114,6 +111,10 @@ export const ProfileEdit = () => {
         break;
     }
   };
+
+  useEffect(() => {
+    if (user.profile) setProfileImage(user.profile);
+  }, [user.profile]);
 
   return (
     <div className="flex flex-col h-full min-w-max">

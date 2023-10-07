@@ -23,7 +23,6 @@ export const MyProfile = ({ nickName }: { nickName: string | undefined }) => {
   });
   const setProfileEdit = useSetRecoilState(profileEditState);
 
-  console.log(nickName);
   const fetchUser = async () => {
     const res = await axiosInstance.get(`/user/search?nickName=${nickName}`);
     if (res.data[0] === undefined) {
